@@ -1,11 +1,12 @@
 import { MESSAGE } from "@/data/message";
 import { ApiError } from "@/models/error/ApiError";
-import axios from "axios";
+import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
 import { useAlerts } from '@/composables/useAlerts';
 import { HttpStatusCode } from "axios";
 const { notifyError } = useAlerts();
 
 class AxiosBase {
+
     constructor(interceptors, baseUrl, type = '') {
         this.type = type;
         this.axiosConfig = {
@@ -103,4 +104,8 @@ class AxiosBase {
     }
 }
 
-module.exports = AxiosBase;
+module.exports = {
+    AxiosBase,
+    axiosInstance,
+    axiosConfig
+};
