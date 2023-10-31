@@ -1,0 +1,117 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+    margin: 0;
+    padding: 0;
+    font: inherit;
+    color: inherit;
+}
+*,
+:after,
+:before {
+    box-sizing: border-box;
+    flex-shrink: 0;
+}
+:root {
+    --color-primary: #7761FF;
+    --color-neutrals-white-100: #FFFFFF;
+    --color-neutrals-black: #111111;
+    --color-neutrals-black-20: rgba(255,255,255, 0.2);
+    --color-gray-ddd: #DDDDDD;
+    --color-gray-bbb: #BBBBBB;
+    --color-gray-777: #777777;
+    --color-gray-444: #444444;
+
+    --ttl-xl: 6rem;
+    --ttl-l: 3.2rem;
+    --ttl-m: 2.4rem;
+    --ttl-s: 2rem;
+
+    --fz-xl: 1.8rem;
+    --fz-l: 1.6rem;
+    --fz-m: 1.4rem;
+    --fz-s: 1.3rem;
+
+    -webkit-tap-highlight-color: transparent;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    cursor: default;
+    line-height: 1.4;
+    overflow-wrap: break-word;
+    -moz-tab-size: 4;
+    tab-size: 4;
+}
+html,
+body {
+    font-family: 'SpoqaHanSansNeo', sans-serif;
+}
+
+img,
+picture,
+video,
+canvas,
+svg {
+    display: block;
+    max-width: 100%;
+}
+button {
+    background: none;
+    border: 0;
+    cursor: pointer;
+}
+a {
+    text-decoration: none;
+}
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+ul,
+li {
+    list-style: none;
+}
+
+textarea {
+    resize: none;
+}
+
+input:focus,
+textarea:focus {
+    outline: none;
+}
+
+
+/* 프로젝트 별 분기 상황 */
+html {
+    font-size: 10px;
+}
+
+main {
+    position: relative;
+}
+
+#app {
+    min-width: 1280px;
+    overflow-x: hidden;
+}
+
+.container-1200 {
+    max-width: 1248px;
+    margin: 0 auto;
+    padding: 0 24px;
+}
+
+.visually--hidden {
+    position: absolute;
+    clip: rect(1px, 1px, 1px, 1px);
+    -webkit-clip-path: inset(0px 0px 99.9% 99.9%);
+    clip-path: inset(0px 0px 99.9% 99.9%);
+    overflow: hidden;
+    height: 1px;
+    width: 1px;
+    padding: 0;
+    border: 0;
+}
