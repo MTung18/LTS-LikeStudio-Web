@@ -1,0 +1,39 @@
+#deductionTable {
+    .b-icon-check {
+        color: #03a9f4;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        font-size: 25px;
+    }
+
+    .b-fa-xmark {
+        color: #fc5555;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        font-size: 25px;
+    }
+
+    .btn-deduction {
+        display: flex;
+        flex-direction: column;
+
+        span {
+            font-size: 12px;
+        }
+    }
+}
+
+.toggle--green {
+    .form-switch {
+        .form-check-input:checked {
+            background-color: #1ABC9C;
+            border-color: #1ABC9C;
+        }
+
+        .form-check-input:focus {
+            box-shadow: unset;
+        }
+    }
+}

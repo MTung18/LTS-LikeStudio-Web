@@ -654,7 +654,11 @@ import IconButton from '@/components/IconButton/IconButton.vue';
 import SearchInput from '@/components/SearchInput/SearchInput.vue';
 import Tabs from '@/components/Tabs/Tabs.vue';
 import TemplateBoardWrap from '@/components/TemplateBoardWrap/TemplateBoardWrap.vue';
+import { faqStore } from '../../../stores/faqStore';
+import { storeToRefs } from 'pinia';
 
+const store = faqStore();
+const { listOfFaq } = storeToRefs(store);
 const dummyInputValue = ref('');
 const categories = [
   {
@@ -710,7 +714,13 @@ const handleToggle = (event) => {
   }
 };
 
-onMounted(() => {
+onMounted(async () => {
+  try {
+    await store.fetchListOfFaq("1");
+    listOfFaq;
+    console.log("tunglm: ", listOfFaq)
+  } finally {
+  }
   detailsElements = document.querySelectorAll('details');
   detailsElements.forEach((detail) => {
     detail.addEventListener('toggle', handleToggle);

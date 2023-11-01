@@ -1,0 +1,19 @@
+$fa-css-prefix    : b-fa;
+//$fa-font-path     : 'fonts' !default;
+$fa-font-path     : 'vendors/bryntum/fontawesome-pro/webfonts' !default;
+
+@import '../fontawesome-pro/scss/mixins';
+@import '../fontawesome-pro/scss/light';
+
+$icon-font        : 'Font Awesome 5 Pro', FontAwesome5Pro !default;
+$icon-font-weight : 300 !default;
+
+// Defined here and not in icons.scss since other products @extend it in some places,
+// need to make it available to them without dragging full Font Awesome into their thin bundles.
+
+.b-content-icon {
+    @include fa-icon();
+    font-family    : $icon-font;
+    font-weight    : $icon-font-weight;
+    vertical-align : 0;
+}

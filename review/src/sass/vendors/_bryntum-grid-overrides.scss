@@ -1,0 +1,28 @@
+
+
+.b-grid-header {
+    .b-checkbox ~ .b-checkbox{
+        display: none !important;
+    }
+}
+
+.b-field-inner {
+    @extend .fs-input__form-group, .pt-0, .mb-0, .border-0;
+}
+.b-textfield {
+
+    border: none;
+    @extend .overflow-visible;
+
+    input, textarea {
+        border: unset;
+
+        @extend .fs-input__input, .form-control;
+
+    }
+
+}
+
+.b-list.b-empty:not(.b-masked)::after {
+    display: none;
+}

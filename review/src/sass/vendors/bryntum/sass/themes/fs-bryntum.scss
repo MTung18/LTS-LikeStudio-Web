@@ -1,0 +1,186 @@
+@import '../../core-sass/themes/stockholm';
+@import 'fs-bryntum.thin';
+
+
+.b-gridbase.b-no-column-lines .b-grid-header {
+	border-right-color: transparent;
+}
+.list {
+    &__b-grid {
+
+    &--hover {
+        .b-container {
+            .b-grid-row {
+                .b-action-cell {
+                    &--hover {
+                        .b-action-ct {
+                            @include media-breakpoint-up(xl) {
+                                visibility: hidden;
+                            }
+                            display: inline-flex;
+                            vertical-align: middle;
+                            right: 0;
+                            position: relative;
+                            border-left: none;
+                            flex: 1 1 auto;
+                            & > span {
+                                display: flex;
+                                flex-direction: column;
+                                flex-shrink: 1;
+    
+                                i {
+                                    &.btn {
+                                        &:hover {
+                                            transform: unset;
+                                        }
+                                        &:before {
+                                            @include font-size(18px);
+                                        }
+                                        width: auto;
+                                        display: flex;
+                                        flex-direction: column;
+                                        line-height: unset !important;
+                                        span {
+                                            @include font-size(13px);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                &.b-hover, &.b-selected {
+                    .b-action-cell {
+                        &--hover {
+                            .b-action-ct {
+                                visibility: visible;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    &--sow {
+        .b-container {
+            border: 1px solid $grey--200;
+            &.b-gridbase {
+                .b-grid-panel-body:not(.b-autoheight) > .b-grid-body-container {
+                    contain: unset;
+                    flex: 1;
+                    overflow-y: unset !important;
+                }
+            }
+
+            .b-grid-vertical-scroller {
+                position: relative;
+            }
+        }
+    }
+    
+    }
+}
+
+
+.b-gridbase.b-autoheight {
+	height: 100%;
+	flex: 1 1 auto;
+}
+.b-gridbase.b-outer {
+    min-height: unset !important;
+	height: unset !important;
+}
+.b-scroller-stretcher {
+	transform: unset !important;
+}
+ label.b-checkbox-label {
+	 margin-bottom: 0;
+	 &::before {
+		 margin: 0 !important;
+	 }
+ }
+ .b-percent-bar-outer, .b-percent-bar {
+	 border-radius: 8px !important;
+ }
+
+ .b-grid-header {
+    .b-checkbox ~ .b-checkbox{
+        display: none !important;
+    }
+}
+
+.b-field-inner {
+    @extend .fs-input__form-group, .pt-0, .mb-0, .border-0;
+	background: transparent;
+}
+.b-textfield {
+	@extend .overflow-visible;
+    border: none;
+
+    input, textarea {
+
+        @extend .fs-input__input, .form-control;
+		position: relative;
+		z-index: 1;
+
+    }
+	.b-list {
+		margin: 0 !important;
+		@extend .overflow-visible;
+		&.b-empty:not(.b-masked)::after {
+			display: none;
+		}
+	}
+	.b-fieldtrigger {
+		position: absolute;
+		bottom: 1px;
+		z-index: 10;
+		height: 38px;
+		@extend .ps-2 !optional;
+		&.b-icon-remove {
+			right: 27px;
+		}
+		&.b-icon-picker {
+			right: 1px;
+		}
+	}
+}
+.b-combo.b-uses-chipview:not(.b-empty) input {
+    padding-left: 0.2em;
+    -webkit-box-ordinal-group: 100000;
+    -ms-flex-order: 99999;
+    order: 99999;
+    min-width: 100%;
+}
+.b-chip {
+	@extend .btn, .btn-sm;
+	border-radius: 0.2rem !important;
+}
+
+.inactiveTab {
+    font-style: italic;
+    color: $grey--300;
+}
+
+.inactiveTab > .b-widget > .b-hbox > .b-grid-panel-body > .b-grid-header-container > .b-grid-header-scroller > .b-grid-headers > .b-grid-header > .b-grid-header-text {
+    color: $grey--400;
+}
+
+.b-textfield {
+    input {
+        border: 1px solid #a7b0bc;
+        @extend .fs-input__input, .form-control;
+    }
+}
+.b-checkbox > .b-field-inner input[type=checkbox]:checked + .b-checkbox-label:before {
+    background-color: $cyan !important;
+    border-color: $cyan;
+    color: $white;
+}
+.b-checkbox > .b-field-inner .b-checkbox-label:not(.b-radio-label):before {
+    font-weight: bold;
+    border-radius: 3px;
+}
+.b-grid-cell.b-checkbox-selection {
+    background-color: $white;
+}

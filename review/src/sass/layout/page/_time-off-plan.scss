@@ -1,0 +1,136 @@
+#assigned-time-off-plans {
+
+  #custom-multiselect {
+    .fs-input__button.btn,
+    .fs-input__button.b-chip {
+      top: 10px !important;
+      right: -10px !important;
+    }
+  }
+  
+  .b-action-item {
+    transform: none !important;
+  }
+
+  .updateContactBtn {
+    color: #1abc9c;
+    font-size: 14px;
+    text-decoration: none;
+    border: 0;
+    background: transparent;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+
+    &:hover,
+    &:focus {
+      color: #1abc9c;
+      border: 0;
+      background: transparent;
+    }
+
+    span {
+      position: relative;
+      top: 3px;
+    }
+  }
+
+  .iCheckFill {
+    color: #03a9f4;
+  }
+
+  .iXFill {
+    color: #fc5555;
+  }
+
+  .btn-edit::after {
+    display: block;
+    cursor: pointer;
+    font-size: 12px;
+  }
+}
+
+.assignPlanToEmployee {
+  &__label {
+    position: relative;
+    font-size: 0.75rem;
+    line-height: 1;
+
+    .required-asterisk {
+      color: red;
+    }
+  }
+
+  &__input {
+    border: 1px solid #95989a;
+    border-radius: 3px;
+    height: 36px;
+    padding: 10px;
+  }
+
+  &__message-error {
+    margin: 5px 0;
+    color: #f23648;
+    display: block;
+  }
+}
+
+.personal-information {
+  &__general-infor {
+    border-bottom: 1px solid rgba(110, 124, 143, 0.5);
+
+    &__image {
+      margin: 9px 16px 9px 24px;
+
+      .avatar {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+      }
+
+      .input-file {
+        width: 50px;
+        height: 50px;
+        color: transparent;
+        cursor: pointer;
+        position: absolute;
+        top: 0;
+        left: 0;
+      }
+
+      .input-file::-webkit-file-upload-button {
+        visibility: hidden;
+      }
+    }
+
+    &__name {
+      padding: 7px 0;
+
+      .name {
+        font-size: 18px;
+      }
+
+      .status-account {
+        width: 61px;
+        height: 26px;
+        background: rgba(45, 188, 154, 0.15);
+        border-radius: 30px;
+        font-size: 12px;
+        color: #2dbc9a;
+        padding: 3px 9px;
+      }
+    }
+  }
+}
+
+#submitTimeOffPlanForm {
+  .form-check-input:checked {
+    background-color: #1ABC9C;
+    border-color: #1ABC9C;
+  }
+
+  .form-check-input:focus {
+    box-shadow: unset;
+  }
+}

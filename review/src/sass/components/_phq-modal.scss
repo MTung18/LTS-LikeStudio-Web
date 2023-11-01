@@ -1,0 +1,44 @@
+.phq-modal {
+    @extend .shadow;
+    border: none;
+
+    &__header {
+        height: 44px;
+        display: flex;
+        align-items: center;
+    }
+
+    &__subheader {
+        background: $grey--100;
+        position: sticky;
+        top: 0;
+        padding: 8px 16px;
+        font-weight: bold;
+        z-index: 1;
+    }
+
+    &__title {
+        text-align: center;
+        color: $grey--000;
+        @include font-size(16px);
+        font-weight: bold;
+    }
+
+    &__body {
+        &--table {
+            padding: 0;
+        }
+    }
+
+    &__footer {
+        background: $grey--000;
+
+        .btn {
+            min-height: unset;
+        }
+
+        & > * {
+            margin: 0;
+        }
+    }
+}

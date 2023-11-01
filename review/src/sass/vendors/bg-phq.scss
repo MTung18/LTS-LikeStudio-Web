@@ -1,0 +1,226 @@
+@use '../../bryntum/sass/themes/stockholm.scss';
+
+$grid-row-odd-color: #fafafa;
+$grid-cell-border-color: #e9eaeb;
+$grid-cell-font-weight: 400;
+$grid-cell-color: lighten($grey--700, 10%);
+$grid-region-resize-splitter-color: $grey--100;
+$grid-header-text-color: lighten($grey--900, 10%);
+$grid-header-background-color: $white;
+$grid-header-hover-background-color: $grey--000;
+$grid-header-border-color: #d8d9da;
+// $grid-header-font-weight: $stockholm-font-weight;
+$grid-header-text-transform: capitalize;
+$grid-header-font-size: 0.875rem;
+$grid-header-icon-light-color: $grey--200;
+$grid-header-font-weight: bold;
+$grid-header-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+$grid-selection-color: $cyan;
+$grid-cell-focused-outline-color: transparentize($secondary, 0.4);
+$grid-cell-focused-outline-width: 1px;
+$grid-header-icon-font-size: 0.8em;
+
+$grid-footer-box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.08);
+
+$grid-group-header-color: $grey--900;
+$grid-group-header-background-color: #fafbfc;
+$grid-group-header-line-width: 1px;
+$grid-group-header-icon-color: #babbbc;
+$grid-group-header-text-transform: uppercase;
+$grid-groupsummary-background-color: #fffbf5;
+
+$grid-cell-row-hover-background-color: rgba($cyan, 0.1);
+$grid-row-selected-background-color: rgba($cyan, 0.1);
+$grid-focus-row-selected-background-color: rgba($cyan, 0.2);
+$grid-cell-hover-background-color: rgba($cyan, 0.1);
+
+$grid-region-resize-splitter-color: $grid-cell-border-color;
+
+$tree-expander-color: lighten($grid-cell-color, 30%);
+$tree-parent-font-weight: 600;
+$tree-parent-color: lighten($grid-cell-color, 10%);
+
+$columndragtoolbar-button-color: $grey--700;
+
+$quickfind-font-weight: 400;
+$percent-bar-fill: $cyan;
+$percent-bar-background: $grey--000;
+
+// .b-icon-sort-asc:before {
+// 	content: "#{ $fa-var-arrow-up }";
+// }
+
+// .b-icon-sort-desc:before {
+// 	content: "#{ $fa-var-arrow-down }";
+// }
+
+// .b-icon-group-collapse:before {
+// 	content: "\f105" !important;
+// }
+
+// .b-icon-group-expand:before {
+// 	content: "\f107" !important;
+// }
+
+// @import "shared";
+
+// hide borders in headers when column lines are hidden
+.b-gridbase.b-no-column-lines .b-grid-header {
+	border-right-color: transparent;
+}
+// .b-fa:before {
+// 	font-family: "Font Awesome 5 Pro";
+// 	font-weight: 300;
+// }
+
+// Custom Styles Added
+.b-container {
+	flex: 1 1 auto;
+	display: flex;
+
+	&--autoheight {
+		.b-grid-body-container {
+			flex: unset !important;
+		}
+	}
+	&--sow {
+		border: 1px solid $grey--200;
+		.b-gridbase .b-grid-panel-body:not(.b-autoheight) > .b-grid-body-container {
+			contain: unset;
+		}
+		.b-grid-vertical-scroller {
+			position: relative;
+		}
+	}
+	&--hover {
+		.b-grid-row {
+			.b-action-cell {
+				&--hover {
+					.b-action-ct {
+						@include media-breakpoint-up(xl) {
+							visibility: hidden;
+						}
+						display: inline-flex;
+						vertical-align: middle;
+						right: 0;
+						position: relative;
+						border-left: none;
+						flex: 1 1 auto;
+						& > span {
+							display: flex;
+							flex-direction: column;
+							flex-shrink: 1;
+
+							i {
+								&.btn {
+									&:hover {
+										transform: unset;
+									}
+									&:before {
+										@include font-size(18px);
+									}
+									width: auto;
+									display: flex;
+									flex-direction: column;
+									line-height: unset !important;
+									span {
+										@include font-size(13px);
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			&.b-hover, &.b-selected {
+				.b-action-cell {
+					&--hover {
+						.b-action-ct {
+							visibility: visible;
+						}
+					}
+				}
+			}
+		}
+	}
+	th,
+	td {
+		border-top: none !important;
+		padding: 0 !important;
+		vertical-align: auto !important;
+	}
+}
+
+.b-gridbase.b-autoheight {
+	height: 100%;
+	flex: 1 1 auto;
+}
+.b-gridbase.b-outer {
+	height: unset !important;
+}
+.b-scroller-stretcher {
+	transform: unset !important;
+}
+ label.b-checkbox-label {
+	 margin-bottom: 0;
+	 &::before {
+		 margin: 0 !important;
+	 }
+ }
+ .b-percent-bar-outer, .b-percent-bar {
+	 border-radius: 8px !important;
+ }
+
+ .b-grid-header {
+    .b-checkbox ~ .b-checkbox{
+        display: none !important;
+    }
+}
+
+.b-field-inner {
+    @extend .fs-input__form-group, .pt-0, .mb-0, .border-0;
+	background: transparent;
+}
+.b-textfield {
+	@extend .overflow-visible;
+    border: none;
+
+    input, textarea {
+
+        @extend .fs-input__input, .form-control;
+		position: relative;
+		z-index: 1;
+
+    }
+	.b-list {
+		margin: 0 !important;
+		@extend .overflow-visible;
+		&.b-empty:not(.b-masked)::after {
+			display: none;
+		}
+	}
+	.b-fieldtrigger {
+		position: absolute;
+		bottom: 1px;
+		z-index: 10;
+		height: 38px;
+		@extend .ps-2, .pe-2;
+		&.b-icon-remove {
+			right: 27px;
+		}
+		&.b-icon-picker {
+			right: 1px;
+		}
+	}
+}
+.b-combo.b-uses-chipview:not(.b-empty) input {
+    padding-left: 0.2em;
+    -webkit-box-ordinal-group: 100000;
+    -ms-flex-order: 99999;
+    order: 99999;
+    min-width: 100%;
+}
+.b-chip {
+	@extend .btn, .btn-sm;
+	border-radius: 0.2rem !important;
+}

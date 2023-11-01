@@ -1,0 +1,200 @@
+/*colors*/
+
+/*greyscale*/
+
+$grey--100: #e1e4e8;
+$grey--200: darken($grey--100, 10%);
+$grey--300: darken($grey--100, 20%);
+$grey--400: darken($grey--100, 30%);
+$grey--500: darken($grey--100, 40%);
+$grey--600: darken($grey--100, 50%);
+$grey--700: darken($grey--100, 60%);
+$grey--800: darken($grey--100, 70%);
+$grey--900: darken($grey--100, 80%);
+$grey--000: lighten($grey--100, 5%);
+$grey--444: #444;
+
+/*Dispatch HQ Colors*/
+
+$luscious-pearl: #F4F5FA;
+$oslo-grey: #95989A;
+$chanted-apricot: #FF6600;
+$enticing-strawberry: #FB4040;
+$dreamy-succulent: #2BB673;
+$cerulean: #03A9F4;
+$shadowed-sapphire: #582D80;
+$mysterious-cobalt: #244E77;
+$mysterious-cobalt-dark: #193755;
+$woodsmoke: #15181C;
+$foundation-yellow: #fbc018;
+$browser-grey: #e8e8e8;
+$pink: #EE3279;
+$mountain-meadow: #1ABC9C;
+$alice-blue: #F5FCFF;
+$mountain-meadow-light--005: rgba(26, 188, 156, 0.05);
+$mountain-meadow: #1ABC9C;
+$mountain-meadow-dark: #12947A;
+$mountain-meadow-dark--hover: #15816B;
+$joyous-buttercup: #FF6600;
+$joyous-buttercup-dark: #EF6407;
+$joyous-buttercup-dark--hover: #DB5804;
+$lightning-yellow: #FBC117;
+$extrinsic-peach: #FF5050;
+$extrinsic-peach-dark: #E24444;
+$enchanted-aqua: #0ABDE3;
+$cornflower-blue: #7D5FFF;
+$charming-coral: #FF5F67;
+$frosted-emerald: #12CBC4;
+$bleu-grey: #6E7C8F;
+$cerulean-dark: #0198DC;
+$enchanted-rose: #e41767;
+$lustrous-ivory: #D980FA;
+$marvelous-magenta: #C43D97;
+$cornflower-blue-dark: #425AFB;
+$boat-orchid: #C43D97;
+$royal-blue: #4942fb;
+
+//action-item-colors
+$priority--low: $cerulean;
+$priority--medium: $lightning-yellow;
+$priority--high: $joyous-buttercup;
+$priority--urgent: $extrinsic-peach;
+$priority--emergency: $enchanted-rose;
+// $concrete: $grey--900;
+// $ebony-clay: $grey--700;
+$white--overlay--050: rgba(255, 255, 255, 0.5);
+$gallery: #EEEEEE;
+$alto: #DDDDDD;
+$silver: #CCCCCC;
+$silver-chalice: #AAAAAA;
+
+// global status colors
+$status--active: $mountain-meadow;
+$status--answered: $cerulean;
+$status--answered-as-noted: $cerulean-dark;
+$status--approved: $mountain-meadow;
+$status--approved-as-noted: $mountain-meadow-dark;
+$status--canceled: $bleu-grey;
+$status--closed: $cerulean;
+$status--completed: $cerulean;
+$status--custom: $lustrous-ivory;
+$status--draft: $bleu-grey;
+$status--estimate: $marvelous-magenta;
+$status--in-progress: $frosted-emerald;
+$status--in-review: $lightning-yellow;
+$status--inactive: $bleu-grey;
+$status--internal: $cornflower-blue-dark;
+$status--not-started: $bleu-grey;
+$status--on-hold: $joyous-buttercup;
+$status--open: $lightning-yellow;
+$status--past-due: $joyous-buttercup;
+$status--pending: $lightning-yellow;
+$status--rejected: $extrinsic-peach;
+$status--resubmitted: $lightning-yellow;
+$status--revise-and-resubmit: $joyous-buttercup;
+$status--submitted: $lightning-yellow;
+
+// Committed Costs Colors
+$items--light: rgba(110, 124, 143, .08);
+$items--dark: rgba(110, 124, 143, .15);
+
+//Crew Color
+$crew-purple: #582D80;
+$crew-purple: #7a49a5;
+$crew-blue: 	#4974a5;
+
+//categories
+$cat-all: #0198DC;
+$cat-open: #425AFB;
+$cat-overdue: #FF5050;
+$cat-upcoming: #EF6407;
+$cat-closed: #12947A;
+$transparent: rgba(255, 255, 255, 0);
+
+//scheduler colors
+$task-orange: #F79F1F;
+$task-pink: #FF5094;
+$task-dark-orange: #FF6600;
+$task-tang: #FF6600;
+$task-fuscia: #F63057;
+$task-green: #27CA37;
+$task-cyan: #03A9F4;
+$task-blue: #0376F2;
+$task-violet: #A03AFF;
+
+/*Normalized Names*/
+
+$yellow: $foundation-yellow;
+$green: $mountain-meadow;
+$red: $extrinsic-peach;
+$blue: $mysterious-cobalt;
+$blue--dk: $mysterious-cobalt-dark;
+$cyan: $cerulean;
+$purple: $shadowed-sapphire;
+$indigo: $mysterious-cobalt;
+$cyan--lt: lighten($cyan, 48%);
+$orange: $joyous-buttercup;
+$peach: $extrinsic-peach;
+$aqua: $enchanted-aqua;
+$primary: $green;
+
+/*Other Colors*/
+
+$teal: #20c9c0;
+$navy: #000080;
+$tan: #D2B48C;
+$black: #000000;
+$steel: #5d727d;
+$mint: #4dffb8;
+$teal-green: #29b390;
+// Vendor Colors
+$dropbox: #0570CC;
+$dropbox-border: #0061FF;
+$onedrive: #0364B8;
+$onedrive-border: #0078D4;
+$googledrive: #007ce7;
+$googledrive-border: #1967D2;
+//P4C Colors
+$p4c-theme: #F5A721;
+$p4c-blue: #34495E;
+$p4c-blue--light: lighten($p4c-blue, 55%);
+$p4c-blue--medium: lighten($p4c-blue, 30%);
+$list-hover: #f5f7f8;
+$list-hover-alpha: rgba($grey--400, 0.1);
+$grey--alpha: rgba($black, 0.125);
+$white: #FFFFFF;
+$blush: #FE828C;
+
+/*Utility Colors*/
+
+$hover-bg: rgba($grey--000, .6);
+//page
+$hr: 1px solid rgba($oslo-grey, 0.5);
+//END Themes
+//forms
+$disabled-bg: $grey--000;
+$form-control-border: $grey--400; //rgba($grey--200, 0.8);
+$border-active: $cyan;
+$form-control-border-radius: 6px;
+$form__input---height: 40px;
+//text
+$text-color: $grey--900;
+
+//file-type colors
+
+$ms-word: #2B579A;
+$ms-ppt: #B7472A;
+$ms-excel: #217346;
+$adobe-pdf: #EA0C0C;
+$dropbox: #007CE7;
+$dropbox-dark: #0572D1;
+
+$folder: $grey--700;
+$file-pdf: $adobe-pdf;
+$file-word: $ms-word;
+$file-excel: $ms-excel;
+$file-powerpoint: $ms-ppt;
+$file-audio: $grey--700;
+$file-video: $grey--700;
+$image: $grey--700;
+$file-alt: $grey--700;

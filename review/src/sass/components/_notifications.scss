@@ -1,0 +1,41 @@
+﻿/****************************/
+/**     NOTIFICATIONS      **/
+/****************************/
+
+.g-notifications {
+    min-height: 62px;
+    margin: 10px;
+    border-radius: 3px;
+    display: flex !important;
+    align-items: stretch;
+    overflow: hidden;
+    @extend .shadow;
+    &__icon {
+        width: 62px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: $white;
+
+
+        &.notification--error {
+            background-color: $red;
+        }
+
+        &.notification--success {
+            background-color: $primary;
+        }
+
+        &.notification--warning {
+            background-color: $orange;
+        }        
+    }
+    
+}
+
+/* Media Queries */
+@media (max-width: 480px) {
+    .vue-notification-group {
+        width: 100% !important;
+    }
+}

@@ -1,0 +1,111 @@
+.switcher {
+    height: 100%;
+    &__header {
+        height: $page-header-ht;
+        position: fixed;
+        background: $white;
+        border-bottom: 1px solid $grey--100;
+        z-index: 10;
+        width: 100%;
+        top: $global-header-height;
+        @include media-breakpoint-down(xl) {
+            width: 100%;
+            top: $global-header-height--mobile;
+        }
+    }
+    form {
+        &.form-inline {
+            height: 100%;
+            width: 100%;
+            .form-group {
+                &--search {
+                    align-items: stretch;
+                    .form-control {
+                        width: 100%;
+                    }
+                }
+            }
+        }
+    }
+    &__wrapper {
+        height: 100%;
+        width: 100%;
+    }
+    &__switch {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        transition: all 300ms ease-in-out;
+        text-align: left;
+        line-height: 1.3;
+        &.btn {
+            height: auto;
+            text-transform: none !important;
+        }
+        &:hover {}
+    }
+    &__title-wrapper {
+        //width: 100%;
+        display: flex;
+        flex-direction: column;
+        flex: 1 1 auto;
+        min-width: 0;
+    }
+    &__title {
+        @extend .default-heading;
+        @extend .ellipsis-text;
+        @include media-breakpoint-down(xl) {}
+        &--sub {
+            text-transform: none;
+            @extend .ellipsis-text;
+        }
+    }
+    &__icon {}
+    &__card {
+        position: absolute;
+        border-radius: 0;
+        border: none;
+        max-height: calc(100vh - #{$global-header-height} - #{$page-header-ht});
+        overflow: auto;
+        width: 50%;
+        top: calc(100% + 1px);
+        left: 0;
+        z-index: 999;
+        @include media-breakpoint-down(xl) {
+            max-height: calc(100vh - #{$global-header-height--mobile} - #{$page-header-ht} - #{$global-footer-height--mobile});
+            width: calc(50% + 72px);
+        }
+        @include media-breakpoint-down(lg) {
+            width: 100%;
+        }
+        &--shifted {
+            @include media-breakpoint-down(xl) {
+                left: 72px;
+                width: 50%;
+            }
+            @include media-breakpoint-down(lg) {
+                left: 72px;
+                width: calc(100% - 72px);
+            }
+        }
+        .card-text {
+            .list-group {
+                .list-group-item {
+                    padding-top: 4px;
+                    padding-bottom: 4px;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                }
+            }
+        }
+    }
+    &__card-header {
+        border-radius: 0 !important;
+        background: $grey--000;
+        position: sticky;
+        top: 0;
+        z-index: 1030;
+        border-bottom: none;
+    }
+}

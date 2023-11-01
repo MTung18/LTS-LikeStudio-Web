@@ -1,0 +1,536 @@
+    .list {
+        display: flex;
+        flex-direction: column;
+        min-height: unset !important;
+        position: relative;
+        padding-bottom: 0 !important;
+        @include media-breakpoint-down(xl) {
+        }
+        &--portfolio {
+            height: calc(100vh - #{$global-header-height}) !important;
+            @include media-breakpoint-down(xl) {
+                height: calc(100vh - #{$global-header-height--mobile} - #{$global-footer-height--mobile}) !important;
+            }
+        }
+        &__controls {
+            padding-top: 20px;
+            padding-bottom: 20px;
+            @include media-breakpoint-down(xl) {
+                padding-bottom: 8px;
+            }
+        }
+        &__action {
+            padding-bottom: 16px;
+            @include media-breakpoint-down(xl) {
+                //padding-top: 8px;
+            }
+        }
+        &__icon {
+            @include font-size(18px);
+            margin-right: 10px;
+        }
+        &__busy {
+            height: 100%;
+            width: 100%;
+            margin-top: 30px;
+            /*align-items: center;*/
+            justify-content: center;
+            display: flex;
+            position: absolute;
+        }
+        &--empty {
+            display: flex;
+            flex-direction: column;
+            text-align: center;
+            color: $grey--400;
+        }
+        &__h-button,
+        &__mobile-button {
+            @include media-breakpoint-down(xl) {
+                visibility: visible !important;
+            }
+            &.btn {
+                flex-direction: column !important;
+                text-transform: none;
+                align-items: center;
+                justify-content: center;
+                text-decoration: none;
+                .list {
+                    &__h-button {
+                        &-icon {
+                            height: 1em;
+                            display: flex;
+                            align-items: center;
+                            margin-right: 0;
+                            @include font-size(18px);
+                        }
+                        &-label {
+                            @include font-size(13px);
+                        }
+                    }
+                }
+            }
+        }
+        &__table {
+            // width: 100%;
+            // height: 100%;
+            flex: 1 auto;
+            overflow: hidden;
+            position: relative;
+            display: flex;
+            flex: 1 1 auto;
+            flex-direction: column;
+            .table-responsive {
+                overflow: auto;
+                height: 100%;
+                margin-bottom: 0;
+                max-height: unset;
+                position: absolute;
+                // padding-bottom: 20px;
+                flex: 1 1 auto;
+            }
+            &--budget {
+                table {
+                    &>tbody {
+                        &>tr {
+                            &.list__tr--tbody {
+                                &>td {
+                                    &.list__td {
+                                        &--hover {
+                                            background: transparent !important;
+                                            &:hover {
+                                                // .list__h-button-group {
+                                                //     background: rgba($white, .5) !important;
+                                                // }
+                                            }
+                                            .list__h-button-group {
+                                                background-color: transparent !important;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            &--onpage {
+                overflow: unset;
+                .table-responsive {
+                    position: relative;
+                    // overflow: unset;
+                    //  overflow-x: auto;
+                    // overflow: visible;
+                    @include media-breakpoint-down(xl) {
+                        overflow: auto;
+                    }
+                }
+            }
+            &--items {
+                overflow: auto !important;
+                table {
+                    background: $white;
+                    td {
+                        //background: $white;
+                        &:not(.list__td) {
+                            padding: 0 !important;
+                            table {
+                                margin-bottom: 0;
+                            }
+                        }
+                    }
+                }
+            }
+            table {
+                &>thead {
+                    &>tr {
+                        &.list__tr--thead {
+                            &>th {
+                                &.list__th {
+                                    border: none;
+                                    line-height: 1;
+                                    white-space: nowrap;
+                                    z-index: 10;
+                                    height: 40px;
+                                    vertical-align: middle;
+                                    @extend .py-2;
+                                    &:not(:last-child) {
+                                        padding-right: 4px;
+                                    }
+                                    &--firstname {
+                                        min-width: 150px;
+                                    }
+                                    &--lastname {
+                                        left: 150px !important;
+                                    }
+                                    &--sideBar {
+                                        border: 1px solid #dee2e6;
+                                        padding: 0.5rem;
+                                        padding-bottom: 0px !important;
+                                        >.custom-radio
+                                        {
+                                            display: flex;
+                                            justify-content: center;
+                                        }
+                                        >div:not(.custom-radio) {
+                                            padding-left: 0.5rem !important;
+                                        }
+                                    }
+                                    &.b-table-sticky-column {
+                                        @include media-breakpoint-down(xl) {
+                                            left: unset;
+                                            background-color: $white;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                &>tbody {
+                    &>tr {
+                        &.list {
+                            &__tr {
+                                outline: none;
+                                &--inactive {
+                                    td {
+                                        color: $grey--300 !important;
+                                        font-style: italic;
+                                    }
+                                }
+                                &--unclickable {
+                                    cursor: default !important;
+                                }
+                                &--hover {
+                                    cursor: pointer;
+                                    &:hover {
+                                        td {
+                                            &::after {
+                                                content: '';
+                                                position: absolute;
+                                                top: 0;
+                                                left: 0;
+                                                height: 100%;
+                                                width: 100%;
+                                                background: rgba($grey--400, 0.1);
+                                                z-index: 0;
+                                                pointer-events: none;
+                                            }
+                                        }
+                                        .list__h-button-group {
+                                            &::after {
+                                                @include media-breakpoint-down(xl) {
+                                                    content: '';
+                                                    position: absolute;
+                                                    top: 0;
+                                                    left: 0;
+                                                    height: 100%;
+                                                    width: 100%;
+                                                    background: rgba($grey--400, 0.1);
+                                                    z-index: 0;
+                                                    pointer-events: none;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        &.list__tr--tbody {
+                            &>td {
+                                position: relative;
+                                &.list__td {
+                                    max-width: 25vw;
+                                    white-space: nowrap;
+                                    overflow: hidden;
+                                    text-overflow: ellipsis;
+                                    position: relative;
+                                    vertical-align: middle;
+                                    padding-bottom: 4px;
+                                    padding-top: 4px;
+                                    overflow: hidden;
+                                    height: 40px;
+                                    &:not(:last-child) {
+                                        padding-right: 4px;
+                                    }
+
+                                    &--wrap-text {
+                                        white-space: normal;
+                                    }
+                                    &--dropdown {
+                                        overflow: visible;
+                                        .fancy {
+                                            &__button {
+                                                height: calc(100% - 2px) !important;
+                                                top: 1px;
+                                            }
+                                        }
+                                    }
+                                    &--100px {
+                                        min-width: 200px;
+                                        width: 200px;
+                                    }
+                                    &--100 {
+                                        width: 100%;
+                                    }
+                                    &--90 {
+                                        width: 90%;
+                                    }
+                                    &--80 {
+                                        width: 80%;
+                                    }
+                                    &--70 {
+                                        width: 70%;
+                                    }
+                                    &--60 {
+                                        width: 60%;
+                                    }
+                                    &--50 {
+                                        width: 50%;
+                                    }
+                                    &--40 {
+                                        width: 40%;
+                                    }
+                                    &--30 {
+                                        width: 30%;
+                                    }
+                                    &--25 {
+                                        width: 25%;
+                                    }
+                                    &--20 {
+                                        width: 20%;
+                                    }
+                                    &--15 {
+                                        width: 15%;
+                                    }
+                                    &--10 {
+                                        width: 10%;
+                                    }
+                                    &--5 {
+                                        width: 5%;
+                                    }
+                                    &--00 {
+                                        width: 0%;
+                                    }
+                                    &--pad--05 {
+                                        padding: 0.5rem;
+                                    }
+                                    &--notes {
+                                        white-space: normal !important;
+                                        span {
+                                            p {
+                                                &:only-child {
+                                                    margin-bottom: 0;
+                                                }
+                                            }
+                                        }
+                                    }
+                                    &--hover-overflow {
+                                        &:hover {
+                                            overflow: visible !important;
+                                        }
+                                    }
+                                    a {
+                                        color: inherit;
+                                        text-decoration: none;
+                                    }
+                                    &--overflow {
+                                        overflow: visible !important;
+                                    }
+                                    // z-index: 0;
+                                    @include media-breakpoint-down(xl) {
+                                        padding-bottom: 6px;
+                                        padding-top: 6px;
+                                    }
+                                    &--hover {
+                                        border-left: 1px solid transparent;
+
+                                        //min-width: 200px;
+                                        position: sticky !important;
+                                        right: 0;
+                                        //background: $white;
+                                        text-overflow: unset;
+                                        overflow: visible;
+                                        height: 44px;
+                                        z-index: 9;
+                                        padding: 0 !important;
+                                        @include media-breakpoint-down(xl) {
+                                            max-width: unset;
+                                        }
+                                        &:after {
+                                            @include media-breakpoint-down(xl) {
+                                                content: '';
+                                                position: absolute;
+                                                width: calc(100% + 1px);
+                                                height: 100%;
+                                                top: 0;
+                                                left: -1px;
+                                                border-left: 1px solid #dee2e6;
+                                            }
+                                        }
+                                        .list__h-button {
+                                            visibility: hidden;
+                                            &--persistant {
+                                                visibility: visible;
+                                            }
+                                        }
+                                        .list__h-button-group {
+                                            @include media-breakpoint-down(xl) {
+                                                background: $white;
+                                                position: absolute;
+                                                right: 100%;
+                                                top: 0;
+                                                height: 100%;
+                                                border-left: 1px solid #dee2e6;
+                                                z-index: 1;
+                                                right: 0;
+                                            }
+                                            &--no-toggle {
+                                                right: 0;
+                                                position: relative;
+                                                border-left: none;
+                                            }
+                                            &--persistant {
+                                                background: white !important;
+                                                border-left: 1px solid #dee2e6;
+                                            }
+                                        }
+                                    }
+                                    &--toggle {
+                                        &>div {
+                                            position: absolute;
+                                        }
+                                    }
+                                    &>div {
+                                        width: 100%;
+                                        white-space: nowrap;
+                                        overflow: hidden;
+                                        text-overflow: ellipsis;
+                                    }
+                                    .custom-radio
+                                    {
+                                        display: flex;
+                                        justify-content: center;
+                                    }
+                                    &--name {
+                                        min-width: 200px;
+                                        div {
+                                            overflow: hidden;
+                                            text-overflow: ellipsis;
+                                        }
+                                    }
+                                    &--firstname {
+                                        min-width: 150px;
+                                        a {
+                                            color: inherit;
+                                            text-decoration: none;
+                                        }
+                                    }
+                                    &--lastname {
+                                        left: 150px !important;
+                                        a {
+                                            color: inherit;
+                                            text-decoration: none;
+                                        }
+                                    }
+                                    &.b-table-sticky-column {
+                                        @include media-breakpoint-down(xl) {
+                                            left: unset;
+                                            background: $white;
+                                        }
+                                    }
+                                    &--inline-edit {
+                                        overflow: visible;
+                                        &>div {
+                                            overflow: visible;
+                                        }
+                                    }
+                                    .fs-input__form-group {
+                                        & > div {
+                                        width: 100%;
+
+                                        }
+                                    }
+                                }
+                            }
+                            &:hover {
+                                &>td {
+                                    &.list__td {
+                                        &--hover {
+                                            background: $white;
+                                            .list__h-button-group {
+                                                    // border-left: 1px solid #dee2e6;
+                                            }
+
+                                            .list__h-button {
+                                                visibility: visible;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            &.table-grey--200 {
+                                &>td {
+                                    color: $grey--700;
+                                }
+                                &:hover {
+                                    &>td {
+                                        &.list__td {
+                                            &--hover {
+                                                background: $grey--000;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            &.table-lightblue {
+                                &>td {
+                                    color: $grey--700;
+                                    background: rgba(3, 168, 244, 0.1);
+                                }
+                                &:hover {
+                                    &>td {
+                                        &.list__td {
+                                            &--hover {
+                                                background: $grey--000;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        &__popover {
+            max-height: 300px;
+            overflow: auto;
+            .popover-header {
+                display: flex;
+                position: sticky;
+                top: 0;
+                z-index: 1;
+            }
+            .popover-body {
+                padding: 0;
+            }
+        }
+        &__popover-icon {
+            color: $green;
+            width: 16px !important;
+            display: inline-block;
+            text-align: center;
+        }
+        &__integration {
+            .table {
+                border-bottom: 1px solid #dee2e6;
+                thead {
+                    th {
+                        vertical-align: bottom;
+                        border-bottom-width: 1px;
+                    }
+                }
+            }
+        }
+    }

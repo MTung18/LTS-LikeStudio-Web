@@ -1,0 +1,51 @@
+@import '../../../core-sass/themes/vars/stockholm-vars';
+
+
+$grid-cell-action-column-color: $primary;
+$action-item-hover-color: darken($primary, 10%);
+
+$grid-row-odd-color: #fafafa;
+$grid-cell-border-color: #e9eaeb;
+$grid-cell-font-weight: 400;
+$grid-cell-color: lighten($grey--700, 10%);
+$grid-region-resize-splitter-color: $grey--100;
+$grid-header-text-color: lighten($grey--900, 10%);
+$grid-header-background-color: $white;
+$grid-header-hover-background-color: $grey--000;
+$grid-header-border-color: #d8d9da;
+// $grid-header-font-weight: $stockholm-font-weight;
+$grid-header-text-transform: capitalize;
+$grid-header-font-size: 0.875rem;
+$grid-header-icon-light-color: $grey--200;
+$grid-header-font-weight: bold;
+$grid-header-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+$grid-selection-color: $cyan;
+$grid-cell-focused-outline-color: transparentize($secondary, 0.4);
+$grid-cell-focused-outline-width: 1px;
+$grid-header-icon-font-size: 0.8em;
+
+$grid-footer-box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.08);
+
+$grid-group-header-color: $grey--500;
+$grid-group-header-background-color: #fafbfc;
+$grid-group-header-line-width: 1px;
+$grid-group-header-icon-color: #babbbc;
+$grid-group-header-text-transform: uppercase;
+$grid-groupsummary-background-color: #fffbf5;
+
+$grid-cell-row-hover-background-color: $grey--000; //rgba($cyan, 0.07);
+$grid-row-selected-background-color:  rgba($cyan, 0.1);
+$grid-focus-row-selected-background-color:  rgba($cyan, 0.1);
+$grid-cell-hover-background-color:  $grey--000; //rgba($cyan, 0.07);
+
+$grid-region-resize-splitter-color: $grid-cell-border-color;
+
+$tree-expander-color: lighten($grid-cell-color, 30%);
+$tree-parent-font-weight: 600;
+$tree-parent-color: lighten($grid-cell-color, 10%);
+
+$columndragtoolbar-button-color: $grey--700;
+
+$quickfind-font-weight: 400;
+$percent-bar-fill: $cyan;
+$percent-bar-background: $grey--000;

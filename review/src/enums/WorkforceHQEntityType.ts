@@ -1,0 +1,23 @@
+export enum WorkforceHQEntityType {
+    Employee = 'Employee',
+    EarnCode = 'Earn Code',
+    AccrualCode = 'Accrual Code',
+    AccrualPlan = 'Accrual Plan',
+    Deduction = 'Benefits/Deduction',
+    Department = 'Department',
+    Minority = 'Minority',
+    Shift = 'Shift',
+    Trade = 'Trade',
+    LocalTaxAuthority = 'Local Tax Authority',
+    Union = 'Union',
+    TaxState = 'Tax State',
+    Crew = 'Crew',
+    CostCode = 'Cost Code',
+    WorkersCompState = 'Workers Comp. State',
+    WorkersCompClass = 'Workers Comp. Class',
+    GeneralLiabilityState = 'General Liability State',
+    GeneralLiabilityClass = 'General Liability Class',
+    PayPeriod = 'Pay Period',
+    MiscDeductionCycle = 'Misc. Deduction Cycle',
+    TaxGroup = 'Tax Group'
+}

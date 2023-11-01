@@ -1,22 +1,22 @@
-import AxiosBase from "./axiosBase";
+import axios from 'axios';
+import { ClientSide } from "../../public/appsettings.json"
 
-class FaqApi extends AxiosBase {
- constructor(interceptors) {
-  const baseUrl = getLocalAppsettings().ClientSide.LikeStudioAPI + "/api/faq";
-  super(interceptors, baseUrl);
- }
+const baseUrl = ClientSide.LikeStudioAPI + "/api/faq";
 
- async search(param) {
-   let listFaq;
-   try {
-    const response = await this.axiosInstance.get(
-     "search",
-     {
-      param: {
-        
-      }
-     }
-    )
-   }
- }
-}
+const FaqApi = {
+  async getListFaq(param) {
+    try {
+      const response = await axios.get(`${baseUrl}/search`, {
+        params: { keyword: param },
+      });
+
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      throw error;
+    }
+  },
+};
+
+export default FaqApi;
+

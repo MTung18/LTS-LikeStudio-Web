@@ -1,0 +1,131 @@
+$tab-selection-color: #03A9F4;
+
+.dashboard {
+    background-color: $grey--000;
+    height: 100% !important;
+    position: relative !important;
+
+    @include media-breakpoint-down(xl) {
+        // height: calc(100% - 80px) !important;
+    }
+
+    &__container {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        padding-bottom: 24px !important;
+
+        @include media-breakpoint-down(xl) {
+            display: block;
+            padding-bottom: 60px !important;
+        }
+    }
+
+    &__row {
+        flex: 1;
+    }
+
+    .qb-center {
+        .card-body {
+            margin: auto;
+        }
+    }
+
+    .qbcard {
+        &center {
+            .card-body {
+
+                margin: auto;
+            }
+        }
+
+        .card-body {
+            display: flex;
+            overflow-x: auto;
+            
+        }
+
+        .card-header {
+            font-weight: 600;
+            background-color: white;
+        }
+
+        .no-chart {
+            display: flex;
+            align-items: center;
+            margin: auto;
+
+            &-icon {
+                font-size: 1.5rem;
+            }
+        }
+
+        .qb-spinner {
+            width: 100%;
+            margin: auto;
+            display: flex;
+            justify-content: center;
+
+            .qb-spinner-color {
+                color: #12cbc4 !important;
+            }
+        }
+
+
+        .budget_header {
+            width: 100%;
+            align-items: center;
+            column-gap: auto;
+            justify-content: space-between;
+        }
+    }
+    .qb-card-table
+    {
+        .card-body {
+            padding: 0  ;
+            padding-bottom: 0.25rem !important;
+        }
+    }
+
+    .budget-grid {
+        width: 100%;
+        margin: auto;
+        .b-grid {
+            min-height: 20rem !important;
+        }
+
+        .b-gridbase.b-sort .b-grid-header.b-sort .b-grid-header-text,
+        .b-grid-header .b-filter-icon::after,
+        .b-grid-header-text::after {
+            color: white !important;
+        }
+
+        .b-grid-header,
+        .b-yscroll-pad {
+            background: #03a9f4 !important;
+            color: white;
+        }
+    }
+
+    .dashboard__header {
+        .tab-title {
+            margin: auto 0;
+            cursor: pointer;
+        }
+
+        .card-body {
+            display: flex;
+        }
+
+        .tab-active {
+            border-bottom: 4px solid $tab-selection-color;
+            font-weight: 500;
+            box-shadow: 0 8px 6px -6px #b0babe;
+        }
+
+        .refresh-button {
+            margin: auto 0 0 auto;
+        }
+    }
+
+}

@@ -1,0 +1,1 @@
+import{R as r,j as t}from"./index.611fe570.js";import{W as a}from"./whqDocumentsApi.6aaa1d96.js";const c=r("employeeDocumentation",()=>{const e=t([]);async function o(n=null){e.value=await a.fetchDocumentList(n)}return{employeeDocumentations:e,fetchEmployeeDocumentations:o}});var s=(e=>(e[e.Rendered=0]="Rendered",e[e.Uploaded=1]="Uploaded",e))(s||{});export{s as E,c as u};

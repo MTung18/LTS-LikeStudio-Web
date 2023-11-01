@@ -1,0 +1,1 @@
+import{_ as o}from"./onboardingContactForm.vue_vue_type_script_setup_true_lang.17935c5f.js";import{d as r,o as t,f as a}from"./index.611fe570.js";import"./onboardingEmployeeContactStore.4a6b6ed4.js";import"./onboardingStore.b8199798.js";const f=r({__name:"addOnboardingContact",setup(e){return(n,m)=>(t(),a(o,{formType:"CREATE"}))}});export{f as default};

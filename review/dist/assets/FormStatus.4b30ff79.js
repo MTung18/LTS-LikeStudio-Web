@@ -1,0 +1,1 @@
+var p=(e=>(e[e.EmployeeNotStarted=1]="EmployeeNotStarted",e[e.EmployeeInProgress=2]="EmployeeInProgress",e[e.EmployeeCompleted=3]="EmployeeCompleted",e[e.HRNotStarted=4]="HRNotStarted",e[e.HRCompleted=5]="HRCompleted",e))(p||{});export{p as F};

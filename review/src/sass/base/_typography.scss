@@ -1,0 +1,58 @@
+/**
+ * Basic typography style for copy text
+ */
+
+body {
+    color: $text-color;
+}
+
+.ellipsis-text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    /*&:hover {
+        overflow: visible;
+    }*/
+}
+
+.title-action {
+    align-self: center;
+}
+
+
+/***Headings***/
+
+.default-heading {
+    font-size: 18px;
+    font-weight: 900;
+
+    @include media-breakpoint-down(xl) {
+        @include font-size(16px);
+    }
+}
+
+.text {
+    &--18 {
+        @include font-size(18px);
+    }
+
+    &--20 {
+        @include font-size(20px);
+    }
+    
+    --status-icon{
+        @include font-size(0.75rem);
+    }
+    
+    &--status-active {
+        color: var(--bs-status-active) !important;
+    }
+
+    &--status-inactive {
+        color: rgba(var(--bs-status-inactive-rgb), 0.5) !important
+    }
+
+    &--status-pending {
+        color: var(--bs-warning) !important
+    }
+}

@@ -1,0 +1,91 @@
+@import '../../variables';
+
+.b-fieldfilterpicker {
+    .b-fieldfilterpicker-property {
+        flex: 0 0 50%;
+    }
+
+    .b-fieldfilterpicker-operator {
+        flex: 0 1 50%;
+        margin-inline-start: 1em;
+    }
+
+    .b-fieldfilterpicker-combo-locked > .b-field-inner {
+        border: none;
+        background: none;
+    }
+
+    .b-fieldfilterpicker-values {
+        margin-block-end: 0.2em;
+    }
+
+    .b-fieldfilterpicker-values > .b-field {
+        flex: 1;
+        margin-block-end: 0;
+    }
+
+    .b-fieldfilterpicker-value-separator {
+        flex: none;
+        padding: 0 0.4em;
+        align-self: center;
+    }
+
+    .b-fieldfilterpicker-values > .b-field:last-child::after {
+        display: none;
+    }
+}
+
+.b-fieldfilterpickergroup {
+    .b-fieldfilterpickergroup-row {
+        padding-top: $fieldfilterpickergroup-gap;
+        position: relative;
+        flex-shrink: 0;
+    }
+
+    .b-fieldfilterpickergroup-row:first-child {
+        padding-top: 0;
+    }
+
+    .b-fieldfilterpickergroup-row::before {
+        content: attr(data-separator-text);
+        font-size: 85%;
+        position: absolute;
+        text-align: center;
+        line-height: $fieldfilterpickergroup-gap;
+        width: 100%;
+        height: $fieldfilterpickergroup-gap;
+        top: 0;
+        background-image: linear-gradient(
+          to right, 
+          #e0e0e7, 
+          #e0e0e7 44%, 
+          transparent 46%, 
+          transparent 54%, 
+          #e0e0e7 56%);
+        background-position: 0 50%;
+        background-size: 100% 1px;
+        background-repeat: no-repeat;
+    }
+
+    .b-fieldfilterpickergroup-row:first-child::before {
+        display: none;
+    }
+  
+    .b-fieldfilterpickergroup-filter-active {
+        flex: 0 0 2.2em;
+    }
+
+    .b-fieldfilterpickergroup-other-filters {
+        padding: 0.5em 0;
+    }
+
+    .b-fieldfilterpickergroup-add-button {
+        align-self: center;
+        margin-top: 1.1em;
+    }
+
+    .b-fieldfilterpickergroup-remove {
+        padding: 0 0.25em;
+        margin-inline-start: 0.5em;
+    }
+}

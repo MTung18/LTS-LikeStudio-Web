@@ -1,0 +1,67 @@
+$success: $green;
+$danger: $red;
+$warning: $foundation-yellow;
+//Font size
+$font-size-base: 0.875rem;
+//misc
+$input-btn-focus-color: rgba($cyan, 0.7);
+$custom-control-indicator-focus-box-shadow: 0 0 0 0.1rem rgba($cyan, .5);
+$input-focus-box-shadow: 0 0 0 0.1rem rgba($cyan, .5);
+$custom-control-indicator-focus-border-color: transparent;
+$custom-control-indicator-focus-border-color: $cyan;
+$input-border-color: $grey--300;
+$input-focus-border-color: $border-active;
+//$card-border-color: $form-control-border;
+$card-spacer-x: 12px;
+$card-border-radius: 8px;
+//$card-border-radius: $form-control-border-radius;
+$btn-border-radius: 4px;
+$custom-control-indicator-checked-border-color: $success;
+$custom-control-indicator-checked-bg: $success;
+$navbar-padding-y: 0;
+$navbar-padding-x: 0;
+$navbar-dark-color: $white;
+$box-shadow: 0 .325rem .5rem rgba($black, .15) !default;
+$modal-backdrop-bg: rgba($black, .65);
+$dropdown-link-hover-bg: $grey--000;
+$dropdown-link-active-bg: $grey--100;
+$dropdown-link-active-color: $grey--900;
+$nav-pills-link-active-bg: $cyan;
+/*Bootstrap Grid Overrides*/
+$table-cell-padding: 1.5rem;
+$table-cell-padding-sm: .75rem;
+$form-check-input-checked-bg-color: $cyan;
+$form-check-input-checked-border-color: $cyan;
+
+$grid-breakpoints: ( //
+    xs: 0, //
+    sm: 481px, //
+    md: 641px, //
+    lg: 769px, //
+    xl: 1025px //
+    ) !default;
+$grid-gutter-width: 20px;
+
+$utilities: (
+    "bg-opacity": (
+        css-var: true,
+        class: bg-opacity,
+        values: (
+            0: 0,
+            10: .1,
+            25: .25,
+            50: .5,
+            75: .75,
+            100: 1
+        )
+    ),
+    "font-size": (
+        rfs: true,
+        property: font-size,
+        class: fs,
+        values: (
+          7: 1rem,
+          8: 1.5rem,
+        ),
+      ),
+);
