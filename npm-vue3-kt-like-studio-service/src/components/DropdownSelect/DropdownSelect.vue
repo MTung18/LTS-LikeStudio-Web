@@ -1,23 +1,28 @@
 <template>
   <div
-    class="select_area"
-    :class="{
-      disable: props.disabled,
-      large: props.size === 'large',
-      medium: props.size === 'medium',
-    }"
+    class="select-area"
+    :class="[props.classBind, disabled && props.disabled]"
   >
-    <button type="button" class="select_btn" @click="selectOpen">
-      선택
-      <Icons icon-name="chevron_b_bold" />
+    <button type="button" class="select-btn" @click="selectOpen">
+      {{ props.defaultSelect }}
+      <Icons
+        icon-name="chevron_b_bold"
+        icon-color="#111"
+        v-if="!props.disabled"
+      />
+      <Icons
+        icon-name="chevron_b_bold"
+        icon-color="var(--color-gray-777)"
+        v-if="props.disabled"
+      />
     </button>
-    <div class="select_list_wrap">
+    <div class="select-list-wrap">
       <ul>
-        <li class="select_list_node select">
-          <button type="button">선택</button>
+        <li class="select-list-node select">
+          <button type="button">{{ props.defaultSelect }}</button>
         </li>
         <li
-          class="select_list_node"
+          class="select-list-node"
           v-for="item in props.selectList"
           :key="item.id"
         >
@@ -40,7 +45,15 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
-  size: {
+  defaultSelect: {
+    type: String,
+    default: '',
+  },
+  width: {
+    type: Number,
+    default: 54,
+  },
+  classBind: {
     type: String,
     default: '',
   },
@@ -48,12 +61,13 @@ const props = defineProps({
 
 function selectOpen(e) {
   if (!e.target.parentNode.classList.contains('disable')) {
-    const findParent = e.target.parentNode.querySelector('.select_list_wrap');
+    const findParent = e.target.parentNode.querySelector('.select-list-wrap');
     const btnIcon = e.target.querySelector('.icon-wrap');
     const listH =
-      findParent.querySelector('.select_list_wrap > ul').clientHeight + 14;
+      findParent.querySelector('.select-list-wrap > ul').clientHeight + 14;
+    console.log(findParent);
+
     findParent.style.height = `${listH}px`;
-    console.log(findParent, listH);
     if (findParent.clientHeight <= 15) {
       findParent.style.height = `${listH}px`;
       btnIcon.style.transform = 'rotate(180deg) translateY(50%)';
@@ -66,89 +80,96 @@ function selectOpen(e) {
 </script>
 
 <style scoped>
-.select_area {
-  max-width: 54rem;
+.select-area {
   position: relative;
-  border-radius: 0.6rem;
-}
-
-.select_btn {
-  position: relative;
-  display: flex;
-  border: 1px solid #dddddd;
-  border-radius: 0.6rem;
+  display: inline-block;
+  min-width: 58rem;
   width: 100%;
-  align-items: center;
-  box-sizing: border-box;
-  font-size: 1.6rem;
-  overflow: hidden;
-}
-.select_area.large .select_btn {
-  max-height: 5.4rem;
-  padding: 1.6rem 2.4rem;
-}
-.select_area.medium .select_btn {
-  max-height: 4.8rem;
-  padding: 1.4rem 1.6rem;
-  font-size: 1.4rem;
+  border: 1px solid var(--color-gray-ddd);
+  border-radius: 0.6rem;
+  background: var(--color-neutrals-white-100);
 }
 
-.select_btn .icon-wrap {
+.select-area:hover {
+  border-color: var(--color-primary);
+}
+
+.select-btn {
+  position: relative;
+  box-sizing: border-box;
+  overflow: hidden;
+  padding: 1.1rem 4.8rem 1.1rem 1.2rem;
+  font-size: var(--fz-m);
+  width: 100%;
+  max-width: 58rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: left;
+}
+
+.select-btn .icon-wrap {
   position: absolute;
-  right: 2.4rem;
+  right: 1.1rem;
   top: 50%;
   transform: translateY(-50%);
 }
 
-.select_list_wrap {
+.select-list-wrap {
   position: absolute;
-  width: 100%;
+  min-width: 100%;
   height: 0;
-  top: 5.4rem;
+  top: 100%;
   left: 0;
   overflow: hidden;
   padding-top: 1.2rem;
   transition: 0.3s;
   z-index: 10;
+  display: inline-block;
 }
-
-.select_list_wrap > ul {
+.drop-width-120 .select-list-wrap {
+  width: 120%;
+}
+.select-list-wrap > ul {
   display: flex;
   flex-flow: column;
-  font-size: 1.6rem;
-  color: #777777;
+  color: var(--color-gray-777);
   border-radius: 0.6rem;
-  border: 1px solid #dddddd;
+  border: 1px solid var(--color-gray-ddd);
   overflow: hidden;
-  background: #fff;
-}
-.medium .select_list_wrap > ul {
-  font-size: 1.4rem;
+  background: var(--color-neutrals-white-100);
+  font-size: var(--fz-m);
 }
 
-.select_list_node.select {
-  color: #111111;
+.select-list-node.select {
+  color: var(--color-neutrals-black);
   background: #f6f6f6;
 }
 
-.select_list_node {
+.select-list-node {
   padding: 1.2rem 2.4rem;
 }
 
-.select_list_node:hover {
-  color: #111111;
+.select-list-node:hover {
+  color: var(--color-neutrals-black);
   background: #f6f6f6;
 }
 
-::v-deep .icon-wrap {
+.select-list-node button {
+  width: 100%;
+  text-align: left;
+}
+
+:deep(.icon-wrap) {
   pointer-events: none;
 }
 
-.select_area.disable {
-  background: #f6f6f6;
-  color: #777777;
+.select-area.disable {
+  color: var(--color-gray-777);
 }
-::v-deep .select_wrap.disable .icon-wrap {
-  --icon-color: #777777 !important;
+.select-area.disable .select-btn {
+  background: #f6f6f6;
+}
+:deep(.select-wrap.disable .icon-wrap) {
+  --icon-color: var(--color-gray-777) !important;
 }
 </style>

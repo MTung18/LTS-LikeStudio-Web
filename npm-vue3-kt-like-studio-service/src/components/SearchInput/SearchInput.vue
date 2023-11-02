@@ -56,9 +56,9 @@ const props = defineProps({
   },
   colorType: {
     type: String,
-    default: 'block',
+    default: 'black',
     validator(value) {
-      return ['block', 'gray'].includes(value);
+      return ['black', 'gray'].includes(value);
     },
   },
   size: {
@@ -99,8 +99,9 @@ const removeModelValue = () => {
   display: inline-flex;
   align-items: center;
   gap: 0 1.2rem;
-  min-width: 56.6rem;
+  width: 100%;
   border: 1px solid;
+  background: var(--color-neutrals-white-100);
 }
 
 .search .search__input-wrap {
@@ -132,11 +133,12 @@ const removeModelValue = () => {
 
 .search.medium {
   padding: 0 1.6rem;
-  height: 4.8rem;
+  height: 4.6rem;
   font-size: var(--fz-m);
 }
 
 .search.medium .search__input {
+  width: 100%;
   height: 2rem;
 }
 
@@ -148,7 +150,7 @@ const removeModelValue = () => {
   border-radius: 0.6rem;
 }
 
-.search.block {
+.search.black {
   border-color: var(--color-neutrals-black);
 }
 

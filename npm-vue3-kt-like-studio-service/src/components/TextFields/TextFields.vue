@@ -84,8 +84,8 @@ const handleBlur = () => {
 }
 
 .text-fields.medium {
-  padding: 1.4rem 1.6rem;
-  height: 4.8rem;
+  padding: 1.3rem 1.6rem;
+  height: 4.6rem;
 }
 
 .text-fields__input {

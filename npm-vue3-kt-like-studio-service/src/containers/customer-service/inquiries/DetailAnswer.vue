@@ -2,28 +2,13 @@
   <div class="detail-answer">
     <div class="detail-answer__tag">라이크 스튜디오의 답변입니다.</div>
     <div class="detail-answer__content">{{ props.content }}</div>
-    <FileDownload
-      :files="props.files"
-      class-bind="detail-answer__file-download"
-    />
-    <span class="detail-answer__date">{{ props.date }}</span>
+    <slot />
   </div>
 </template>
 
 <script setup>
-import FileDownload from '@/components/FileDownload/FileDownload.vue';
-
 const props = defineProps({
   content: {
-    type: String,
-    required: true,
-    default: '',
-  },
-  files: {
-    type: Array,
-    default: () => [],
-  },
-  date: {
     type: String,
     required: true,
     default: '',
@@ -34,13 +19,13 @@ const props = defineProps({
 <style scoped>
 .detail-answer {
   position: relative;
-  margin-bottom: 6rem;
-  border-bottom: 1px solid var(--color-gray-ddd);
+  padding-top: 6rem;
+  padding-bottom: 6rem;
 }
 
 .detail-answer::after {
   position: absolute;
-  top: -6rem;
+  top: -1px;
   left: 0;
   content: '';
   width: 100%;
@@ -64,12 +49,5 @@ const props = defineProps({
 
 .detail-answer__content {
   margin-bottom: 4rem;
-}
-
-.detail-answer__date {
-  display: block;
-  margin-bottom: 6rem;
-  font-size: var(--fz-m);
-  color: var(--color-gray-777);
 }
 </style>

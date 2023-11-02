@@ -1,11 +1,18 @@
 <template>
   <TemplateBoardWrap title="공지사항">
-    <div class="search-wrap">
+    <CustomerSearchWrap>
       <SearchInput
         v-model="dummyInputValue"
         placeholder="검색어를 입력해주세요"
+        size="medium"
+        style-type="square"
+        color-type="gray"
+        class-bind="!min-w-[41.2rem]"
       />
-    </div>
+      <RoundButton component="button" color-type="filed" size="medium"
+        >검색</RoundButton
+      >
+    </CustomerSearchWrap>
     <template v-if="dummyList && dummyList.length > 0">
       <div class="list">
         <RouterLink
@@ -36,8 +43,10 @@
 <script setup>
 import { ref } from 'vue';
 
+import CustomerSearchWrap from '@/components/CustomerSearchWrap/CustomerSearchWrap.vue';
 import Icons from '@/components/Icons/Icons.vue';
 import Pagination from '@/components/Pagination/Pagination.vue';
+import RoundButton from '@/components/RoundButton/RoundButton.vue';
 import SearchInput from '@/components/SearchInput/SearchInput.vue';
 import TemplateBoardWrap from '@/components/TemplateBoardWrap/TemplateBoardWrap.vue';
 import TemplateDataNone from '@/components/TemplateDataNone/TemplateDataNone.vue';
@@ -118,18 +127,8 @@ const dummyList = [
 </script>
 
 <style scoped>
-.search-wrap {
-  text-align: center;
-}
-
-.search-wrap {
-  margin-top: 4rem;
-}
-
 .list {
-  margin-top: 7.2rem;
   margin-bottom: 6rem;
-  border-top: 1px solid var(--color-neutrals-black);
 }
 
 .list__item {

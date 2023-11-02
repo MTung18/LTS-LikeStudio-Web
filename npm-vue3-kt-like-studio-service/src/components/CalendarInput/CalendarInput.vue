@@ -10,7 +10,7 @@
           tabindex="0"
         >
           <input class="datepicker__input" :value="inputValue" readonly />
-          <Icons icon-name="calender_bold" />
+          <Icons icon-name="calender_bold" icon-color="var(--color-gray-777)" />
         </div>
       </template>
     </date-picker>
@@ -27,19 +27,28 @@ const date = ref(new Date());
 </script>
 
 <style scoped>
+.datepicker {
+  border-radius: 0.4rem;
+  border: 1px solid var(--color-gray-ddd);
+  background: var(--color-neutrals-white-100);
+}
+
+.datepicker:hover {
+  border-color: var(--color-primary);
+}
+
 .datepicker__area {
   display: flex;
   align-items: center;
   gap: 0 1.2rem;
-  height: 5.6rem;
-  padding: 0 2.4rem;
-  border-radius: 5.6rem;
-  border: 1px solid var(--color-gray-ddd);
+  height: 4.6rem;
+  padding: 0 1.6rem;
 }
 
 .datepicker__input {
-  width: 8.4rem;
-  font-size: var(--fz-l);
+  width: 7.4rem;
+  font-size: var(--fz-m);
+  line-height: 1;
 }
 
 .datepicker :deep(.vc-popover-caret) {
@@ -70,7 +79,7 @@ const date = ref(new Date());
   height: 24px;
   border: 1px solid var(--color-gray-ddd);
   border-radius: 9999px;
-  background: #fff;
+  background: var(--color-neutrals-white-100);
 }
 
 .datepicker :deep(.vc-arrow) svg {

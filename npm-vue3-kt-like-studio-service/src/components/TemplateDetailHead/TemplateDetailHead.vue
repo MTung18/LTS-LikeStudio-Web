@@ -2,10 +2,16 @@
   <div class="head">
     <h2 class="head__title">{{ props.title }}</h2>
     <ul class="head__list">
-      <li v-show="props.category" class="head__item item-category">
+      <li v-if="props.category" class="head__item item-category">
         {{ props.category }}
       </li>
-      <li v-show="props.date" class="head__item item-date">
+      <li
+        v-if="props.writer && props.writerPosition"
+        class="head__item item-category"
+      >
+        {{ props.writer }} ({{ props.writerPosition }})
+      </li>
+      <li v-if="props.date" class="head__item item-date">
         {{ props.date }}
       </li>
     </ul>
@@ -15,6 +21,14 @@
 <script setup>
 const props = defineProps({
   title: {
+    type: String,
+    default: '',
+  },
+  writer: {
+    type: String,
+    default: '',
+  },
+  writerPosition: {
     type: String,
     default: '',
   },

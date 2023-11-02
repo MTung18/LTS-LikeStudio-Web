@@ -1,15 +1,14 @@
 <template>
-  <div class="template-edit-file">
-    <div class="template-edit-file__label">첨부파일</div>
-    <div class="template-edit-file__inner">
-      <div class="upload-group">
+  <div class="template-edit-file__inner">
+    <template v-if="props.styleType === 'image'">
+      <div class="upload-group upload-group--image">
         <div>
-          <Button
+          <RoundButton
             component="button"
-            color-type="standard"
-            size="large"
+            color-type="filed"
+            size="medium"
             @click="onClickUploadButton"
-            >파일선택(2/3)</Button
+            >파일선택</RoundButton
           >
         </div>
         <!-- eslint-disable-next-line vuejs-accessibility/form-control-has-label-->
@@ -17,31 +16,104 @@
           ref="fileRef"
           class="visually--hidden"
           type="file"
+          readonly
           @change="onChangeFile"
         />
         <div class="upload-group__inner">
           <p class="upload-group__title">
-            첨부파일은 최대 3개, 1개 파일당 50MB 이하의 아래 확장자만 업로드
-            가능합니다.
+            가로 1920px X 세로 680px<br />20MB 이하의 JPG, JPEG, GIF, PNG 파일
           </p>
-          <ul class="upload-group__list">
-            <li class="upload-group__item">압축 파일 : zip, 7z, alz, egg</li>
-            <li class="upload-group__item">
-              문서 파일 : xls, xlsx, ppt, pptx, doc, docx, pdf
-            </li>
-            <li class="upload-group__item">
-              이미지 파일 : jpg , jpeg , png , gif
-            </li>
-            <li class="upload-group__item">
-              영상 파일 : mp4, wmv, asf , flv, mov, mpeg
+        </div>
+      </div>
+
+      <div class="preview-wrap">
+        <figure class="preview">
+          <img
+            class="preview__img"
+            src="./img/img_example.png"
+            alt="예시 이미지"
+          />
+        </figure>
+        <button type="button" class="preview__remove-btn">
+          <Icons
+            icon-name="delete"
+            icon-color="var(--color-neutrals-white-100)"
+            :width="1.4"
+            :height="1.4"
+          />
+        </button>
+      </div>
+      <ul
+        v-if="props.files && props.files.length > 0"
+        class="upload-image-list"
+      >
+        <li
+          v-for="file in props.files"
+          :key="file.id"
+          class="upload-image-item"
+        >
+          <button
+            type="button"
+            @click="onDownloadFile"
+            class="upload-image-button"
+          >
+            <IconButton
+              icon-name="download"
+              size="small"
+              type="outlined"
+              component="button"
+              class-bind="upload-image-icon"
+              @click="onRemoveFile"
+            />
+            <p class="upload-image-filename">
+              <span>{{ file.filename }}</span>
+            </p>
+          </button>
+        </li>
+      </ul>
+    </template>
+    <template v-else>
+      <div class="upload-group">
+        <div>
+          <RoundButton
+            component="button"
+            color-type="filed"
+            size="medium"
+            @click="onClickUploadButton"
+            >파일선택({{ files.length }}/3)</RoundButton
+          >
+        </div>
+        <!-- eslint-disable-next-line vuejs-accessibility/form-control-has-label-->
+        <input
+          ref="fileRef"
+          class="visually--hidden"
+          type="file"
+          readonly
+          @change="onChangeFile"
+        />
+        <div
+          v-if="props.fileCaptionTitle || fileFormat || fileFormat.length > 0"
+          class="upload-group__inner"
+        >
+          <p v-if="props.fileCaptionTitle" class="upload-group__title">
+            {{ props.fileCaptionTitle }}
+          </p>
+          <ul
+            v-if="fileFormat && fileFormat.length > 0"
+            class="upload-group__list"
+          >
+            <li
+              v-for="(format, idx) in fileFormat"
+              :key="idx"
+              class="upload-group__item"
+            >
+              {{ format }}
             </li>
           </ul>
         </div>
       </div>
-      <ul
-        v-show="props.files && props.files.length > 0"
-        class="upload-file-list"
-      >
+
+      <ul v-if="props.files && props.files.length > 0" class="upload-file-list">
         <li v-for="file in props.files" :key="file.id" class="upload-file-item">
           <button type="button" @click="onDownloadFile">
             {{ file.filename }}
@@ -55,18 +127,34 @@
           />
         </li>
       </ul>
-    </div>
+    </template>
   </div>
 </template>
 
 <script setup>
 import { ref } from 'vue';
 
-import Button from '@/components/Button/Button.vue';
 import IconButton from '@/components/IconButton/IconButton.vue';
+import Icons from '@/components/Icons/Icons.vue';
+import RoundButton from '@/components/RoundButton/RoundButton.vue';
 
 const props = defineProps({
+  styleType: {
+    type: String,
+    default: 'file',
+    validator: (value) => {
+      return ['file', 'image'].includes(value);
+    },
+  },
   files: {
+    type: Array,
+    default: () => [],
+  },
+  fileCaptionTitle: {
+    type: String,
+    default: null,
+  },
+  fileFormat: {
     type: Array,
     default: () => [],
   },
@@ -94,49 +182,32 @@ const onDownloadFile = () => {
 </script>
 
 <style scoped>
-.template-edit-file {
-  display: flex;
-  gap: 0 2rem;
-  padding-top: 4rem;
-  padding-bottom: 4rem;
-  border-top: 1px solid var(--color-gray-ddd);
-  border-bottom: 1px solid var(--color-neutrals-black);
-}
-
-.template-edit-file__label {
-  min-width: 18.3rem;
-  padding: 1.45rem 0;
-  font-size: var(--fz-xl);
-  font-weight: 700;
-}
-
-.template-edit-file__inner {
-  flex-grow: 1;
-}
-
-.upload-group__button {
-  display: inline-block;
-  cursor: pointer;
-}
-
 .upload-group {
   display: flex;
-  gap: 0 3.4rem;
+  gap: 0 2rem;
 }
 
 .upload-group__title {
   margin-bottom: 1rem;
   font-size: var(--fz-m);
-  font-weight: 700;
+  font-weight: 500;
+}
+
+.upload-group--image .upload-group__title {
+  margin-bottom: 0;
 }
 
 .upload-group__list {
   font-size: var(--fz-m);
-  color: var(--color-gray-444);
+  color: var(--color-gray-777);
 }
 
 .upload-file-list {
   margin-top: 4rem;
+}
+
+.upload-group--image .upload-file-list {
+  margin-top: 2rem;
 }
 
 .upload-file-item {
@@ -154,5 +225,52 @@ const onDownloadFile = () => {
 
 .upload-file-item + .upload-file-item {
   margin-top: 1.2rem;
+}
+
+.preview-wrap {
+  position: relative;
+  width: 50.8rem;
+  margin-top: 2.8rem;
+}
+
+.preview:before {
+  position: absolute;
+  top: 0;
+  left: 0;
+  content: '';
+  width: 100%;
+  height: 100%;
+  border: 1px solid var(--color-gray-ddd);
+}
+
+.preview__remove-btn {
+  position: absolute;
+  top: 0.8rem;
+  right: 0.8rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 2.4rem;
+  height: 2.4rem;
+  border-radius: 9999px;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.preview__remove-btn:hover {
+  background-color: #000;
+}
+
+.upload-image-button {
+  display: flex;
+  align-items: center;
+  gap: 0 1.2rem;
+  margin-top: 1.4rem;
+  font-size: var(--fz-m);
+}
+
+.upload-image-icon {
+  width: 2rem !important;
+  height: 2rem !important;
+  border-radius: 0 !important;
 }
 </style>

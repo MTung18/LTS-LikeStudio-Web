@@ -5,7 +5,7 @@
         <Button
           class-bind="!min-w-[18rem]"
           component="a"
-          href="/customer-service/inquiries/edit"
+          href="/customer-service/inquiries/create"
           color-type="primary"
           size="big"
           isIcon
@@ -17,42 +17,35 @@
           />
         </Button>
       </div>
-      <div class="search-box">
-        <div class="calendar__wrap">
-          <CalendarInput />
-          <span class="calendar__between">~</span>
-          <CalendarInput />
-        </div>
+      <CustomerSearchWrap>
+        <CalenderGroup />
         <SearchInput
           v-model="dummyInputValue"
           placeholder="검색어를 입력해주세요"
-          class-bind="!min-w-[auto] grow"
+          size="medium"
+          style-type="square"
+          color-type="gray"
+          class-bind="ml-auto !min-w-[41.2rem]"
         />
         <div class="search__button-group">
-          <Button
-            component="button"
-            color-type="standard"
-            size="large"
-            class-bind="!min-w-[11rem]"
-            >검색</Button
+          <RoundButton component="button" color-type="filed" size="medium"
+            >검색</RoundButton
           >
 
-          <Button
-            component="button"
-            color-type="outlined"
-            size="large"
-            class-bind="!min-w-[11rem]"
-            >초기화</Button
+          <RoundButton component="button" color-type="outlined" size="medium"
+            >초기화</RoundButton
           >
         </div>
-      </div>
+      </CustomerSearchWrap>
 
       <template v-if="dummyList && dummyList.length > 0">
         <div class="list">
           <RouterLink
             v-for="item in dummyList"
             :key="item.id"
-            :to="`/customer-service/inquiries/${item.id}`"
+            :to="`/customer-service/inquiries/${item.id}/${
+              item.isAnswer ? 'answered' : 'unanswered'
+            }`"
             class="list__item"
           >
             <div class="item-no">{{ item.no }}</div>
@@ -85,9 +78,11 @@
 import { ref } from 'vue';
 
 import Button from '@/components/Button/Button.vue';
-import CalendarInput from '@/components/CalendarInput/CalendarInput.vue';
+import CalenderGroup from '@/components/CalenderGroup/CalenderGroup.vue';
+import CustomerSearchWrap from '@/components/CustomerSearchWrap/CustomerSearchWrap.vue';
 import Icons from '@/components/Icons/Icons.vue';
 import Pagination from '@/components/Pagination/Pagination.vue';
+import RoundButton from '@/components/RoundButton/RoundButton.vue';
 import SearchInput from '@/components/SearchInput/SearchInput.vue';
 import TemplateBoardWrap from '@/components/TemplateBoardWrap/TemplateBoardWrap.vue';
 import TemplateDataNone from '@/components/TemplateDataNone/TemplateDataNone.vue';
@@ -172,22 +167,6 @@ const firstVisit = ref(false);
 </script>
 
 <style scoped>
-.search-box {
-  display: flex;
-  margin-top: 7.2rem;
-}
-
-.calendar__wrap {
-  display: flex;
-  align-items: center;
-  gap: 0 1.2rem;
-  margin-right: 1.7rem;
-}
-
-.calendar__between {
-  font-size: var(--ttl-s);
-}
-
 .search__button-group {
   display: flex;
   gap: 0 1rem;
@@ -195,9 +174,7 @@ const firstVisit = ref(false);
 }
 
 .list {
-  margin-top: 7.2rem;
   margin-bottom: 6rem;
-  border-top: 1px solid var(--color-neutrals-black);
 }
 
 .list__item {

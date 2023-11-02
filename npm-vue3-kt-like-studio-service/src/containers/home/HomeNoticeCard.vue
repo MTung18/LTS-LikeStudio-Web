@@ -11,14 +11,6 @@
         component="a"
         href=""
       />
-      <!--      <RouterLink to="" class="notice__top-link">-->
-      <!--        <Icons-->
-      <!--          :width="2.4"-->
-      <!--          :height="2.4"-->
-      <!--          icon-name="arrow_next_bold"-->
-      <!--          icon-color="#47CDDA"-->
-      <!--        />-->
-      <!--      </RouterLink>-->
     </div>
     <ul class="notice__list">
       <li class="notice__item" v-for="item in data" :key="item.id">

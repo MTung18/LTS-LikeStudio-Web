@@ -1,9 +1,5 @@
 <template>
-  <div
-    v-if="files && files.length > 0"
-    :class="props.classBind"
-    class="download__file-wrap"
-  >
+  <div :class="props.classBind" class="download__file-wrap">
     <p class="download__title">첨부파일</p>
     <ul class="download__file-list">
       <li
@@ -40,7 +36,6 @@ const props = defineProps({
 <style scoped>
 .download__file-wrap {
   margin-top: 4rem;
-  margin-bottom: 4rem;
   padding: 2rem;
   background-color: #f6f6f6;
 }

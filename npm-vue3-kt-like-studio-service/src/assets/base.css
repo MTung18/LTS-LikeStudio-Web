@@ -15,7 +15,7 @@
     flex-shrink: 0;
 }
 :root {
-    --color-primary: #7761FF;
+    --color-primary: #ED1C24;
     --color-neutrals-white-100: #FFFFFF;
     --color-neutrals-black: #111111;
     --color-neutrals-black-20: rgba(255,255,255, 0.2);
@@ -94,6 +94,7 @@ main {
 }
 
 #app {
+    position: relative;
     min-width: 1280px;
     overflow-x: hidden;
 }
@@ -114,4 +115,26 @@ main {
     width: 1px;
     padding: 0;
     border: 0;
+}
+
+.is-scrollFixed {
+    overflow: hidden;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+    width: 2rem
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+    background-color: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb{
+    background-color: var(--color-gray-ddd);
+    border-radius: 10rem;
+    border: 0.7rem solid #fff;
+}
+
+.custom-scrollbar::-webkit-scrollbar-button {
+    display: none;
 }

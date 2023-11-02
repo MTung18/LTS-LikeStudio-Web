@@ -1,5 +1,8 @@
 <template>
-  <div class="edit container-1200">
+  <div class="edit container-1200" :class="[props.classBind]">
+    <div>
+      <slot name="tab" />
+    </div>
     <div class="edit__head">
       <h2 class="edit__title">{{ props.title }}</h2>
       <span class="edit__desc">
@@ -8,7 +11,12 @@
     </div>
     <div class="edit__body">
       <div class="edit__body__fields">
-        <slot />
+        <slot name="body" />
+      </div>
+    </div>
+    <div class="edit__foot">
+      <div class="edit__foot__fields">
+        <slot name="foot" />
       </div>
     </div>
   </div>
@@ -17,6 +25,10 @@
 <script setup>
 const props = defineProps({
   title: {
+    type: String,
+    default: '',
+  },
+  classBind: {
     type: String,
     default: '',
   },
@@ -54,6 +66,7 @@ const props = defineProps({
 }
 
 .edit__body {
-  padding-top: 4rem;
+  padding-top: 3.2rem;
+  border-bottom: 1px solid var(--color-neutrals-black);
 }
 </style>

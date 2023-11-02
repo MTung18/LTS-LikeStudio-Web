@@ -1,46 +1,8 @@
 <template>
-  <div class="category-container">
-    <IconButton
-      icon-name="arrow_prev_bold"
-      class-bind="!border-neutrals-black-20 hover:!border-neutrals-black"
-      size="large"
-      type="outlined"
-      component="button"
-    />
-    <ul class="category-list">
-      <li class="category-item">
-        <button type="button" class="">포스터</button>
-      </li>
-      <li class="category-item">
-        <button type="button" class="">브로셔</button>
-      </li>
-      <li class="category-item">
-        <button type="button" class="">책받침</button>
-      </li>
-      <li class="category-item">
-        <button type="button" class="">전단지</button>
-      </li>
-      <li class="category-item">
-        <button type="button" class="">X배너</button>
-      </li>
-      <li class="category-item">
-        <button type="button" class="">SNS용</button>
-      </li>
-      <li class="category-item">
-        <button type="button" class="">PPT</button>
-      </li>
-      <li class="category-item">
-        <button type="button" class="">기타</button>
-      </li>
-    </ul>
-    <IconButton
-      icon-name="arrow_next_bold"
-      class-bind="!border-neutrals-black-20 hover:!border-neutrals-black"
-      size="large"
-      type="outlined"
-      component="button"
-    />
-  </div>
+  <SlideCategory
+    :categories="dummyCategories"
+    @category-selected="updateSelectedCategory"
+  />
   <ul class="template-list">
     <li
       v-for="item in [1, 2, 3, 4, 5]"
@@ -72,8 +34,72 @@
 </template>
 
 <script setup>
-import IconButton from '@/components/IconButton/IconButton.vue';
+import { ref } from 'vue';
+
 import Icons from '@/components/Icons/Icons.vue';
+import SlideCategory from '@/containers/home/SlideCategory.vue';
+
+const dummyCategories = ref([
+  {
+    id: 0,
+    title: '포스터',
+    isSelected: true,
+  },
+  {
+    id: 1,
+    title: '브로셔',
+    isSelected: false,
+  },
+  {
+    id: 2,
+    title: '책받침',
+    isSelected: false,
+  },
+  {
+    id: 3,
+    title: '전단지',
+    isSelected: false,
+  },
+  {
+    id: 4,
+    title: 'X배너',
+    isSelected: false,
+  },
+  {
+    id: 5,
+    title: 'SNS용',
+    isSelected: false,
+  },
+  {
+    id: 6,
+    title: 'PPT',
+    isSelected: false,
+  },
+  {
+    id: 7,
+    title: '기타',
+    isSelected: false,
+  },
+  {
+    id: 8,
+    title: '기타1',
+    isSelected: false,
+  },
+  {
+    id: 9,
+    title: '기타2',
+    isSelected: false,
+  },
+]);
+
+function updateSelectedCategory(selectedId) {
+  const newCategories = dummyCategories.value.map((category) => ({
+    ...category,
+    isSelected: category.id === selectedId,
+  }));
+
+  dummyCategories.value = newCategories;
+}
 
 const getImageUrl = (name) => {
   return new URL(`./img/${name}.png`, import.meta.url).href;
@@ -81,36 +107,6 @@ const getImageUrl = (name) => {
 </script>
 
 <style scoped>
-.category-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 6.4rem 0;
-}
-
-.category-list {
-  display: flex;
-  gap: 0 1rem;
-  margin: 0 3rem;
-}
-
-.category-item {
-  min-width: 9.7rem;
-  border: 1px solid rgba(0, 0, 0, 0.2);
-  border-radius: 4.8rem;
-  height: 4.8rem;
-  line-height: 4.8rem;
-  text-align: center;
-  font-size: var(--fz-l);
-  font-weight: 500;
-}
-
-.category-item:hover {
-  border-color: var(--color-neutrals-black);
-  background-color: var(--color-neutrals-black);
-  color: var(--color-neutrals-white-100);
-}
-
 .template-list {
   display: grid;
   grid-template-columns: repeat(5, 1fr);

@@ -6,6 +6,7 @@
         <DropdownSelect
           :select-list="dummyData"
           :size="'large'"
+          :default-select="'선택'"
         ></DropdownSelect>
       </div>
       <p class="article__select-desc">large, unselected+completed</p>
@@ -14,6 +15,7 @@
           :select-list="dummyData"
           :disabled="true"
           :size="'large'"
+          :default-select="'선택'"
         ></DropdownSelect>
       </div>
       <p class="article__select-desc">large, disabled</p>
@@ -21,6 +23,7 @@
         <DropdownSelect
           :select-list="dummyData"
           :size="'medium'"
+          :default-select="'선택'"
         ></DropdownSelect>
       </div>
       <p class="article__select-desc">medium, unselected+completed</p>
@@ -29,6 +32,7 @@
           :select-list="dummyData"
           :disabled="true"
           :size="'medium'"
+          :default-select="'선택'"
         ></DropdownSelect>
       </div>
       <p class="article__select-desc">medium, disabled</p>

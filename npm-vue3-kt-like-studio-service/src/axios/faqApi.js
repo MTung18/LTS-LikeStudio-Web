@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { ClientSide } from "../../public/appsettings.json"
 
-const baseUrl = ClientSide.LikeStudioAPI + "/api/faq";
+const baseUrl= ClientSide.LikeStudioAPI + "/api/faq";
 
 const FaqApi = {
   async getListFaq(param) {

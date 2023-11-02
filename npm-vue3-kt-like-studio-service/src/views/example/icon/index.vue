@@ -43,9 +43,9 @@
       </div>
       <div class="article__inner">
         <div class="article__icon-wrap">
-          <Icons icon-name="check" />
+          <Icons icon-name="check_bold" />
         </div>
-        <p class="article__icon-desc">arrow_top_bold</p>
+        <p class="article__icon-desc">check_bold</p>
       </div>
     </div>
   </article>

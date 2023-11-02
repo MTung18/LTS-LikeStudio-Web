@@ -1,19 +1,32 @@
 <template>
   <TemplateDetail>
-    <TemplateDetailHead :title="dummyData.title" :date="dummyData.date" />
-    <TemplateDetailBody
-      :content="dummyData.content"
-      :files="dummyData.files"
-      :prev-post="dummyData.prevPost"
-      :next-post="dummyData.nextPost"
-    />
-    <TemplateDetailFooter to-list-href="/customer-service/announcements" />
+    <template #body>
+      <TemplateDetailHead :title="dummyData.title" :date="dummyData.date" />
+      <TemplateDetailBody
+        :content="dummyData.content"
+        :files="dummyData.files"
+        :prev-post="dummyData.prevPost"
+        :next-post="dummyData.nextPost"
+      />
+    </template>
+    <template #foot>
+      <div class="text-center">
+        <Button
+          component="a"
+          href="/customer-service/announcements"
+          color-type="standard"
+          size="large"
+          class-bind="!min-w-[14rem]"
+          >목록</Button
+        >
+      </div>
+    </template>
   </TemplateDetail>
 </template>
 
 <script setup>
+import Button from '@/components/Button/Button.vue';
 import TemplateDetailBody from '@/components/TemplateDetailBody/TemplateDetailBody.vue';
-import TemplateDetailFooter from '@/components/TemplateDetailFooter/TemplateDetailFooter.vue';
 import TemplateDetailHead from '@/components/TemplateDetailHead/TemplateDetailHead.vue';
 import TemplateDetail from '@/components/TemplateDetailWrap/TemplateDetail.vue';
 
