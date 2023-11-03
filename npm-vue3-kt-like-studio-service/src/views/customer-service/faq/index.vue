@@ -1,8 +1,8 @@
 <template>
   <TemplateBoardWrap title="FAQ">
     <ul class="category__list">
-      <li v-for="category in categories" :key="category.id" class="category__item">
-        <Tabs type="underbar" :is-selected="category.isSelected" @tab-selected="updateSelectedCategory(category.id)">
+      <li v-for="category in categories" :key="category.key" class="category__item">
+        <Tabs type="underbar" :is-selected="category.isSelected" @tab-selected="updateSelectedCategory(category.key)">
           {{ category.category }}
           <span v-show="category.dummyLength && category.dummyLength > 0">
             {{ category.dummyLength }}
@@ -13,49 +13,28 @@
     <CustomerSearchWrap>
       <SearchInput v-model="dummyInputValue" placeholder="검색어를 입력해주세요" size="medium" style-type="square" color-type="gray"
         class-bind="!min-w-[41.2rem]" />
-      <RoundButton component="button" color-type="filed" size="medium">검색</RoundButton>
+      <RoundButton component="button" color-type="filed" size="medium" @click="searchByKeyword">검색</RoundButton>
     </CustomerSearchWrap>
-    <div class="list">
-      <details class="list__item">
-        <summary class="item__question-wrap">
+    <div v-if="listDataQuestion.length === 0" class="text-center pt-72">
+      <span class="text-xl font-bold">데이터가 없습니디다.</span>
+    </div>
+    <div class="list" v-else>
+      <div class="list__item" v-for="(data, index) in listDataQuestion" :key="data.id">
+        <div class="item__question-wrap">
           <span class="question__symbol">Q</span>
-          <span class="question__title">결제 후 유료 회원으로 전환이 되지 않는 경우</span>
-          dev: 추후에 해당 details 의 id가 open 일 떼 iconButton 의 icon-name 을 'chevron_t'로 변경해주는 토글 함수 작성 필요
-          <IconButton class-bind="question__icon" icon-name="chevron_b" size="small" type="outlined" component="button" />
-        </summary>
-        <div class="item__answer-wrap">
+          <span class="question__title">{{ data.title }}</span>
+          <IconButton v-if="!showDropdown[index]" class="text-right" class-bind="question__icon" icon-name="chevron_b"
+            size="small" @click="toggleDropdown(index)" type="outlined" component="button" />
+          <IconButton v-else class="text-right rotate-180" class-bind="question__icon" icon-name="chevron_b" size="small"
+            @click="toggleDropdown(index)" type="outlined" component="button" />
+        </div>
+        <div :id="index" class="item__answer-wrap" v-if="showDropdown[index]">
           <div class="answer__wrap">
             <div class="answer__area">
               <div class="answer__symbol">A</div>
               <div class="answer__content">
                 <div class="answer__content-text">
-                  <p class="answer__title">
-                    원인은 몇가지가 있을 수 있습니다. 아래의 원인 중 하나일 수
-                    있사오니 확인 바랍니다.
-                  </p>
-                  <ul class="answer__desc-list">
-                    <li class="answer__desc-item">
-                      <p class="answer__desc-title">
-                        1. 글자를 감싸고 있는 영역으로 인하여 자동 줄바꿈이 된
-                        경우 해당 증상이 발생할 수 있습니다.
-                      </p>
-                      <p class="answer__desc-text">
-                        이는 자동으로 줄이 바뀐 위치에서 키보드의 엔터를 직접
-                        누르시면 해결 됩니다.
-                      </p>
-                    </li>
-                    <li class="answer__desc-item">
-                      <p class="answer__desc-title">
-                        2. 혹시 크롬 외의 브라우저를 사용하시나요?
-                        라이크스튜디오는 크롬 브라우저에 최적화되어 있기에
-                        크롬을 사용하셔서 다운로드 해보시기 바랍니다.
-                      </p>
-                      <p class="answer__desc-text">
-                        이러한 조치를 취하여도 문제가 계속 발생할 경우 1:1 문의
-                        남겨주시기 바랍니다.
-                      </p>
-                    </li>
-                  </ul>
+                  <div v-html="data.content"></div>
                 </div>
                 <div class="answer__content-file">
                   <FileDownload class-bind="!mt-0" :files="[
@@ -67,43 +46,6 @@
             </div>
           </div>
         </div>
-      </details>
-
-      <div class="list__item">
-        <table class="w-full">
-          <tbody>
-            <tr class="item__question-wrap" v-for="(data, index) in listDataQuestion" :key="data.id">
-              <td class="question__symbol w-1/10">Q</td>
-              <td class="question__title w-4/5">{{ data.title }}</td>
-              <td class="w-1/6">
-                <IconButton v-if="!showDropdown" class="text-right" class-bind="question__icon" icon-name="chevron_b"
-                  size="small" @click="toggleDropdown(index)" type="outlined" component="button" />
-                <IconButton v-else class="text-right" class-bind="question__icon" icon-name="chevron_b" size="small"
-                  @click="toggleDropdown(index)" type="outlined" component="button"/>
-              </td>
-              <td>
-                <div class="item__answer-wrap" v-if="showDropdown">
-                  <div class="answer__wrap">
-                    <div class="answer__area">
-                      <div class="answer__symbol">A</div>
-                      <div class="answer__content">
-                        <div class="answer__content-text">
-                          <div v-html="data.content"></div>
-                        </div>
-                        <div class="answer__content-file">
-                          <FileDownload class-bind="!mt-0" :files="[
-                            { id: 0, filename: '라이크 스튜디오 사용 매뉴얼.docx' },
-                            { id: 1, filename: '라이크 스튜디오 사용 매뉴얼.pdf' },
-                          ]" />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
       </div>
     </div>
     <!-- dev: 데이터가 없을 때 -->
@@ -114,7 +56,7 @@
 </template>
 
 <script setup>
-import { onMounted, onUnmounted, ref, computed } from 'vue';
+import { onMounted, ref } from 'vue';
 
 import CustomerSearchWrap from '@/components/CustomerSearchWrap/CustomerSearchWrap.vue';
 import FileDownload from '@/components/FileDownload/FileDownload.vue';
@@ -127,107 +69,87 @@ import { faqStore } from '../../../stores/faqStore';
 import { storeToRefs } from 'pinia';
 
 const store = faqStore();
-const { listOfFaqUser } = storeToRefs(store);
+const { listOfFaqUser, listOfFaqByCategory } = storeToRefs(store);
 
 const dummyInputValue = ref('');
 const categories = ref([
   {
-    id: 0,
+    key: 1,
     category: '자주 묻는 질문',
     dummyLength: 10,
     isSelected: true,
   },
   {
-    id: 1,
+    key: 2,
     category: '저작권',
     dummyLength: 0,
     isSelected: false,
   },
   {
-    id: 2,
+    key: 3,
     category: '로그인',
     dummyLength: 0,
     isSelected: false,
   },
   {
-    id: 3,
+    key: 4,
     category: '팀룸',
     dummyLength: 0,
     isSelected: false,
   },
   {
-    id: 4,
+    key: 5,
     category: '사용법',
     dummyLength: 0,
     isSelected: false,
   },
   {
-    id: 5,
+    key: 6,
     category: '다운로드',
     dummyLength: 0,
     isSelected: false,
   },
   {
-    id: 6,
+    key: 7,
     category: 'PDF 인쇄',
     dummyLength: 0,
     isSelected: false,
   },
   {
-    id: 7,
+    key: 8,
     category: '서비스 오류',
     dummyLength: 0,
   },
 ]);
-const param = ref('');
 const listDataQuestion = ref([]);
-const selectedItem = ref();
-const showDropdown = ref(false);
 
-let detailsElements = [];
-const handleToggle = (event) => {
-  if (event.target.open) {
-    detailsElements.forEach((otherDetail) => {
-      if (otherDetail !== event.target) {
-        otherDetail.removeAttribute('open');
-      }
-    });
-  }
-};
-
-function updateSelectedCategory(selectedId) {
-  categories.value = categories.value.map((category) => ({
-    ...category,
-    isSelected: category.id === selectedId,
-  }));
+async function getListByCategory(param) {
+  await store.getByCategory(param)
+  listDataQuestion.value = listOfFaqByCategory.value.filter(x => x.show == 1);
 }
 
-const changeIcon = ref(false)
+async function updateSelectedCategory(param) {
+  categories.value = categories.value.map((category) => ({
+    ...category,
+    isSelected: category.key === param,
+  }));
+  await getListByCategory(param)
+}
+
+const showDropdown = ref(Array(listDataQuestion.value.length).fill(false));
+
 const toggleDropdown = (index) => {
-  showDropdown.value = !showDropdown.value;
-  for (const data of listDataQuestion.value) {
-    if (data.index === index) {
-      changeIcon.value = !changeIcon.value;
-    }
-  }
+  showDropdown.value[index] = !showDropdown.value[index];
 };
 
-onMounted(async () => {
-  try {
-    await store.getListFaqForUser(param.value);
-    listDataQuestion.value = listOfFaqUser.value.filter(x => x.show == 1);
-  } finally {
-  }
-  detailsElements = document.querySelectorAll('details');
-  detailsElements.forEach((detail) => {
-    detail.addEventListener('toggle', handleToggle);
-  });
-});
+const searchByKeyword = async () => {
+  await store.getListFaqForUser(dummyInputValue.value)
+  listDataQuestion.value = listOfFaqUser.value;
+}
 
-onUnmounted(() => {
-  detailsElements.forEach((detail) => {
-    detail.removeEventListener('toggle', handleToggle);
-  });
+const param = ref('');
+onMounted(async () => {
+  await getListByCategory(1);
 });
 </script>
 
