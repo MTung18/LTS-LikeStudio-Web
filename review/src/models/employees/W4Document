@@ -1,8 +1,0 @@
-export default class W4Document {
-  public id: number;
-  public name: string;
-  public description: string;
-  public uploadDate: string;
-  public uploadedBy: string;
-  public absolutePath: string;
-}

@@ -1,1 +1,0 @@
-export const supportedExtensions = ['pdf', 'jpeg', 'png', 'jpg', 'gif', 'bmp', 'tiff', 'svg', 'txt', 'ttf'];

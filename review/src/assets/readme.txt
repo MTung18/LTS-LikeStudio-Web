@@ -1,1 +1,0 @@
-this folder should only house images (svg, png etc). Delete css files from here

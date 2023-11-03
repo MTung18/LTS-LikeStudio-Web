@@ -20,7 +20,7 @@
         <summary class="item__question-wrap">
           <span class="question__symbol">Q</span>
           <span class="question__title">결제 후 유료 회원으로 전환이 되지 않는 경우</span>
-          dev: 추후에 해당 details 의 id가 open 일 떼 iconButton 의 icon-name 을 'chevron_t'로 변경해주는 토글 함수 작성 필요 
+          dev: 추후에 해당 details 의 id가 open 일 떼 iconButton 의 icon-name 을 'chevron_t'로 변경해주는 토글 함수 작성 필요
           <IconButton class-bind="question__icon" icon-name="chevron_b" size="small" type="outlined" component="button" />
         </summary>
         <div class="item__answer-wrap">
@@ -70,14 +70,40 @@
       </details>
 
       <div class="list__item">
-        <ul class="item__question-wrap" v-for="data in listDataQuestion" :key="data.id">
-          <li class="question__symbol w-1/10">Q</li>
-          <li class="question__title w-4/5">{{ data.title }}</li>
-          <li class="w-1/6">
-            <IconButton class="text-right" class-bind="question__icon" icon-name="chevron_b" size="small" type="outlined"
-              component="button" />
-          </li>
-        </ul>
+        <table class="w-full">
+          <tbody>
+            <tr class="item__question-wrap" v-for="(data, index) in listDataQuestion" :key="data.id">
+              <td class="question__symbol w-1/10">Q</td>
+              <td class="question__title w-4/5">{{ data.title }}</td>
+              <td class="w-1/6">
+                <IconButton v-if="!showDropdown" class="text-right" class-bind="question__icon" icon-name="chevron_b"
+                  size="small" @click="toggleDropdown(index)" type="outlined" component="button" />
+                <IconButton v-else class="text-right" class-bind="question__icon" icon-name="chevron_b" size="small"
+                  @click="toggleDropdown(index)" type="outlined" component="button"/>
+              </td>
+              <td>
+                <div class="item__answer-wrap" v-if="showDropdown">
+                  <div class="answer__wrap">
+                    <div class="answer__area">
+                      <div class="answer__symbol">A</div>
+                      <div class="answer__content">
+                        <div class="answer__content-text">
+                          <div v-html="data.content"></div>
+                        </div>
+                        <div class="answer__content-file">
+                          <FileDownload class-bind="!mt-0" :files="[
+                            { id: 0, filename: '라이크 스튜디오 사용 매뉴얼.docx' },
+                            { id: 1, filename: '라이크 스튜디오 사용 매뉴얼.pdf' },
+                          ]" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
     <!-- dev: 데이터가 없을 때 -->
@@ -88,7 +114,7 @@
 </template>
 
 <script setup>
-import { onMounted, onUnmounted, ref } from 'vue';
+import { onMounted, onUnmounted, ref, computed } from 'vue';
 
 import CustomerSearchWrap from '@/components/CustomerSearchWrap/CustomerSearchWrap.vue';
 import FileDownload from '@/components/FileDownload/FileDownload.vue';
@@ -101,7 +127,7 @@ import { faqStore } from '../../../stores/faqStore';
 import { storeToRefs } from 'pinia';
 
 const store = faqStore();
-const { listOfFaq } = storeToRefs(store);
+const { listOfFaqUser } = storeToRefs(store);
 
 const dummyInputValue = ref('');
 const categories = ref([
@@ -155,6 +181,8 @@ const categories = ref([
 ]);
 const param = ref('');
 const listDataQuestion = ref([]);
+const selectedItem = ref();
+const showDropdown = ref(false);
 
 let detailsElements = [];
 const handleToggle = (event) => {
@@ -174,11 +202,20 @@ function updateSelectedCategory(selectedId) {
   }));
 }
 
+const changeIcon = ref(false)
+const toggleDropdown = (index) => {
+  showDropdown.value = !showDropdown.value;
+  for (const data of listDataQuestion.value) {
+    if (data.index === index) {
+      changeIcon.value = !changeIcon.value;
+    }
+  }
+};
+
 onMounted(async () => {
   try {
-    await store.fetchListOfFaq(param.value);
-    listDataQuestion.value = listOfFaq.value.filter(x => x.questionId == 0);
-    console.log("tunglm: ", listData.value)
+    await store.getListFaqForUser(param.value);
+    listDataQuestion.value = listOfFaqUser.value.filter(x => x.show == 1);
   } finally {
   }
   detailsElements = document.querySelectorAll('details');
@@ -212,6 +249,7 @@ onUnmounted(() => {
   padding: 3rem 0;
   cursor: pointer;
   justify-content: space-between;
+  border-bottom: 1px solid #ddd;
 }
 
 .question__symbol {

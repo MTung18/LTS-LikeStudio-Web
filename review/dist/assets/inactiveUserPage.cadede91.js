@@ -1,1 +1,0 @@
-import{_ as e,o as t,c,a as s}from"./index.611fe570.js";const o={},n={class:"text-center"},a=s("h3",null,"Your account is inactive!",-1),r=[a];function _(i,d){return t(),c("div",n,r)}const f=e(o,[["render",_]]);export{f as default};

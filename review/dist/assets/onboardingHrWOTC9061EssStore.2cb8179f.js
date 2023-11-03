@@ -1,1 +1,0 @@
-import{R as s,j as n}from"./index.611fe570.js";import{o as r}from"./onboardingHrWOTC9061EssApi.6044f5a3.js";const O=s("hrOnboardingWOTC9061Ess",()=>{const t=n();return{form9061Data:t,fetchForm9061Data:async(a,o)=>{t.value=await r.getOnboardingWOTC9061Ess(a,o)},updateForm9061Data:async({employeeId:a,formData:o})=>{await r.updateOnboardingWOTC9061Ess(a,o)}}});export{O as u};

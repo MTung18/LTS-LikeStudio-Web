@@ -14,7 +14,6 @@ const faqData = {
  createUser: null,
  editDate: null,
  editUser: null,
- questionId: null,
  show: null
 };
 

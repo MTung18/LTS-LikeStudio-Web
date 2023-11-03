@@ -1,1 +1,0 @@
-var e=(c=>(c.PendingAndApprovedTimeOff="e2890296-054e-43b5-9a2d-88a053bacf25",c.TimeOffBalance="55b494b2-7158-438f-8b47-5fe532431180",c.EmployeeContactInformation="459cba38-ecb5-4a0e-8cdd-26c2239cfd83",c.W2ElectronicConsent="64087ce1-bd4c-47f8-8f16-07ee993bc59b",c))(e||{});export{e as R};

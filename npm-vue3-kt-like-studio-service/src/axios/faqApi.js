@@ -4,9 +4,22 @@ import { ClientSide } from "../../public/appsettings.json"
 const baseUrl= ClientSide.LikeStudioAPI + "/api/faq";
 
 const FaqApi = {
-  async getListFaq(param) {
+  async getListFaqForAdmin(param) {
     try {
       const response = await axios.get(`${baseUrl}/search`, {
+        params: { keyword: param },
+      });
+
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      throw error;
+    }
+  },
+
+  async getListFaqForUser(param) {
+    try {
+      const response = await axios.get(`${baseUrl}/searchForUser`, {
         params: { keyword: param },
       });
 
