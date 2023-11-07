@@ -13,22 +13,23 @@
     <CustomerSearchWrap>
       <SearchInput v-model="dummyInputValue" placeholder="검색어를 입력해주세요" size="medium" style-type="square" color-type="gray"
         class-bind="!min-w-[41.2rem]" />
-      <RoundButton component="button" color-type="filed" size="medium" @click="searchByKeyword">검색</RoundButton>
+      <RoundButton component="button" color-type="filed" size="medium" @click="searchByKeyword(categoryKey)">검색
+      </RoundButton>
     </CustomerSearchWrap>
     <div v-if="listDataQuestion.length === 0" class="text-center pt-72">
       <span class="text-xl font-bold">데이터가 없습니디다.</span>
     </div>
     <div class="list" v-else>
-      <div class="list__item" v-for="(data, index) in listDataQuestion" :key="data.id">
+      <div class="list__item" v-for="(data) in listDataQuestion" :key="data.id">
         <div class="item__question-wrap">
           <span class="question__symbol">Q</span>
           <span class="question__title">{{ data.title }}</span>
-          <IconButton v-if="!showDropdown[index]" class="text-right" class-bind="question__icon" icon-name="chevron_b"
-            size="small" @click="toggleDropdown(index)" type="outlined" component="button" />
+          <IconButton v-if="!showDropdown[data.id]" class="text-right" class-bind="question__icon" icon-name="chevron_b"
+            size="small" @click="toggleDropdown(data.id)" type="outlined" component="button" />
           <IconButton v-else class="text-right rotate-180" class-bind="question__icon" icon-name="chevron_b" size="small"
-            @click="toggleDropdown(index)" type="outlined" component="button" />
+            @click="closeToggleDropdown(data.id)" type="outlined" component="button" />
         </div>
-        <div :id="index" class="item__answer-wrap" v-if="showDropdown[index]">
+        <div :id="data.id" class="item__answer-wrap" v-if="showDropdown[data.id]">
           <div class="answer__wrap">
             <div class="answer__area">
               <div class="answer__symbol">A</div>
@@ -37,9 +38,9 @@
                   <div v-html="data.content"></div>
                 </div>
                 <div class="answer__content-file">
-                  <FileDownload class-bind="!mt-0" :files="[
-                    { id: 0, filename: '라이크 스튜디오 사용 매뉴얼.docx' },
-                    { id: 1, filename: '라이크 스튜디오 사용 매뉴얼.pdf' },
+                  <p class="mb-6 text-xl text-slate-950 font-bold">첨부파일</p>
+                  <FileDownload class-bind="!mt-0" v-for="item in listFile" :key="item.id" :files="[
+                    { id: item.id, filename: item.oriFileName, filePath: item.uniqFileName },
                   ]" />
                 </div>
               </div>
@@ -48,10 +49,6 @@
         </div>
       </div>
     </div>
-    <!-- dev: 데이터가 없을 때 -->
-    <!--
-    <TemplateDataNone />
-    -->
   </TemplateBoardWrap>
 </template>
 
@@ -66,10 +63,13 @@ import SearchInput from '@/components/SearchInput/SearchInput.vue';
 import Tabs from '@/components/Tabs/Tabs.vue';
 import TemplateBoardWrap from '@/components/TemplateBoardWrap/TemplateBoardWrap.vue';
 import { faqStore } from '../../../stores/faqStore';
+import { fileManagerStore } from '../../../stores/fileManagerStore';
 import { storeToRefs } from 'pinia';
 
 const store = faqStore();
+const fileStore = fileManagerStore();
 const { listOfFaqUser, listOfFaqByCategory } = storeToRefs(store);
+const { listOfFile } = storeToRefs(fileStore);
 
 const dummyInputValue = ref('');
 const categories = ref([
@@ -122,6 +122,10 @@ const categories = ref([
   },
 ]);
 const listDataQuestion = ref([]);
+const categoryKey = ref(1);
+const listFile = ref([]);
+
+const functionType = 2;
 
 async function getListByCategory(param) {
   await store.getByCategory(param)
@@ -133,23 +137,32 @@ async function updateSelectedCategory(param) {
     ...category,
     isSelected: category.key === param,
   }));
+  categoryKey.value = param
   await getListByCategory(param)
 }
 
+async function gitListFile(functionType, titleId) {
+  await fileStore.getListFile(functionType, titleId)
+  listFile.value = listOfFile.value;
+}
 const showDropdown = ref(Array(listDataQuestion.value.length).fill(false));
 
-const toggleDropdown = (index) => {
+const toggleDropdown = async (index) => {
+  showDropdown.value[index] = !showDropdown.value[index];
+  await gitListFile(functionType, index);
+};
+
+const closeToggleDropdown = (index) => {
   showDropdown.value[index] = !showDropdown.value[index];
 };
 
-const searchByKeyword = async () => {
-  await store.getListFaqForUser(dummyInputValue.value)
+const searchByKeyword = async (categoryKey) => {
+  await store.getListFaqForUser(categoryKey, dummyInputValue.value)
   listDataQuestion.value = listOfFaqUser.value;
 }
 
-const param = ref('');
 onMounted(async () => {
-  await getListByCategory(1);
+  await getListByCategory(categoryKey.value);
 });
 </script>
 

@@ -17,10 +17,13 @@ const FaqApi = {
     }
   },
 
-  async getListFaqForUser(param) {
+  async getListFaqForUser(category, param) {
     try {
       const response = await axios.get(`${baseUrl}/searchForUser`, {
-        params: { keyword: param },
+        params: { 
+          category: category,
+          keyword: param 
+        },
       });
 
       return response.data;

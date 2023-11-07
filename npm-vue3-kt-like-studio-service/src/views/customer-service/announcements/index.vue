@@ -124,6 +124,10 @@ const dummyList = [
     isNotice: false,
   },
 ];
+
+onMounted(async () => {
+  await getListByCategory(categoryKey.value);
+});
 </script>
 
 <style scoped>

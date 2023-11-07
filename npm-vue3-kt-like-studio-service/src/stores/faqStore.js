@@ -11,8 +11,8 @@ export const faqStore = defineStore("faq", () => {
   listOfFaqAdmin.value = await FaqApi.getListFaqForAdmin(param);
  }
 
- async function getListFaqForUser(param) {
-  listOfFaqUser.value = await FaqApi.getListFaqForUser(param);
+ async function getListFaqForUser(category, keyword) {
+  listOfFaqUser.value = await FaqApi.getListFaqForUser(category, keyword);
  }
 
  async function getByCategory(param) {
