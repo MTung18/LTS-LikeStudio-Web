@@ -1,5 +1,6 @@
 import '@/assets/fonts/font.css';
 import '@/assets/base.css';
+import '@/assets/table.css';
 
 import { createApp } from 'vue';
 

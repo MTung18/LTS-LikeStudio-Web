@@ -1,20 +1,59 @@
 <template>
   <article class="article">
-    <h2 class="article__title">Dropdown Select</h2>
+    <h2 class="article__title">checkBox</h2>
     <div class="article__group">
       <div class="article__inner">
-        <CheckBox :check-list="'미선택'" :id="'noChoice'"></CheckBox>
-        <CheckBox :check-list="'선택'" :id="'choice'"></CheckBox>
+        <CheckBox
+          :check-list="'미선택'"
+          :id="'no'"
+          :shape-type="'square'"
+          :name="'choise'"
+        ></CheckBox>
+        <CheckBox
+          :check-list="'선택'"
+          :id="'yes'"
+          :shape-type="'square'"
+          :name="'choise'"
+        ></CheckBox>
       </div>
-      <p class="article__select-desc">check-box</p>
-      <div class="article__inner"></div>
-      <p class="article__select-desc">large, unselected+completed</p>
+      <p class="article__select-desc">check-box [suquare]</p>
+      <div class="article__inner">
+        <CheckBox
+          :check-list="'미선택'"
+          :id="'no1'"
+          :shape-type="'round'"
+          :name="'choise1'"
+        ></CheckBox>
+        <CheckBox
+          :check-list="'선택'"
+          :id="'yes1'"
+          :shape-type="'round'"
+          :name="'choise1'"
+        ></CheckBox>
+      </div>
+      <p class="article__select-desc">check-box [round]</p>
+    </div>
+  </article>
+  <article class="article">
+    <h2 class="article__title">Radio</h2>
+    <div class="article__group">
+      <div class="article__inner">
+        <Radio
+          :check-list="'동의'"
+          :id="'agree1'"
+          :name="'agree'"
+          checked="checked"
+        />
+        <Radio :check-list="'미동의'" :id="'agree2'" :name="'agree'" />
+      </div>
+      <p class="article__select-desc">radio</p>
     </div>
   </article>
 </template>
 
 <script setup>
 import CheckBox from '@/components/CheckBox/CheckBox.vue';
+import Radio from '@/components/Radio/Radio.vue';
 </script>
 
 <style scoped>
@@ -32,7 +71,7 @@ import CheckBox from '@/components/CheckBox/CheckBox.vue';
   border: 1px dashed #9747ff;
   border-radius: 2rem;
   padding: 50px;
-  min-height: 800px;
+  min-height: 300px;
 }
 
 .article__title {

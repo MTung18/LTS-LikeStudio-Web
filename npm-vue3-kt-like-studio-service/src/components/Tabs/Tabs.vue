@@ -2,30 +2,48 @@
   <button
     type="button"
     class="tabs"
-    :class="[props.type, props.selected && 'selected']"
+    :class="[props.type, props.isSelected && 'selected']"
+    @click="handleTabClick"
   >
+    <Icons
+      v-if="type === 'withIcon' && props.isSelected"
+      icon-name="check"
+      icon-color="var(--color-primary)"
+    />
     <slot />
   </button>
 </template>
 
 <script setup>
+import Icons from '@/components/Icons/Icons.vue';
+
 const props = defineProps({
   type: {
     type: String,
-    default: 'block',
+    default: 'black',
     validator(value) {
-      return ['block', 'underbar'].includes(value);
+      return ['black', 'underbar', 'withIcon'].includes(value);
     },
   },
-  selected: {
+  useIcon: {
+    type: Boolean,
+    default: false,
+  },
+  isSelected: {
     type: Boolean,
     default: false,
   },
 });
+
+const emit = defineEmits(['tab-selected']);
+
+function handleTabClick(id) {
+  emit('tab-selected', id);
+}
 </script>
 
 <style scoped>
-.tabs.block {
+.tabs.black {
   min-width: 8.2rem;
   padding: 0 2.6rem;
   height: 4.8rem;
@@ -37,7 +55,7 @@ const props = defineProps({
   color: var(--color-neutrals-black);
 }
 
-.tabs.block.selected {
+.tabs.black.selected {
   background-color: var(--color-neutrals-black);
   border-color: var(--color-neutrals-black);
   color: var(--color-neutrals-white-100);
@@ -66,5 +84,18 @@ const props = defineProps({
 
 .tabs.underbar.selected::before {
   background-color: var(--color-primary);
+}
+
+.tabs.withIcon {
+  display: flex;
+  align-items: center;
+  gap: 0 0.6rem;
+  font-size: var(--fz-xl);
+  color: var(--color-gray-777);
+}
+
+.tabs.withIcon.selected {
+  font-weight: 700;
+  color: var(--color-primary);
 }
 </style>

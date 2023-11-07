@@ -76,19 +76,23 @@ const props = defineProps({
 
 <style scoped>
 .button {
-  display: inline-block;
+  display: inline-flex;
   padding-left: 2.4rem;
   padding-right: 2.4rem;
   border-radius: 4rem;
-  font-size: 1.6rem;
+  font-size: var(--fz-l);
   font-weight: 700;
   text-align: center;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
 }
 
 .button.is-icon {
   display: inline-flex;
   gap: 1rem;
   justify-content: center;
+  align-items: center;
 }
 
 .button:disabled {
@@ -164,11 +168,11 @@ const props = defineProps({
 }
 
 .button.primary:hover {
-  background-color: #8e7bff;
+  background-color: #f4777c;
 }
 
 .button.primary:disabled {
-  background-color: #f1efff;
-  color: #ccc4ff;
+  background-color: #fcddde;
+  color: #f4777c;
 }
 </style>

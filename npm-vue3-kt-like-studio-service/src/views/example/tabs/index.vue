@@ -4,30 +4,53 @@
     <div class="article__group">
       <div class="article__button-item">
         <p class="article__button-desc">block, selected</p>
-        <Tabs type="block" :selected="true">선택</Tabs>
+        <Tabs type="black" :is-selected="true">선택</Tabs>
       </div>
 
       <div class="article__button-item">
-        <p class="article__button-desc">block, unselected</p>
-        <Tabs type="block">미선택</Tabs>
+        <p class="article__button-desc">underbar, selected</p>
+        <Tabs type="underbar" :is-selected="true">선택</Tabs>
+      </div>
+      <div class="article__button-item">
+        <p class="article__button-desc">w.icon, selected</p>
+        <Tabs type="withIcon" use-icon :is-selected="true">선택</Tabs>
+      </div>
+
+      <div class="article__button-item">
+        <p class="article__button-desc">cornerround, selected</p>
+        <div class="flex">
+          <RoundTabs :is-selected="true">선택</RoundTabs>
+          <RoundTabs>선택</RoundTabs>
+        </div>
       </div>
     </div>
 
     <div class="article__group">
       <div class="article__button-item">
-        <p class="article__button-desc">underbar, selected</p>
-        <Tabs type="underbar" :selected="true">선택</Tabs>
+        <p class="article__button-desc">block, unselected</p>
+        <Tabs type="black">미선택</Tabs>
       </div>
 
       <div class="article__button-item">
         <p class="article__button-desc">underbar, unselected</p>
         <Tabs type="underbar">미선택</Tabs>
       </div>
+
+      <div class="article__button-item">
+        <p class="article__button-desc">w.icon, unselected</p>
+        <Tabs type="withIcon" use-icon>선택</Tabs>
+      </div>
+
+      <div class="article__button-item">
+        <p class="article__button-desc">cornerround, unselected</p>
+        <RoundTabs>선택</RoundTabs>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
+import RoundTabs from '@/components/RoundTabs/RoundTabs.vue';
 import Tabs from '@/components/Tabs/Tabs.vue';
 </script>
 

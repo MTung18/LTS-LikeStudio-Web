@@ -93,7 +93,7 @@ function goToPost(postId) {
 
 <style scoped>
 .detail-body {
-  margin: 6rem 0;
+  padding: 6rem 0;
   border-bottom: 1px solid var(--color-gray-ddd);
 }
 

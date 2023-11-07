@@ -20,6 +20,7 @@
 .wrap {
   text-align: center;
   margin-top: 12rem;
+  margin-bottom: 12rem;
 }
 
 .wrap__img-area {

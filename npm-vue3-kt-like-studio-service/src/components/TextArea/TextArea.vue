@@ -69,6 +69,10 @@ const handleBlur = () => {
   overflow: hidden;
 }
 
+.text-area.medium {
+  width: 100%;
+}
+
 .text-area.is-focus {
   border-color: var(--color-primary);
 }
@@ -77,7 +81,7 @@ const handleBlur = () => {
   display: inline-flex;
   align-items: center;
   width: 100%;
-  font-size: var(--fz-l);
+  font-size: var(--fz-m);
 }
 
 .text-area.large .text-area__input {
@@ -87,8 +91,9 @@ const handleBlur = () => {
 }
 
 .text-area.medium .text-area__input {
-  padding: 0 1.6rem;
-  height: 4.8rem;
+  width: 100%;
+  padding: 1.3rem 1.6rem;
+  height: 11.8rem;
 }
 
 .text-area.is-disabled .text-area__input {

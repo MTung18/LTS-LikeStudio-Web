@@ -1,11 +1,47 @@
 <template>
-  <div class="input_check">
-    <label :for="props.id">
-      <input type="checkbox" :id="props.id" />
-      <span>{{ props.checkList }}</span>
-      <Icons icon-name="chevron_b_bold" />
-    </label>
-  </div>
+  <label
+    :for="props.id"
+    class="input-check"
+    :class="[
+      props.classBind,
+      props.shapeType === 'square' && 'square',
+      props.shapeType === 'round' && 'round',
+      props.checkList && 'use-checkList',
+    ]"
+  >
+    <span class="input-check__wrap">
+      <input
+        type="checkbox"
+        :id="props.id"
+        :checked="modelValue"
+        @change="handleCheckboxChange"
+        v-bind="$attrs"
+        class="visually--hidden"
+      />
+      <span class="input-check__inner">
+        <span class="input-check__box">
+          <Icons
+            icon-name="check_bold"
+            iconColor="var(--color-neutrals-white-100)"
+            :width="1.6"
+            :height="1.6"
+            v-if="props.shapeType === 'square'"
+            class-bind="check_icon icon-square"
+          />
+          <Icons
+            icon-name="check_box_round"
+            :width="1.5"
+            :height="1.5"
+            v-if="props.shapeType === 'round'"
+            class-bind="check_icon icon-round"
+          />
+        </span>
+        <span v-if="props.checkList" class="input-check__name">{{
+          props.checkList
+        }}</span>
+      </span>
+    </span>
+  </label>
 </template>
 
 <script setup>
@@ -16,47 +52,88 @@ const props = defineProps({
     type: String,
     default: '',
   },
+  modelValue: {
+    type: Boolean,
+    default: false,
+  },
   id: {
     type: String,
     default: '',
   },
+  shapeType: {
+    type: String,
+    default: '',
+  },
+  classBind: {
+    type: String,
+    default: '',
+  },
 });
+
+const emit = defineEmits(['update:modelValue']);
+
+const handleCheckboxChange = (event) => {
+  emit('update:modelValue', event.target.checked);
+};
 </script>
 
 <style scoped>
-.input_check input {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  border: 0;
+.input-check {
+  display: inline-block;
+  line-height: 1;
+  cursor: pointer;
 }
-.input_check input + span {
+
+.input-check__wrap {
+  display: inline-block;
+}
+
+.input-check__inner {
+  display: inline-flex;
+  align-items: center;
+  gap: 0 1rem;
   font-size: 1.4rem;
-  color: #444444;
-  padding-left: 2.8rem;
-  position: relative;
 }
-.input_check input + span:after {
-  content: '';
-  display: block;
+
+.round .input-check__box {
+  position: relative;
+  width: 2.4rem;
+  height: 2.4rem;
+  border-radius: 9999px;
+  border: 2px solid var(--color-gray-ddd);
+}
+
+.square .input-check__box {
+  position: relative;
   width: 1.8rem;
   height: 1.8rem;
-  border: 1px solid #dddddd;
+  border-radius: 0.4rem;
+  border: 2px solid var(--color-gray-ddd);
+}
+
+.input-check__box .check_icon {
+  display: none;
   position: absolute;
-  top: 0;
-  left: 0;
-  border-radius: 0.3rem;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
-.input_check input:checked + span {
-  font-size: 1.4rem;
-  color: #111111;
+
+.square .input-check__box .check_icon {
+  top: calc(50% + 0.1rem);
 }
-.input_check input:checked + span:after {
-  background: #ed1c24;
-  border: 0;
+
+input:checked + .input-check__inner .input-check__box {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+input:checked + .input-check__inner .input-check__box .check_icon {
+  display: block;
+}
+
+.round .input-check__name {
+  font-size: var(--fz-m);
+  color: var(--color-gray-444);
 }
 </style>

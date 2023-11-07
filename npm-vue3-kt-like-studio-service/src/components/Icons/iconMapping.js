@@ -6,9 +6,13 @@ import IconArrowPrevBold from '@/components/Icons/Icon/IconArrowPrevBold.vue';
 import IconArrowTopBold from '@/components/Icons/Icon/IconArrowTopBold.vue';
 import IconAudio from '@/components/Icons/Icon/IconAudio.vue';
 import IconBookmark from '@/components/Icons/Icon/IconBookmark.vue';
+import IconBookmarkFilled from '@/components/Icons/Icon/IconBookmarkFilled.vue';
 import IconCalender from '@/components/Icons/Icon/IconCalender.vue';
 import IconCalenderBold from '@/components/Icons/Icon/IconCalenderBold.vue';
 import IconCheck from '@/components/Icons/Icon/IconCheck.vue';
+import IconCheckBold from '@/components/Icons/Icon/IconCheckBold.vue';
+import IconCheckBox from '@/components/Icons/Icon/IconCheckBox.vue';
+import IconCheckRound from '@/components/Icons/Icon/IconCheckRound.vue';
 import IconChevronB from '@/components/Icons/Icon/IconChevronB.vue';
 import IconChevronBBold from '@/components/Icons/Icon/IconChevronBBold.vue';
 import IconChevronL from '@/components/Icons/Icon/IconChevronL.vue';
@@ -33,6 +37,7 @@ import IconSearch from '@/components/Icons/Icon/IconSearch.vue';
 import IconSheet from '@/components/Icons/Icon/IconSheet.vue';
 import IconSort from '@/components/Icons/Icon/IconSort.vue';
 import IconText from '@/components/Icons/Icon/IconText.vue';
+import IconTrash from '@/components/Icons/Icon/IconTrash.vue';
 import IconVideo from '@/components/Icons/Icon/IconVideo.vue';
 import IconZip from '@/components/Icons/Icon/IconZip.vue';
 
@@ -43,6 +48,9 @@ const iconMapping = {
   arrow_next_bold: IconArrowNextBold,
   arrow_top_bold: IconArrowTopBold,
   check: IconCheck,
+  check_bold: IconCheckBold,
+  check_box: IconCheckBox,
+  check_box_round: IconCheckRound,
   search: IconSearch,
   arrow_prev: IconArrowPrev,
   arrow_next: IconArrowNext,
@@ -51,6 +59,7 @@ const iconMapping = {
   chevron_b_bold: IconChevronBBold,
   chevron_t_bold: IconChevronTBold,
   bookmark: IconBookmark,
+  bookmark_filled: IconBookmarkFilled,
   link: IconLink,
   sort: IconSort,
   chevron_b: IconChevronB,
@@ -74,6 +83,7 @@ const iconMapping = {
   text: IconText,
   audio: IconAudio,
   video: IconVideo,
+  trash: IconTrash,
 };
 
 export default iconMapping;

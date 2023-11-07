@@ -16,22 +16,25 @@
             </RouterLink>
           </li>
           <li class="header__nav-item">
-            <RouterLink to="" class="header__nav-item-inner">
+            <div class="header__nav-item-inner" role="button" tabindex="0">
               <div class="header__nav-icon-circle"></div>
               <div class="header__nav-title">갤러리</div>
-            </RouterLink>
+            </div>
           </li>
           <li class="header__nav-item">
-            <RouterLink to="" class="header__nav-item-inner">
+            <div class="header__nav-item-inner" role="button" tabindex="0">
               <div class="header__nav-icon-circle"></div>
               <div class="header__nav-title">매장 VMD</div>
-            </RouterLink>
+            </div>
           </li>
-          <li class="header__nav-item">
-            <RouterLink to="" class="header__nav-item-inner">
+          <li
+            class="header__nav-item"
+            :class="oneDepthPathName === 'customer-service' && 'is-active'"
+          >
+            <div class="header__nav-item-inner" role="button" tabindex="0">
               <div class="header__nav-icon-circle"></div>
               <div class="header__nav-title">고객센터</div>
-            </RouterLink>
+            </div>
             <div class="header__two-depth-wrap">
               <ul class="header__two-depth-list">
                 <li class="header__two-depth-item">
@@ -50,11 +53,60 @@
               </ul>
             </div>
           </li>
-          <li class="header__nav-item">
-            <RouterLink to="" class="header__nav-item-inner">
+          <li
+            class="header__nav-item"
+            :class="oneDepthPathName === 'site-management' && 'is-active'"
+          >
+            <div class="header__nav-item-inner" role="button" tabindex="0">
               <div class="header__nav-icon-circle"></div>
               <div class="header__nav-title">사이트 관리</div>
-            </RouterLink>
+            </div>
+            <div class="header__two-depth-wrap">
+              <ul class="header__two-depth-list">
+                <li class="header__two-depth-item">
+                  <RouterLink to="/site-management/template"
+                    >템플릿 관리</RouterLink
+                  >
+                </li>
+                <li class="header__two-depth-item">
+                  <RouterLink to="/site-management/gallery"
+                    >갤러리 관리</RouterLink
+                  >
+                </li>
+                <li class="header__two-depth-item">
+                  <RouterLink to="/site-management/asset">에셋 관리</RouterLink>
+                </li>
+                <li class="header__two-depth-item">
+                  <RouterLink to="/site-management/vmd"
+                    >매장 VMD 관리</RouterLink
+                  >
+                </li>
+                <li class="header__two-depth-item">
+                  <RouterLink to="/site-management/inquiries"
+                    >1:1 문의 관리</RouterLink
+                  >
+                </li>
+                <li class="header__two-depth-item">
+                  <RouterLink to="/site-management/faq">FAQ 관리</RouterLink>
+                </li>
+                <li class="header__two-depth-item">
+                  <RouterLink to="/site-management/announcements"
+                    >공지사항 관리</RouterLink
+                  >
+                </li>
+                <li class="header__two-depth-item">
+                  <RouterLink to="/site-management/main">메인 관리</RouterLink>
+                </li>
+                <li class="header__two-depth-item">
+                  <RouterLink to="/site-management/statistics">통계</RouterLink>
+                </li>
+                <li class="header__two-depth-item">
+                  <RouterLink to="/site-management/admin"
+                    >관리자 권한</RouterLink
+                  >
+                </li>
+              </ul>
+            </div>
           </li>
         </ul>
       </nav>
@@ -75,10 +127,27 @@
 </template>
 
 <script setup>
-import { RouterLink } from 'vue-router';
+import { ref, watch } from 'vue';
+import { RouterLink, useRoute } from 'vue-router';
 
 import IconLogo from '@/components/base/Header/IconLogo.vue';
 import Button from '@/components/Button/Button.vue';
+
+const router = useRoute();
+
+const getCurrentPath = (path) => {
+  const segments = path.split('/');
+  return segments[1];
+};
+
+const oneDepthPathName = ref(getCurrentPath(router.path));
+
+watch(
+  () => router.path,
+  (newPath) => {
+    oneDepthPathName.value = getCurrentPath(newPath);
+  },
+);
 </script>
 
 <style scoped>
@@ -137,7 +206,7 @@ import Button from '@/components/Button/Button.vue';
   border: 1px solid var(--color-gray-bbb);
 }
 
-.header__nav-list.is-active .header__nav-icon-circle {
+.header__nav-item.is-active .header__nav-icon-circle {
   background-color: var(--color-primary);
   border-color: var(--color-primary);
 }
@@ -149,7 +218,6 @@ import Button from '@/components/Button/Button.vue';
   display: none;
   width: 100%;
   padding-top: 1rem;
-  background-color: var(--color-neutrals-white-100);
 }
 
 .header__nav-item:hover .header__two-depth-wrap {
@@ -162,16 +230,31 @@ import Button from '@/components/Button/Button.vue';
   text-align: center;
   border: 1px solid var(--color-gray-ddd);
   border-radius: 2rem;
+  background-color: var(--color-neutrals-white-100);
 }
 
 .header__two-depth-item {
-  height: 3rem;
+  padding: 0.4rem 0;
   line-height: 3rem;
+  margin: 0.4rem 0;
 }
 
-.header__two-depth-item.is-active {
+.header__two-depth-item:first-child {
+  margin-top: 0;
+}
+
+.header__two-depth-item:last-child {
+  margin-bottom: 0;
+}
+
+.header__two-depth-item:hover {
   color: var(--color-primary);
   font-weight: 500;
+}
+
+.header__two-depth-item a {
+  display: block;
+  width: 100%;
 }
 
 .user-action {

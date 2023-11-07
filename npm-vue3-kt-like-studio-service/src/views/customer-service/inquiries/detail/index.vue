@@ -1,37 +1,75 @@
 <template>
   <TemplateDetail>
-    <TemplateDetailHead
-      :title="dummyData.title"
-      :category="dummyData.category"
-      :date="dummyData.date"
-    />
-    <TemplateDetailBody
-      :content="dummyData.content"
-      :files="dummyData.files"
-      :prev-post="dummyData.prevPost"
-      :next-post="dummyData.nextPost"
-    />
-    <!-- dev: 답변 후 DetailAnswer 노출 -->
-    <DetailAnswer
-      v-if="dummyAnswer"
-      :content="dummyAnswer.content"
-      :files="dummyAnswer.files"
-      :date="dummyAnswer.date"
-    />
-    <TemplateDetailFooter
-      :useRemoveButton="!!dummyAnswer"
-      @on-delete="handleRemove"
-      to-list-href="/customer-service/announcements"
-    />
+    <template #body>
+      <TemplateDetailHead
+        :title="dummyData.title"
+        :category="dummyData.category"
+        :date="dummyData.date"
+      />
+      <TemplateDetailBody
+        :content="dummyData.content"
+        :files="dummyData.files"
+        :prev-post="dummyData.prevPost"
+        :next-post="dummyData.nextPost"
+      />
+      <DetailAnswer
+        v-if="props.state === 'answered'"
+        :content="dummyAnswer.content"
+        :files="dummyAnswer.files"
+        :date="dummyAnswer.date"
+      >
+        <FileDownload :files="dummyAnswer.files" />
+        <TemplateEditInfo
+          class-bind="after:!hidden !pt-[4rem] !pb-0"
+          answered-date="2023.01.30 11:32"
+        />
+      </DetailAnswer>
+    </template>
+    <template #foot>
+      <div class="flex gap-x-[1rem] justify-center">
+        <Button
+          v-if="state === 'answered'"
+          component="button"
+          color-type="outlined"
+          size="large"
+          class-bind="!min-w-[14rem]"
+          @click="onDeleteButton"
+          >삭제</Button
+        >
+        <Button
+          component="a"
+          href="/customer-service/inquiries"
+          color-type="standard"
+          size="large"
+          class-bind="!min-w-[14rem]"
+          >목록</Button
+        >
+      </div>
+    </template>
   </TemplateDetail>
 </template>
 
 <script setup>
+import { defineProps } from 'vue';
+
+import Button from '@/components/Button/Button.vue';
+import FileDownload from '@/components/FileDownload/FileDownload.vue';
 import TemplateDetailBody from '@/components/TemplateDetailBody/TemplateDetailBody.vue';
-import TemplateDetailFooter from '@/components/TemplateDetailFooter/TemplateDetailFooter.vue';
 import TemplateDetailHead from '@/components/TemplateDetailHead/TemplateDetailHead.vue';
 import TemplateDetail from '@/components/TemplateDetailWrap/TemplateDetail.vue';
+import TemplateEditInfo from '@/components/TemplateEditInfo/TemplateEditInfo.vue';
 import DetailAnswer from '@/containers/customer-service/inquiries/DetailAnswer.vue';
+
+const props = defineProps({
+  id: {
+    type: String,
+    default: '',
+  },
+  state: {
+    type: String,
+    default: '',
+  },
+});
 
 const dummyData = {
   title: '갤러리로 보내기 할 때 오류가 발생합니다',
@@ -67,8 +105,8 @@ const dummyAnswer = {
   date: '2023.01.30 11:32',
 };
 
-const handleRemove = (arg) => {
-  console.log(arg);
+const onDeleteButton = () => {
+  console.log('삭제');
 };
 </script>
 
