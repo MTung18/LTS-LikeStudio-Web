@@ -17,18 +17,29 @@ const NoticeBoardApi = {
   }
  },
 
- // async getListNoitceForUser(param) {
- //  try {
- //   const response = await axios.get(`${baseUrl}/search`, {
- //    params: { page: param },
- //   });
+ async findAllNoitceForUser() {
+  try {
+   const response = await axios.get(`${baseUrl}/getAllNotice`);
 
- //   return response.data;
- //  } catch (error) {
- //   console.error('Error fetching data:', error);
- //   throw error;
- //  }
- // },
+   return response.data;
+  } catch (error) {
+   console.error('Error fetching data:', error);
+   throw error;
+  }
+ },
+
+ async getNoticeById(id) {
+  try {
+   const response = await axios.get(`${baseUrl}/getById`, {
+    params: { id: id },
+   });
+
+   return response.data;
+  } catch (error) {
+   console.error('Error fetching data:', error);
+   throw error;
+  }
+ },
 }
 
 export default NoticeBoardApi;

@@ -125,7 +125,7 @@ const listDataQuestion = ref([]);
 const categoryKey = ref(1);
 const listFile = ref([]);
 
-const functionType = 2;
+const functionType = 1;
 
 async function getListByCategory(param) {
   await store.getByCategory(param)

@@ -1,0 +1,31 @@
+
+Sau khi chạy `git pull` để pull code mới nhất về
+------------------------------------------------
+
+b.1 vào file (bấm vào biểu tượng tệp file bên góc trái)
+b.2 chọn thư mục public
+b.3 tạo 1 file mới trong thư mục public bằng cách click chuột phải vào public -> new file -> gõ / paste tên file mới: appsettings.local.json -> enter
+b.4 copy nội dung file appsettings.json sang file appsettings.local.json
+b.5 thay đổi nội dung của các dòng sau ở file appsettings.local.json (dòng 51-53) -> copy đoạn mới paste vào đoạn cũ
+đoạn cũ:
+    "MockApiUrl": "https://apifs-dev.foundationsoft.com/whqemployee/v1",
+    "HrmApiUrl": "https://app-workforcehqapi-sbox1.azurewebsites.net",
+    "EssApiUrl": "https://app-workforcehqempapi-sbox1.azurewebsites.net",
+đoạn mới:
+    "MockApiUrl": "http://172.16.8.28:8111",
+    "HrmApiUrl": "http://172.16.8.28:8112",
+    "EssApiUrl": "http://172.16.8.28:8113",
+
+--------
+
+Cách khác
+b.1, b.2 tương tự
+b.3: click chọn file appsettings.json -> Ctrl + C -> Ctrl + V 
+Khi đó sẽ tạo ra 1 file mới có tên là appsettings copy.json -> sửa tên appsettings copy.json thành appsettings.local.json
+(click chuột phải vào file + rename hoặc F2 để đổi tên)
+b.4, b.5 tương tự
+
+
+--hết rồi----> 
+
+VinhLT2

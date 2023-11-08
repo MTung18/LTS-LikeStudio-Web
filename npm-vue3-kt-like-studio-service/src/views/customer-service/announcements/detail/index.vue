@@ -1,60 +1,91 @@
 <template>
   <TemplateDetail>
     <template #body>
-      <TemplateDetailHead :title="dummyData.title" :date="dummyData.date" />
+      <TemplateDetailHead :title="noticeBoarDetail.title" :date="noticeBoarDetail.date" />
       <TemplateDetailBody
-        :content="dummyData.content"
-        :files="dummyData.files"
-        :prev-post="dummyData.prevPost"
-        :next-post="dummyData.nextPost"
+        :content="noticeBoarDetail.content"
+        :files="listFile"
+        :prev-post="prevPost"
+        :next-post="nextItem"
+        @someEvent="callback"
       />
     </template>
     <template #foot>
       <div class="text-center">
-        <Button
-          component="a"
-          href="/customer-service/announcements"
-          color-type="standard"
-          size="large"
-          class-bind="!min-w-[14rem]"
-          >목록</Button
-        >
+        <Button component="a" href="/customer-service/announcements" color-type="standard" size="large"
+          class-bind="!min-w-[14rem]">목록</Button>
       </div>
     </template>
   </TemplateDetail>
 </template>
 
 <script setup>
+import { onMounted, ref } from 'vue';
+
 import Button from '@/components/Button/Button.vue';
 import TemplateDetailBody from '@/components/TemplateDetailBody/TemplateDetailBody.vue';
 import TemplateDetailHead from '@/components/TemplateDetailHead/TemplateDetailHead.vue';
 import TemplateDetail from '@/components/TemplateDetailWrap/TemplateDetail.vue';
+import { noticeBoardStore } from '@/stores/noticeBoardStore';
+import { fileManagerStore } from '@/stores/fileManagerStore';
+import { storeToRefs } from 'pinia';
+import { useRoute } from "vue-router";
 
-const dummyData = {
-  title: '마이페이지/고객지원 등 일부 서비스 이용제한 안내',
-  date: '2023.09.20 15:32',
-  content:
-    '안녕하세요 kt.com 입니다. 보다 안정적인 서비스 제공을 위해 아래의 내용으로 시스템 점검 작업을 진행할 예정이오니 참고하셔서 사용에 불편 없으시기를 바랍니다.',
-  files: [
-    {
-      id: 0,
-      filename: '서버점검 상세 안내문.docx',
-    },
-    {
-      id: 1,
-      filename: '서버점검 상세 안내문.pdf',
-    },
-  ],
-  prevPost: {
-    id: 0,
-    title: '인쇄종류의 추가에 따른 약관 및 개인정보취급방침의 개정',
-  },
-  nextPost: {
-    id: 1,
-    title:
-      '[공지] 추석 이벤트 디자인 템플릿 모음, 한복 AI 사진 생성도 가능해요!',
-  },
-};
+const store = noticeBoardStore();
+const fileStore = fileManagerStore();
+const { noticeBoard, listNoticeUser } = storeToRefs(store);
+const { listOfFile } = storeToRefs(fileStore);
+const route = useRoute();
+
+const functionType = 0;
+
+const dummyList = ref([]);
+const noticeBoarDetail = ref([]);
+const listFile = ref([]);
+const noticeId = ref()
+
+const prevPost = ref();
+const nextItem = ref();
+
+async function getNoticeById(noticeId) {
+  await store.getNoticeById(noticeId)
+  noticeBoarDetail.value = noticeBoard.value
+}
+
+async function gitListFile(functionType, titleId) {
+  await fileStore.getListFile(functionType, titleId)
+  listFile.value = listOfFile.value;
+}
+
+async function getListNotice() {
+  await store.findAllNoitceForUser();
+  dummyList.value = listNoticeUser.value;
+  for (let i = 0; i < dummyList.value.length; i++) {
+    if (dummyList.value[i].id == noticeId.value) {
+      if (i > 0) {
+        await store.getNoticeById(dummyList.value[i - 1].id)
+        prevPost.value = noticeBoard.value;
+      }
+      if (i < dummyList.value.length - 1) {
+        await store.getNoticeById(dummyList.value[i + 1].id)
+        nextItem.value = noticeBoard.value;
+      }
+      break;
+    }
+  }
+}
+
+const c = ref(false)
+function callback(postId) {
+  window.location.href = '/customer-service/announcements/' + postId;
+}
+
+onMounted(async () => {
+  noticeId.value = route.params.id;
+  await getNoticeById(noticeId.value)
+  await gitListFile(functionType, noticeId.value);
+  await getListNotice();
+});
 </script>
 
 <style scoped></style>
