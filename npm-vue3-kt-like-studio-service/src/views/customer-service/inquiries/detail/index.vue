@@ -1,56 +1,29 @@
 <template>
+  {{ data }}
   <TemplateDetail>
     <template #body>
-      <TemplateDetailHead
-        :title="dummyData.title"
-        :category="dummyData.category"
-        :date="dummyData.date"
-      />
-      <TemplateDetailBody
-        :content="dummyData.content"
-        :files="dummyData.files"
-        :prev-post="dummyData.prevPost"
-        :next-post="dummyData.nextPost"
-      />
-      <DetailAnswer
-        v-if="props.state === 'answered'"
-        :content="dummyAnswer.content"
-        :files="dummyAnswer.files"
-        :date="dummyAnswer.date"
-      >
+      <TemplateDetailHead :title="data.title" :category="data.category ? data.category: 'not found category'" :date="data.createDate" />
+      <TemplateDetailBody :content="data.content" :files="dummyData.files" :prev-post="dummyData.prevPost"
+        :next-post="dummyData.nextPost" />
+      <DetailAnswer v-if="props.state === 'answered'" :content="dummyAnswer.content" :files="dummyAnswer.files"
+        :date="dummyAnswer.date">
         <FileDownload :files="dummyAnswer.files" />
-        <TemplateEditInfo
-          class-bind="after:!hidden !pt-[4rem] !pb-0"
-          answered-date="2023.01.30 11:32"
-        />
+        <TemplateEditInfo class-bind="after:!hidden !pt-[4rem] !pb-0" answered-date="2023.01.30 11:32" />
       </DetailAnswer>
     </template>
     <template #foot>
       <div class="flex gap-x-[1rem] justify-center">
-        <Button
-          v-if="state === 'answered'"
-          component="button"
-          color-type="outlined"
-          size="large"
-          class-bind="!min-w-[14rem]"
-          @click="onDeleteButton"
-          >삭제</Button
-        >
-        <Button
-          component="a"
-          href="/customer-service/inquiries"
-          color-type="standard"
-          size="large"
-          class-bind="!min-w-[14rem]"
-          >목록</Button
-        >
+        <Button v-if="state === 'answered'" component="button" color-type="outlined" size="large"
+          class-bind="!min-w-[14rem]" @click="onDeleteButton">삭제</Button>
+        <Button component="a" href="/customer-service/inquiries" color-type="standard" size="large"
+          class-bind="!min-w-[14rem]">목록</Button>
       </div>
     </template>
   </TemplateDetail>
 </template>
 
 <script setup>
-import { defineProps } from 'vue';
+import { defineProps, onMounted, ref } from 'vue';
 
 import Button from '@/components/Button/Button.vue';
 import FileDownload from '@/components/FileDownload/FileDownload.vue';
@@ -59,6 +32,20 @@ import TemplateDetailHead from '@/components/TemplateDetailHead/TemplateDetailHe
 import TemplateDetail from '@/components/TemplateDetailWrap/TemplateDetail.vue';
 import TemplateEditInfo from '@/components/TemplateEditInfo/TemplateEditInfo.vue';
 import DetailAnswer from '@/containers/customer-service/inquiries/DetailAnswer.vue';
+
+import { useRoute } from 'vue-router'
+import { lsSupportManagerStore } from '@/stores/lsSupportManagerStore';
+import { storeToRefs } from 'pinia';
+
+const route = useRoute()
+
+const { lsSupportManagerById } = storeToRefs(lsSupportManagerStore());
+const data = ref([])
+
+onMounted(async () => {
+  await lsSupportManagerStore().getLsSupportManagerById(route.params.id)
+  data.value = lsSupportManagerById.value
+});
 
 const props = defineProps({
   id: {
@@ -72,7 +59,7 @@ const props = defineProps({
 });
 
 const dummyData = {
-  title: '갤러리로 보내기 할 때 오류가 발생합니다',
+  title: '갤러리로 보내기 할 때 오류가 발생합니다 detail content',
   category: '서비스 오류',
   date: '2023.01.30 11:32',
   content:
