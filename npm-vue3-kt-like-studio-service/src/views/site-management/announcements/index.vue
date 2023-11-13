@@ -6,6 +6,7 @@
       :input-data3="inputData3"
       :input-data4="inputData4"
       :only-search="true"
+      @search="searchNotice"
     />
 
     <div class="select-wrap flex justify-between">
@@ -17,7 +18,7 @@
           class-bind="!min-w-[12rem] ml-auto mr-0 "
         ></DropdownSelect>
       </div>
-      <RoundButton component="button" color-type="filed" size="medium" @click="searchNotice()"
+      <RoundButton component="button" color-type="filed" size="medium"
         >등록</RoundButton
       >
     </div>
@@ -104,7 +105,6 @@ const optionList = {
 
 const store = noticeBoardStore();
 const { listOfNoticeAdmin } = storeToRefs(store);
-const dummyInputValue = ref('');
 const tableData = ref([]);
 const currentPage = ref();
 const totalPages = ref();
@@ -112,14 +112,14 @@ const totalPages = ref();
 async function getListNotice(keyword, dateParamStart, dateParamEnd, popup, page) {
   await store.getAllNoitceForAdmin(keyword, dateParamStart, dateParamEnd, popup, page)
   tableData.value = listOfNoticeAdmin.value;
-  console.log("tunglm: ",tableData.value);
   currentPage.value = tableData.value.currentPage;
   totalPages.value = tableData.value.totalPages;
 }
 
-const searchNotice = async () => {
-  await getListNotice(dummyInputValue.value, "", "", "", 1);
-};
+async function searchNotice(dummyInputValue, fromDateValue, toDateValue) {
+  console.log("tunglm");
+  await getListNotice(dummyInputValue, fromDateValue, toDateValue, "", "");
+}
 
 onMounted(async () => {
   await getListNotice("", "", "", "", 1);

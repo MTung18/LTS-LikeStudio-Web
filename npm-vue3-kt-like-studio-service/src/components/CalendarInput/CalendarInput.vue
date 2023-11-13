@@ -19,11 +19,17 @@
 
 <script setup>
 import { DatePicker } from 'v-calendar';
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 
 import Icons from '@/components/Icons/Icons.vue';
 
 const date = ref(new Date());
+
+const emit = defineEmits(['date']);
+
+watch(date, (newValue) => {
+  emit('date', newValue);
+});
 </script>
 
 <style scoped>
