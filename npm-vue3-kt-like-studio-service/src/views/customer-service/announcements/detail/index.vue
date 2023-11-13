@@ -33,7 +33,7 @@ import { useRoute } from "vue-router";
 
 const store = noticeBoardStore();
 const fileStore = fileManagerStore();
-const { noticeBoard, listNoticeUser } = storeToRefs(store);
+const { noticeBoard, listNotice } = storeToRefs(store);
 const { listOfFile } = storeToRefs(fileStore);
 const route = useRoute();
 
@@ -58,8 +58,8 @@ async function gitListFile(functionType, titleId) {
 }
 
 async function getListNotice() {
-  await store.findAllNoitceForUser();
-  dummyList.value = listNoticeUser.value;
+  await store.findAllNoitce();
+  dummyList.value = listNotice.value.find((item) => item.show = 1);
   for (let i = 0; i < dummyList.value.length; i++) {
     if (dummyList.value[i].id == noticeId.value) {
       if (i > 0) {
@@ -75,7 +75,6 @@ async function getListNotice() {
   }
 }
 
-const c = ref(false)
 function callback(postId) {
   window.location.href = '/customer-service/announcements/' + postId;
 }

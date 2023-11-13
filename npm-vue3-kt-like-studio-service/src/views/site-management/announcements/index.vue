@@ -17,7 +17,7 @@
           class-bind="!min-w-[12rem] ml-auto mr-0 "
         ></DropdownSelect>
       </div>
-      <RoundButton component="button" color-type="filed" size="medium"
+      <RoundButton component="button" color-type="filed" size="medium" @click="searchNotice()"
         >등록</RoundButton
       >
     </div>
@@ -34,12 +34,12 @@
               <th width="134px">작성일시</th>
             </tr>
           </thead>
-          <tbody v-if="tableData && tableData.length > 0">
-            <tr v-for="item in tableData" :key="item.id">
-              <td class="num">{{ item.no }}</td>
+          <tbody v-if="tableData.list && tableData.list.length > 0">
+            <tr v-for="item in tableData.list" :key="item.id">
+              <td class="num">{{ item.rowNumber }}</td>
               <td class="title !text-left">
                 <RouterLink to="/site-management/announcements/create">
-                  <span class="notice-badge" v-if="item.notice">
+                  <span class="notice-badge" v-if="item.gim">
                     <Icons
                       :width="2"
                       :height="2"
@@ -52,23 +52,27 @@
                 </RouterLink>
               </td>
 
-              <td>{{ item.show1 }}</td>
-              <td>{{ item.show2 }}</td>
-              <td>{{ item.author }}</td>
-              <td class="date">{{ item.correctDate }}</td>
+              <td v-if="item.popup == 0">N</td>
+              <td v-else="item.popup == 1">y</td>
+              <td v-if="item.show == 0">N</td>
+              <td v-else="item.show == 1">y</td>
+              <td>{{ item.createUser }}</td>
+              <td class="date">{{ moment(item.createDate).format("YYYY.MM.DD HH:mm") }}</td>
             </tr>
           </tbody>
         </table>
       </div>
-      <div v-if="tableData && tableData.length <= 0">
+      <div v-if="tableData.list && tableData.list.length <= 0">
         <TemplateDataNone />
       </div>
     </div>
-    <Pagination v-if="tableData && tableData.length > 0" />
+    <Pagination v-if="tableData.list && tableData.list.length > 0" />
   </TemplateBoardWrap>
 </template>
 
 <script setup>
+import { onMounted, ref } from 'vue';
+import moment from 'moment';
 import DropdownSelect from '@/components/DropdownSelect/DropdownSelect.vue';
 import Icons from '@/components/Icons/Icons.vue';
 import ManageHeadForm from '@/components/ManageHeadForm/ManageHeadForm.vue';
@@ -76,6 +80,9 @@ import Pagination from '@/components/Pagination/Pagination.vue';
 import RoundButton from '@/components/RoundButton/RoundButton.vue';
 import TemplateBoardWrap from '@/components/TemplateBoardWrap/TemplateBoardWrap.vue';
 import TemplateDataNone from '@/components/TemplateDataNone/TemplateDataNone.vue';
+import { noticeBoardStore } from '@/stores/noticeBoardStore';
+import { fileManagerStore } from '@/stores/fileManagerStore';
+import { storeToRefs } from 'pinia';
 
 const optionList = {
   defaultSelect: '전체',
@@ -94,215 +101,29 @@ const optionList = {
     },
   ],
 };
-const tableData = [
-  {
-    id: 1,
-    no: 100,
-    notice: true,
-    cate: '공식 VMD',
-    title:
-      '2023년 10월10월10월10월10월10월10월10월10월10월10월10월10월10월10월10월10월10월10월10월10월10월10월',
-    fileNumber: '1234',
-    show1: 'N',
-    show2: 'N',
-    author: '홍길동',
-    correctDate: '2023.09.18 15:32',
-    answer: false,
-  },
-  {
-    id: 2,
-    no: 99,
-    notice: true,
-    cate: '공식 VMD',
-    title: '2023년 10월',
-    fileNumber: '1234',
-    show1: 'N',
-    show2: 'N',
-    author: '홍길동',
-    correctDate: '2023.09.18 15:32',
-    answer: false,
-  },
-  {
-    id: 3,
-    no: 98,
-    notice: false,
-    cate: '공식 VMD',
-    title: '2023년 10월',
-    fileNumber: '1234',
-    show1: 'N',
-    show2: 'N',
-    author: '홍길동',
-    correctDate: '2023.09.18 15:32',
-    answer: true,
-  },
-  {
-    id: 4,
-    no: 97,
-    notice: false,
-    cate: '공식 VMD',
-    title: '2023년 10월',
-    fileNumber: '1234',
-    show1: 'N',
-    show2: 'N',
-    author: '홍길동',
-    correctDate: '2023.09.18 15:32',
-    answer: true,
-  },
-  {
-    id: 5,
-    no: 95,
-    notice: false,
-    cate: '공식 VMD',
-    title: '2023년 10월',
-    fileNumber: '1234',
-    show1: 'N',
-    show2: 'N',
-    author: '홍길동',
-    correctDate: '2023.09.18 15:32',
-    answer: true,
-  },
-  {
-    id: 6,
-    no: 94,
-    notice: false,
-    cate: '공식 VMD',
-    title: '2023년 10월',
-    fileNumber: '1234',
-    show1: 'N',
-    show2: 'N',
-    author: '홍길동',
-    correctDate: '2023.09.18 15:32',
-    answer: true,
-  },
-  {
-    id: 7,
-    no: 93,
-    notice: false,
-    cate: '공식 VMD',
-    title: '2023년 10월',
-    fileNumber: '1234',
-    show1: 'N',
-    show2: 'N',
-    author: '홍길동',
-    correctDate: '2023.09.18 15:32',
-    answer: true,
-  },
-  {
-    id: 8,
-    no: 92,
-    notice: false,
-    cate: '공식 VMD',
-    title: '2023년 10월',
-    fileNumber: '1234',
-    show1: 'N',
-    show2: 'N',
-    author: '홍길동',
-    correctDate: '2023.09.18 15:32',
-    answer: true,
-  },
-  {
-    id: 9,
-    no: 91,
-    notice: false,
-    cate: '공식 VMD',
-    title: '2023년 10월',
-    fileNumber: '1234',
-    show1: 'N',
-    show2: 'N',
-    author: '홍길동',
-    correctDate: '2023.09.18 15:32',
-    answer: true,
-  },
-  {
-    id: 10,
-    no: 90,
-    notice: false,
-    cate: '공식 VMD',
-    title: '2023년 10월',
-    fileNumber: '1234',
-    show1: 'N',
-    show2: 'N',
-    author: '홍길동',
-    correctDate: '2023.09.18 15:32',
-    answer: true,
-  },
-];
-const inputData1 = {
-  id: 1,
-  cate: '등록일',
-  defaultSelect: '등록일',
-  listData: [
-    {
-      id: 1,
-      listName: '로그인1',
-    },
-    {
-      id: 2,
-      listName: '로그인2',
-    },
-    {
-      id: 3,
-      listName: '로그인3',
-    },
-  ],
+
+const store = noticeBoardStore();
+const { listOfNoticeAdmin } = storeToRefs(store);
+const dummyInputValue = ref('');
+const tableData = ref([]);
+const currentPage = ref();
+const totalPages = ref();
+
+async function getListNotice(keyword, dateParamStart, dateParamEnd, popup, page) {
+  await store.getAllNoitceForAdmin(keyword, dateParamStart, dateParamEnd, popup, page)
+  tableData.value = listOfNoticeAdmin.value;
+  console.log("tunglm: ",tableData.value);
+  currentPage.value = tableData.value.currentPage;
+  totalPages.value = tableData.value.totalPages;
+}
+
+const searchNotice = async () => {
+  await getListNotice(dummyInputValue.value, "", "", "", 1);
 };
-const inputData2 = {
-  id: 1,
-  cate: '노출',
-  defaultSelect: '노출',
-  listData: [
-    {
-      id: 1,
-      listName: '로그인1',
-    },
-    {
-      id: 2,
-      listName: '로그인2',
-    },
-    {
-      id: 3,
-      listName: '로그인3',
-    },
-  ],
-};
-const inputData3 = {
-  id: 1,
-  cate: '용도',
-  defaultSelect: '전체',
-  listData: [
-    {
-      id: 1,
-      listName: '로그인1',
-    },
-    {
-      id: 2,
-      listName: '로그인2',
-    },
-    {
-      id: 3,
-      listName: '로그인3',
-    },
-  ],
-};
-const inputData4 = {
-  id: 1,
-  cate: '상품서비스',
-  defaultSelect: '전체',
-  listData: [
-    {
-      id: 1,
-      listName: '로그인1',
-    },
-    {
-      id: 2,
-      listName: '로그인2',
-    },
-    {
-      id: 3,
-      listName: '로그인3',
-    },
-  ],
-};
+
+onMounted(async () => {
+  await getListNotice("", "", "", "", 1);
+});
 </script>
 
 <style scoped>

@@ -4,9 +4,6 @@
       <li v-for="category in categories" :key="category.key" class="category__item">
         <Tabs type="underbar" :is-selected="category.isSelected" @tab-selected="updateSelectedCategory(category.key)">
           {{ category.category }}
-          <span v-show="category.dummyLength && category.dummyLength > 0">
-            {{ category.dummyLength }}
-          </span>
         </Tabs>
       </li>
     </ul>

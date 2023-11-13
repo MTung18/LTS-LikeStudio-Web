@@ -4,15 +4,20 @@ import { ref } from "vue";
 
 export const noticeBoardStore = defineStore("notice", () => {
  const listOfNoticeUser = ref([]);
- const listNoticeUser = ref([]);
+ const listOfNoticeAdmin = ref([]);
+ const listNotice = ref([]);
  const noticeBoard = ref();
 
- async function getAllNoitceForUser(param) {
-  listOfNoticeUser.value = await NoticeBoardApi.getAllNoitceForUser(param)
+ async function getAllNoitceForUser(keyword, page) {
+  listOfNoticeUser.value = await NoticeBoardApi.getAllNoitceForUser(keyword, page)
  }
 
- async function findAllNoitceForUser() {
-  listNoticeUser.value = await NoticeBoardApi.findAllNoitceForUser()
+ async function getAllNoitceForAdmin(keyword, dateParamStart, dateParamEnd, popup, page) {
+  listOfNoticeAdmin.value = await NoticeBoardApi.getAllNoitceForAdmin(keyword, dateParamStart, dateParamEnd, popup, page)
+ }
+
+ async function findAllNoitce() {
+  listNotice.value = await NoticeBoardApi.findAllNoitce()
  }
 
  async function getNoticeById(id) {
@@ -21,10 +26,12 @@ export const noticeBoardStore = defineStore("notice", () => {
 
  return {
   listOfNoticeUser,
+  listOfNoticeAdmin,
   noticeBoard,
-  listNoticeUser,
+  listNotice,
   getAllNoitceForUser,
+  getAllNoitceForAdmin,
   getNoticeById,
-  findAllNoitceForUser
+  findAllNoitce
  };
 })

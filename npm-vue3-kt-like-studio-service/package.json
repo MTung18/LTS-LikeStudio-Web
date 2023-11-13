@@ -20,6 +20,7 @@
     "@popperjs/core": "^2.11.8",
     "@vue/eslint-config-airbnb": "^7.0.0",
     "axios": "^1.6.0",
+    "moment-timezone": "^0.5.43",
     "pinia": "^2.1.6",
     "swiper": "^10.0.0",
     "uuid": "^9.0.1",

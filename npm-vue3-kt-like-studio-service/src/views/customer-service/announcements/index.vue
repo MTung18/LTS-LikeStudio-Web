@@ -3,13 +3,14 @@
     <CustomerSearchWrap>
       <SearchInput v-model="dummyInputValue" placeholder="검색어를 입력해주세요" size="medium" style-type="square" color-type="gray"
         class-bind="!min-w-[41.2rem]" />
-      <RoundButton component="button" color-type="filed" size="medium">검색</RoundButton>
+      <RoundButton component="button" color-type="filed" size="medium" @click="searchByKeyword()">검색
+      </RoundButton>
     </CustomerSearchWrap>
-    <template v-if="dummyList && dummyList.length > 0">
+    <template v-if="dummyList.list && dummyList.list.length > 0">
       <div class="list">
-        <RouterLink v-for="item in dummyList" :key="item.id" :to="`/customer-service/announcements/${item.id}`"
+        <RouterLink v-for="item in dummyList.list" :key="item.id" :to="`/customer-service/announcements/${item.id}`"
           class="list__item">
-          <div class="item-no">{{ item.id }}</div>
+          <div class="item-no">{{ item.rowNumber }}</div>
           <div class="item-title flex items-center justify-between gap-5" :class="item.isNotice && 'is-notice'">
             <div v-if="item.gim" class="notice-wrap">
               <Icons :width="2" :height="2" icon-name="pin" />
@@ -17,10 +18,10 @@
             </div>
             <span class="item-title-text">{{ item.title }}</span>
           </div>
-          <div class="item-date">{{ item.createDate }}</div>
+          <div class="item-date">{{ moment(item.createDate).format("YYYY.MM.DD HH:mm") }}</div>
         </RouterLink>
       </div>
-      <Pagination />
+      <Pagination :currentPage="currentPage" :pageNumber="totalPages" @numberPage="navigate" />
     </template>
     <template v-else>
       <TemplateDataNone />
@@ -30,6 +31,7 @@
 
 <script setup>
 import { onMounted, ref } from 'vue';
+import moment from 'moment';
 
 import CustomerSearchWrap from '@/components/CustomerSearchWrap/CustomerSearchWrap.vue';
 import Icons from '@/components/Icons/Icons.vue';
@@ -45,14 +47,26 @@ const store = noticeBoardStore();
 const { listOfNoticeUser } = storeToRefs(store);
 const dummyInputValue = ref('');
 const dummyList = ref([]);
+const currentPage = ref();
+const totalPages = ref();
 
-async function getListNotice(param) {
-  await store.getAllNoitceForUser(param)
+async function getListNotice(keyword, page) {
+  await store.getAllNoitceForUser(keyword, page)
   dummyList.value = listOfNoticeUser.value;
+  currentPage.value = dummyList.value.currentPage;
+  totalPages.value = dummyList.value.totalPages;
+}
+
+const searchByKeyword = async () => {
+  await getListNotice(dummyInputValue.value, 1);
+};
+
+async function navigate(newPage) {
+  await getListNotice(dummyInputValue.value, newPage);
 }
 
 onMounted(async () => {
-  await getListNotice(1);
+  await getListNotice("", 1);
 });
 </script>
 
