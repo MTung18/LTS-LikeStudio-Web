@@ -1,40 +1,40 @@
 <template>
   <TemplateBoardWrap title="1:1 문의">
-      <div class="mt-[4rem] text-center">
-        <Button class-bind="!min-w-[18rem]" component="a" href="/customer-service/inquiries/create" color-type="primary"
-          size="big" isIcon>
-          문의하기
-          <Icons icon-name="arrow_next_bold" icon-color="var(--color-neutrals-white-100)" />
-        </Button>
-      </div>
-      <CustomerSearchWrap>
-        <CalenderGroup />
-        <SearchInput v-model="dummyInputValue" placeholder="검색어를 입력해주세요" size="medium" style-type="square"
-          color-type="gray" class-bind="ml-auto !min-w-[41.2rem]" />
-        <div class="search__button-group">
-          <RoundButton component="button" color-type="filed" size="medium" @click="search()">검색</RoundButton>
+    <div class="mt-[4rem] text-center">
+      <Button class-bind="!min-w-[18rem]" component="a" href="/customer-service/inquiries/create" color-type="primary"
+        size="big" isIcon>
+        문의하기
+        <Icons icon-name="arrow_next_bold" icon-color="var(--color-neutrals-white-100)" />
+      </Button>
+    </div>
+    <CustomerSearchWrap>
+      <CalenderGroup />
+      <SearchInput v-model="dummyInputValue" placeholder="검색어를 입력해주세요" size="medium" style-type="square" color-type="gray"
+        class-bind="ml-auto !min-w-[41.2rem]" />
+      <div class="search__button-group">
+        <RoundButton component="button" color-type="filed" size="medium" @click="search()">검색</RoundButton>
 
-          <RoundButton component="button" color-type="outlined" size="medium">초기화</RoundButton>
+        <RoundButton component="button" color-type="outlined" size="medium">초기화</RoundButton>
+      </div>
+    </CustomerSearchWrap>
+
+    <div class="list">
+      <RouterLink v-for="item in listData.list" :key="item.id" :to="`/customer-service/inquiries/${item.id}/${item.status == 1 ? 'answered' : 'unanswered'
+        }`" class="list__item">
+        <div class="item-no">{{ item.id }}</div>
+        <div class="item-title">
+          <span class="item-title-text">{{ item.title }}</span>
         </div>
-      </CustomerSearchWrap>
-
-      <div class="list">
-        <RouterLink v-for="item in listData.list" :key="item.id" :to="`/customer-service/inquiries/${item.id}/${item.status == 1 ? 'answered' : 'unanswered'
-          }`" class="list__item">
-          <div class="item-no">{{ item.id }}</div>
-          <div class="item-title">
-            <span class="item-title-text">{{ item.title }}</span>
-          </div>
-          <div class="item-answer">
-            <span v-if="item.status == 1" class="item-answer--complete">답변완료</span>
-            <span v-else>답변대기</span>
-          </div>
-          <div class="item-date">
-            {{ `${item.createDate.slice(0, 4)}.${item.createDate.slice(5, 7)}.${item.createDate.slice(8, 10)}
-                        ${item.createDate.slice(11, 16)}` }}</div>
-        </RouterLink>
-      </div>
-      <Pagination />
+        <div class="item-answer">
+          <span v-if="item.status == 1" class="item-answer--complete">답변완료</span>
+          <span v-else>답변대기</span>
+        </div>
+        <div class="item-date">
+          {{ `${item.createDate.slice(0, 4)}.${item.createDate.slice(5, 7)}.${item.createDate.slice(8, 10)}
+                    ${item.createDate.slice(11, 16)}` }}</div>
+      </RouterLink>
+    </div>
+    <Pagination :currentPage="currentPage" :pageNumber="totalPages" @numberPage="navigate" />
     <!-- dev: 1:1 문의를 한적이 없을 때 -->
   </TemplateBoardWrap>
 </template>
@@ -61,15 +61,25 @@ import { lsSupportManagerStore } from '@/stores/lsSupportManagerStore';
 const { lsSupportManagerListForUser } = storeToRefs(lsSupportManagerStore());
 const listData = ref([])
 const dummyInputValue = ref('')
+const currentPage = ref();
+const totalPages = ref();
 
 onMounted(async () => {
-  await lsSupportManagerStore().getLsSupportManagerListForUser('', 1, '', '', '');
-  listData.value = lsSupportManagerListForUser.value;
+  await updatePage('', 1, '', '', '')
 });
 
-async function search() {
-  await lsSupportManagerStore().getLsSupportManagerListForUser(dummyInputValue.value, 1,'','','');
+async function updatePage(keyword,userId,startDate,endDate,page) {
+  await lsSupportManagerStore().getLsSupportManagerListForUser(keyword,userId,startDate,endDate,page);
   listData.value = lsSupportManagerListForUser.value;
+  currentPage.value = listData.value.currentPage;
+  totalPages.value = listData.value.totalPages;
+}
+async function navigate(newPage) {
+  await updatePage(dummyInputValue.value, 1, '', '', newPage)
+}
+
+async function search() {
+  await updatePage(dummyInputValue.value, 1, '', '', '')
 }
 
 </script>
