@@ -40,6 +40,7 @@ import IconText from '@/components/Icons/Icon/IconText.vue';
 import IconTrash from '@/components/Icons/Icon/IconTrash.vue';
 import IconVideo from '@/components/Icons/Icon/IconVideo.vue';
 import IconZip from '@/components/Icons/Icon/IconZip.vue';
+import IconChevronRR from '@/components/Icons/Icon/IconChevronRR.vue';
 
 const iconMapping = {
   chevron_prev: IconChevronsNext,
@@ -84,6 +85,7 @@ const iconMapping = {
   audio: IconAudio,
   video: IconVideo,
   trash: IconTrash,
+  chevronRR: IconChevronRR
 };
 
 export default iconMapping;

@@ -1,33 +1,17 @@
 <template>
   <TemplateBoardWrap title="FAQ 관리">
-    <ManageHeadForm
-      :input-data1="inputData1"
-      :input-data2="inputData2"
-      :input-data3="inputData3"
-      :input-data4="inputData4"
-      :only-search="true"
-    />
+    <ManageHeadForm :input-data1="inputData1" :input-data2="inputData2" :input-data3="inputData3"
+      :input-data4="inputData4" :only-search="true" />
 
     <div class="select-wrap flex justify-between">
       <ul class="category__list">
-        <li
-          v-for="category in categories"
-          :key="category.id"
-          class="category__item"
-        >
-          <Tabs
-            type="withIcon"
-            use-icon
-            :is-selected="category.isSelected"
-            @tab-selected="updateSelectedCategory(category.id)"
-          >
-            {{ category.category }}</Tabs
-          >
+        <li v-for="category in categories" :key="category.key" class="category__item">
+          <Tabs type="withIcon" use-icon :is-selected="category.isSelected"
+            @tab-selected="updateSelectedCategory(category.key)">
+            {{ category.value }}</Tabs>
         </li>
       </ul>
-      <RoundButton component="button" color-type="filed" size="medium"
-        >등록</RoundButton
-      >
+      <RoundButton component="button" color-type="filed" size="medium">등록</RoundButton>
     </div>
     <div class="manage_list-wrap">
       <div class="manage_table-wrap">
@@ -71,7 +55,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 
 import ManageHeadForm from '@/components/ManageHeadForm/ManageHeadForm.vue';
 import Pagination from '@/components/Pagination/Pagination.vue';
@@ -79,63 +63,23 @@ import RoundButton from '@/components/RoundButton/RoundButton.vue';
 import Tabs from '@/components/Tabs/Tabs.vue';
 import TemplateBoardWrap from '@/components/TemplateBoardWrap/TemplateBoardWrap.vue';
 import TemplateDataNone from '@/components/TemplateDataNone/TemplateDataNone.vue';
+import { faqStore } from '../../../stores/faqStore';
+import { categoryStore } from '../../../stores/categoryStore';
+import { fileManagerStore } from '../../../stores/fileManagerStore';
+import { storeToRefs } from 'pinia';
 
-const categories = ref([
-  {
-    id: 0,
-    category: '전체',
-    dummyLength: 10,
-    isSelected: true,
-  },
-  {
-    id: 1,
-    category: '자주 묻는 질문 10',
-    dummyLength: 0,
-    isSelected: false,
-  },
-  {
-    id: 2,
-    category: '저작권',
-    dummyLength: 0,
-    isSelected: false,
-  },
-  {
-    id: 3,
-    category: '로그인',
-    dummyLength: 0,
-    isSelected: false,
-  },
-  {
-    id: 4,
-    category: '팀룸',
-    dummyLength: 0,
-    isSelected: false,
-  },
-  {
-    id: 5,
-    category: '사용법',
-    dummyLength: 0,
-    isSelected: false,
-  },
-  {
-    id: 6,
-    category: '다운로드',
-    dummyLength: 0,
-    isSelected: false,
-  },
-  {
-    id: 7,
-    category: 'PDF 인쇄',
-    dummyLength: 0,
-    isSelected: false,
-  },
-  {
-    id: 8,
-    category: '서비스 오류',
-    dummyLength: 0,
-    isSelected: false,
-  },
-]);
+const functionType = 1;
+
+const storeOfCategory = categoryStore();
+const fileStore = fileManagerStore();
+const storeOfFaq = faqStore();
+const { listCategory } = storeToRefs(storeOfCategory);
+const { listOfFile } = storeToRefs(fileStore);
+const { listOfFaqAdmin } = storeToRefs(storeOfFaq);
+
+const categoryKey = ref(0);
+const listDataOfFaq = ref([]);
+const categories = ref([]);
 const tableData = [
   {
     id: 1,
@@ -325,12 +269,36 @@ const inputData4 = {
     },
   ],
 };
-function updateSelectedCategory(selectedId) {
+async function updateSelectedCategory(selectedId) {
   categories.value = categories.value.map((category) => ({
     ...category,
-    isSelected: category.id === selectedId,
+    isSelected: category.key === selectedId,
   }));
+  categoryKey.value = selectedId
+  getListForAdmin("", categoryKey.value, "", "", 1)
 }
+
+async function getListCategory(functionType) {
+  await storeOfCategory.getListCategory(functionType)
+  categories.value = listCategory.value;
+  categories.value.unshift({
+    id: 0,
+    value: "Default",
+    functionType: 1,
+    key: ""
+  });
+}
+
+async function getListForAdmin(keyword, category, startDate, endDate, page) {
+  await storeOfFaq.getListFaqForAdmin(keyword, category, startDate, endDate, page);
+  listDataOfFaq.value = listOfFaqAdmin.value;
+  console.log("tunbglm: ", listDataOfFaq.value)
+}
+
+onMounted(async () => {
+  await getListCategory(functionType)
+  await getListForAdmin("", "", "", "", 1)
+})
 </script>
 
 <style scoped>
@@ -338,9 +306,11 @@ function updateSelectedCategory(selectedId) {
   color: var(--color-gray-777);
   font-weight: 400;
 }
+
 .select-wrap {
   margin-bottom: 2.4rem;
 }
+
 .category__list {
   display: flex;
   align-items: flex-end;
@@ -348,13 +318,16 @@ function updateSelectedCategory(selectedId) {
   font-size: 1.6rem;
   line-height: 2.4rem;
 }
+
 .manage_list-wrap {
   max-height: 748px;
   overflow: auto;
 }
+
 .complete {
   color: var(--color-primary);
 }
+
 .manage_list-wrap table tbody td.title a {
   border-bottom: 0;
   line-height: 1;

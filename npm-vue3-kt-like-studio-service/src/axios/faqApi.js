@@ -4,10 +4,16 @@ import { ClientSide } from "../../public/appsettings.json"
 const baseUrl= ClientSide.LikeStudioAPI + "/api/faq";
 
 const FaqApi = {
-  async getListFaqForAdmin(param) {
+  async getListFaqForAdmin(keyword = null, category = null, startDate = null, endDate = null, page = null) {
     try {
       const response = await axios.get(`${baseUrl}/search`, {
-        params: { keyword: param },
+        params: { 
+          keyword: keyword, 
+          category: category,
+          startDate: startDate,
+          endDate: endDate,
+          page: page
+         },
       });
 
       return response.data;
