@@ -59,7 +59,7 @@ async function gitListFile(functionType, titleId) {
 
 async function getListNotice() {
   await store.findAllNoitce();
-  dummyList.value = listNotice.value.find((item) => item.show = 1);
+  dummyList.value = listNotice.value.filter((item) => item.show = 1);
   for (let i = 0; i < dummyList.value.length; i++) {
     if (dummyList.value[i].id == noticeId.value) {
       if (i > 0) {

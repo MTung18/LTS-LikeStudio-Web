@@ -24,6 +24,14 @@ export const noticeBoardStore = defineStore("notice", () => {
   noticeBoard.value = await NoticeBoardApi.getNoticeById(id)
  }
 
+ async function deleteNotice(id) {
+  await NoticeBoardApi.deleteDataById(id);
+ }
+
+ async function updateNotice(noticeBoard) {
+  await NoticeBoardApi.updateNotice(noticeBoard);
+ }
+
  return {
   listOfNoticeUser,
   listOfNoticeAdmin,
@@ -32,6 +40,8 @@ export const noticeBoardStore = defineStore("notice", () => {
   getAllNoitceForUser,
   getAllNoitceForAdmin,
   getNoticeById,
-  findAllNoitce
+  findAllNoitce,
+  deleteNotice,
+  updateNotice
  };
 })

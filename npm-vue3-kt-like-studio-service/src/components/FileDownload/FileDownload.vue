@@ -16,6 +16,7 @@
 
 <script setup>
 import Icons from '@/components/Icons/Icons.vue';
+import customToast from '@/untils/custom_toast';
 
 const props = defineProps({
   files: {
@@ -48,13 +49,13 @@ const downloadFile = async (filePath, filename) => {
       link.click();
       document.body.removeChild(link);
 
-      window.alert('Tải tệp thành công');
+      customToast.success('Successfully downloaded file');
     } else {
-      window.alert('Lỗi khi tải tệp');
+      customToast.error('Error while downloading file');
     }
   } catch (error) {
-    console.error('Lỗi khi tải tệp', error);
-    window.alert('Lỗi khi tải tệp');
+    console.error('Error while downloading file', error);
+    customToast.error('Error while downloading file');
   }
 };
 

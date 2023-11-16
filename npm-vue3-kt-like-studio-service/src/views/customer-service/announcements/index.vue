@@ -6,7 +6,10 @@
       <RoundButton component="button" color-type="filed" size="medium" @click="searchByKeyword()">검색
       </RoundButton>
     </CustomerSearchWrap>
-    <template v-if="dummyList.list && dummyList.list.length > 0">
+    <template v-if="dummyList == null">
+          <TemplateDataNone />
+    </template>
+    <template v-else>
       <div class="list">
         <RouterLink v-for="item in dummyList.list" :key="item.id" :to="`/customer-service/announcements/${item.id}`"
           class="list__item">
@@ -22,9 +25,6 @@
         </RouterLink>
       </div>
       <Pagination :currentPage="currentPage" :pageNumber="totalPages" @numberPage="navigate" />
-    </template>
-    <template v-else>
-      <TemplateDataNone />
     </template>
   </TemplateBoardWrap>
 </template>
@@ -52,9 +52,13 @@ const totalPages = ref();
 
 async function getListNotice(keyword, page) {
   await store.getAllNoitceForUser(keyword, page)
-  dummyList.value = listOfNoticeUser.value;
-  currentPage.value = dummyList.value.currentPage;
-  totalPages.value = dummyList.value.totalPages;
+  if (listOfNoticeUser.value) {
+    dummyList.value = listOfNoticeUser.value;
+    currentPage.value = dummyList.value.currentPage;
+    totalPages.value = dummyList.value.totalPages;
+  } else {
+    dummyList.value = null;
+  }
 }
 
 const searchByKeyword = async () => {

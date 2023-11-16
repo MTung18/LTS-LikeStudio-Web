@@ -9,8 +9,13 @@ export const fileManagerStore = defineStore("fileManager", () => {
   listOfFile.value = await FileManager.getListFile(functionType, titleId);
  }
 
+ async function uploadFile(file) {
+  await FileManager.uploadFile(file);
+ }
+
  return {
   listOfFile,
   getListFile,
+  uploadFile
  };
 })

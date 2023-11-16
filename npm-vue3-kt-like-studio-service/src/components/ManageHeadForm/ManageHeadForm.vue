@@ -256,12 +256,10 @@ const toDateValue = ref();
 
 async function fromDate(date) {
   fromDateValue.value = moment(date).format("YYYY-MM-DD");
-  console.log("fromDateValue: ", fromDateValue.value);
 }
 
 async function toDate(date) {
   toDateValue.value = moment(date).format("YYYY-MM-DD");
-  console.log("toDateValue: ", toDateValue.value);
 }
 
 const emit = defineEmits(['search']);
