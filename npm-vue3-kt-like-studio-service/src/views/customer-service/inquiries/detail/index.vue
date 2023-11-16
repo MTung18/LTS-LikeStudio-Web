@@ -1,56 +1,37 @@
 <template>
   <TemplateDetail>
     <template #body>
-      <TemplateDetailHead
-        :title="dummyData.title"
-        :category="dummyData.category"
-        :date="dummyData.date"
-      />
-      <TemplateDetailBody
-        :content="dummyData.content"
-        :files="dummyData.files"
-        :prev-post="dummyData.prevPost"
-        :next-post="dummyData.nextPost"
-      />
-      <DetailAnswer
-        v-if="props.state === 'answered'"
-        :content="dummyAnswer.content"
-        :files="dummyAnswer.files"
-        :date="dummyAnswer.date"
-      >
-        <FileDownload :files="dummyAnswer.files" />
-        <TemplateEditInfo
-          class-bind="after:!hidden !pt-[4rem] !pb-0"
-          answered-date="2023.01.30 11:32"
-        />
+      <TemplateDetailHead :title="lsSupportManagerByIdData.title"
+        :category="lsSupportManagerByIdData.category ? lsSupportManagerByIdData.category : 'not found category'"
+        :date="lsSupportManagerByIdData.createDate" />
+      <TemplateDetailBody :content="lsSupportManagerByIdData.content"
+        :files="lsSupportManagerByIdData.fileManagerListQuestion" :prev-post="preLsSupportManagerByIdData"
+        :next-post="nextLsSupportManagerByIdData" @someEvent="callback" />
+      <DetailAnswer v-if="props.state === 'answered'" :content="lsSupportManagerByIdData.contentAnswer">
+        <FileDownload class-bind="!mt-0" v-for="item in lsSupportManagerByIdData.fileManagerListAnswer" :key="item.id"
+          :files="[
+            { id: item.id, filename: item.oriFileName, filePath: item.uniqFileName },
+          ]" />
+        <TemplateEditInfo class-bind="after:!hidden !pt-[4rem] !pb-0"
+          :answeredDate="formatDate(lsSupportManagerByIdData.dateAnswer)" />
       </DetailAnswer>
     </template>
     <template #foot>
       <div class="flex gap-x-[1rem] justify-center">
-        <Button
-          v-if="state === 'answered'"
-          component="button"
-          color-type="outlined"
-          size="large"
-          class-bind="!min-w-[14rem]"
-          @click="onDeleteButton"
-          >삭제</Button
-        >
-        <Button
-          component="a"
-          href="/customer-service/inquiries"
-          color-type="standard"
-          size="large"
-          class-bind="!min-w-[14rem]"
-          >목록</Button
-        >
+        <Button v-if="state === 'answered'" component="button" color-type="outlined" size="large"
+          class-bind="!min-w-[14rem]" @click="onDeleteButton">삭제</Button>
+        <Button component="a" href="/customer-service/inquiries" color-type="standard" size="large"
+          class-bind="!min-w-[14rem]">목록</Button>
       </div>
     </template>
   </TemplateDetail>
 </template>
 
 <script setup>
-import { defineProps } from 'vue';
+import { defineProps, onMounted, ref } from 'vue';
+import { useRoute } from 'vue-router'
+import { storeToRefs } from 'pinia';
+import moment from 'moment'
 
 import Button from '@/components/Button/Button.vue';
 import FileDownload from '@/components/FileDownload/FileDownload.vue';
@@ -60,6 +41,50 @@ import TemplateDetail from '@/components/TemplateDetailWrap/TemplateDetail.vue';
 import TemplateEditInfo from '@/components/TemplateEditInfo/TemplateEditInfo.vue';
 import DetailAnswer from '@/containers/customer-service/inquiries/DetailAnswer.vue';
 
+import { lsSupportManagerStore } from '@/stores/lsSupportManagerStore';
+
+const route = useRoute()
+
+const { lsSupportManagerById } = storeToRefs(lsSupportManagerStore());
+const { allLsSupportManager } = storeToRefs(lsSupportManagerStore());
+const lsSupportManagerByIdData = ref([])
+const allLsSupportManagerData = ref([])
+const preLsSupportManagerByIdData = ref([])
+const nextLsSupportManagerByIdData = ref([])
+const userId = 1
+let preLsSupportManagerId, nextLsSupportManagerId
+
+onMounted(async () => {
+  await lsSupportManagerStore().getLsSupportManagerById(route.params.id)
+  lsSupportManagerByIdData.value = lsSupportManagerById.value
+
+  await lsSupportManagerStore().getAllLsSupportManager()
+  allLsSupportManagerData.value = allLsSupportManager.value
+
+  getPreNextLsSupportManagerId()
+
+  await lsSupportManagerStore().getLsSupportManagerById(preLsSupportManagerId)
+  preLsSupportManagerByIdData.value = lsSupportManagerById.value
+
+  await lsSupportManagerStore().getLsSupportManagerById(nextLsSupportManagerId)
+  nextLsSupportManagerByIdData.value = lsSupportManagerById.value
+});
+
+function getPreNextLsSupportManagerId() {
+  const ls = allLsSupportManagerData.value.filter(e => e.createUser == userId && e.questionId == 0)
+  const currentId = lsSupportManagerByIdData.value.id
+
+  for (let i = 0; i < ls.length; i++) {
+    if (i < ls.length - 1 && ls[i + 1].id == currentId) preLsSupportManagerId = ls[i].id
+    if (i > 0 && ls[i - 1].id == currentId) nextLsSupportManagerId = ls[i].id
+  }
+}
+function callback(postId) {
+  window.location.href = `/customer-service/inquiries/${postId}/${nextLsSupportManagerByIdData.value.status == 1 ? 'answered' : 'unanswered'}`;
+}
+function formatDate(str) {
+  return moment(str).format("YYYY.MM.DD HH:mm")
+}
 const props = defineProps({
   id: {
     type: String,
@@ -72,7 +97,7 @@ const props = defineProps({
 });
 
 const dummyData = {
-  title: '갤러리로 보내기 할 때 오류가 발생합니다',
+  title: '갤러리로 보내기 할 때 오류가 발생합니다 detail content',
   category: '서비스 오류',
   date: '2023.01.30 11:32',
   content:
