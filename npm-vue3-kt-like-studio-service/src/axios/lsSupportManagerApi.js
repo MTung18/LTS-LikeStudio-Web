@@ -1,13 +1,13 @@
 import axios from 'axios';
 import { ClientSide } from "../../public/appsettings.json"
 
-const baseUrl= ClientSide.LikeStudioAPI + "/api/lsManagerSupport";
+const baseUrl = ClientSide.LikeStudioAPI + "/api/lsManagerSupport";
 
 const LsSupportManagerApi = {
-  async getLsSupportManagerListForUser(keyword,userId,startDate,endDate,page) {
+  async getLsSupportManagerListForUser(keyword, userId, startDate, endDate, page) {
     try {
       const response = await axios.get(`${baseUrl}/getByKeywordForUser`, {
-        params: { 
+        params: {
           keyword: keyword,
           userId: userId,
           startDate: startDate,
@@ -24,11 +24,21 @@ const LsSupportManagerApi = {
   async getLsSupportManagerById(id) {
     try {
       const response = await axios.get(`${baseUrl}/getById`, {
-        params: { 
+        params: {
           id: id
         },
       });
       return response.data.data;
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      throw error;
+    }
+  },
+  async getAllLsSupportManager() {
+    try {
+      const response = await axios.get(`${baseUrl}/all`, {
+      });
+      return response.data;
     } catch (error) {
       console.error('Error fetching data:', error);
       throw error;

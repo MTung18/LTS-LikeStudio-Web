@@ -1,5 +1,5 @@
 <template>
-  <TemplateBoardWrap title="1:1 문의">
+  <TemplateBoardWrap title="1:1 문의" v-if="listData != ''">
     <div class="mt-[4rem] text-center">
       <Button class-bind="!min-w-[18rem]" component="a" href="/customer-service/inquiries/create" color-type="primary"
         size="big" isIcon>
@@ -8,8 +8,8 @@
       </Button>
     </div>
     <CustomerSearchWrap>
-      <CalenderGroup />
-      <SearchInput v-model="dummyInputValue" placeholder="검색어를 입력해주세요" size="medium" style-type="square" color-type="gray"
+      <CalenderGroup @fromDate="fromDate" @toDate="toDate" />
+      <SearchInput v-model="inputValue" placeholder="검색어를 입력해주세요" size="medium" style-type="square" color-type="gray"
         class-bind="ml-auto !min-w-[41.2rem]" />
       <div class="search__button-group">
         <RoundButton component="button" color-type="filed" size="medium" @click="search()">검색</RoundButton>
@@ -21,7 +21,7 @@
     <div class="list">
       <RouterLink v-for="item in listData.list" :key="item.id" :to="`/customer-service/inquiries/${item.id}/${item.status == 1 ? 'answered' : 'unanswered'
         }`" class="list__item">
-        <div class="item-no">{{ item.id }}</div>
+        <div class="item-no">{{ item.rowNumber }}</div>
         <div class="item-title">
           <span class="item-title-text">{{ item.title }}</span>
         </div>
@@ -37,11 +37,11 @@
     <Pagination :currentPage="currentPage" :pageNumber="totalPages" @numberPage="navigate" />
     <!-- dev: 1:1 문의를 한적이 없을 때 -->
   </TemplateBoardWrap>
+  <TemplateDataNone v-else />
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue';
-
 import Button from '@/components/Button/Button.vue';
 import CalenderGroup from '@/components/CalenderGroup/CalenderGroup.vue';
 import CustomerSearchWrap from '@/components/CustomerSearchWrap/CustomerSearchWrap.vue';
@@ -51,37 +51,42 @@ import RoundButton from '@/components/RoundButton/RoundButton.vue';
 import SearchInput from '@/components/SearchInput/SearchInput.vue';
 import TemplateBoardWrap from '@/components/TemplateBoardWrap/TemplateBoardWrap.vue';
 import TemplateDataNone from '@/components/TemplateDataNone/TemplateDataNone.vue';
-import FirstVisit from '@/containers/customer-service/inquiries/FirstVisit.vue';
-
-import dummyList from './dummyList'
 import { storeToRefs } from 'pinia';
-
 import { lsSupportManagerStore } from '@/stores/lsSupportManagerStore';
 
 const { lsSupportManagerListForUser } = storeToRefs(lsSupportManagerStore());
 const listData = ref([])
-const dummyInputValue = ref('')
+const inputValue = ref('')
 const currentPage = ref();
 const totalPages = ref();
+const fromDateValue = ref()
+const toDateValue = ref()
+
+const userId = 1
 
 onMounted(async () => {
-  await updatePage('', 1, '', '', '')
+  await updatePage('', userId, '', '', '')
 });
-
-async function updatePage(keyword,userId,startDate,endDate,page) {
-  await lsSupportManagerStore().getLsSupportManagerListForUser(keyword,userId,startDate,endDate,page);
+async function navigate(newPage) {
+  await updatePage(inputValue.value, userId, '', '', newPage)
+}
+async function search() {
+  let startDate = fromDateValue.value ? fromDateValue.value : ''
+  let endDate = toDateValue.value ? toDateValue.value : ''
+  await updatePage(inputValue.value, userId, startDate, endDate, '')
+}
+async function updatePage(keyword, userId, startDate, endDate, page) {
+  await lsSupportManagerStore().getLsSupportManagerListForUser(keyword, userId, startDate, endDate, page);
   listData.value = lsSupportManagerListForUser.value;
   currentPage.value = listData.value.currentPage;
   totalPages.value = listData.value.totalPages;
 }
-async function navigate(newPage) {
-  await updatePage(dummyInputValue.value, 1, '', '', newPage)
+async function fromDate(newValue) {
+  fromDateValue.value = newValue
 }
-
-async function search() {
-  await updatePage(dummyInputValue.value, 1, '', '', '')
+async function toDate(newValue) {
+  toDateValue.value = newValue
 }
-
 </script>
 
 <style scoped>
