@@ -44,6 +44,21 @@ const LsSupportManagerApi = {
       throw error;
     }
   },
+  async deleteLsSupportManagerForUser(id) {
+    try {
+      const response = await axios.delete(`${baseUrl}/deleteForUser`, {
+        params: {id: id}
+      });
+
+      console.log('axios delete');
+      if(response.status === 200) return true
+      else throw new Error("Failed to delete"); 
+
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      throw error;
+    }
+  },
 };
 
 export default LsSupportManagerApi;

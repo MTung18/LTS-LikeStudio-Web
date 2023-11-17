@@ -17,6 +17,9 @@ export const lsSupportManagerStore = defineStore("lsSupportManager", () => {
     async function getAllLsSupportManager() {
         allLsSupportManager.value = await LsSupportManagerApi.getAllLsSupportManager();
     }
+    async function deleteLsSupportManagerForUser(id) {
+        await LsSupportManagerApi.deleteLsSupportManagerForUser(id);
+    }
 
     console.log(allLsSupportManager.value);
     return {
@@ -25,7 +28,8 @@ export const lsSupportManagerStore = defineStore("lsSupportManager", () => {
         allLsSupportManager,
         getLsSupportManagerListForUser,
         getLsSupportManagerById,
-        getAllLsSupportManager
+        getAllLsSupportManager,
+        deleteLsSupportManagerForUser
     };
 })
 
