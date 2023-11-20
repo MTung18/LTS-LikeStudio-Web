@@ -29,7 +29,7 @@
 
 <script setup>
 import { defineProps, onMounted, ref } from 'vue';
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { storeToRefs } from 'pinia';
 import moment from 'moment'
 
@@ -44,6 +44,7 @@ import DetailAnswer from '@/containers/customer-service/inquiries/DetailAnswer.v
 import { lsSupportManagerStore } from '@/stores/lsSupportManagerStore';
 
 const route = useRoute()
+const router = useRouter()
 
 const { lsSupportManagerById } = storeToRefs(lsSupportManagerStore());
 const { allLsSupportManager } = storeToRefs(lsSupportManagerStore());
@@ -85,6 +86,13 @@ function callback(postId) {
 function formatDate(str) {
   return moment(str).format("YYYY.MM.DD HH:mm")
 }
+async function onDeleteButton() {
+  if (window.confirm("confirm to delete")) {
+    await lsSupportManagerStore().deleteLsSupportManagerForUser(lsSupportManagerByIdData.value.id)
+    router.push('/customer-service/inquiries')
+    console.log('delete', lsSupportManagerByIdData.value.id);
+  }
+};
 const props = defineProps({
   id: {
     type: String,
@@ -130,9 +138,6 @@ const dummyAnswer = {
   date: '2023.01.30 11:32',
 };
 
-const onDeleteButton = () => {
-  console.log('삭제');
-};
 </script>
 
 <style scoped></style>
