@@ -1,9 +1,9 @@
 <template>
   <TemplateBoardWrap title="FAQ">
     <ul class="category__list">
-      <li v-for="category in categories" :key="category.key" class="category__item">
-        <Tabs type="underbar" use-icon :is-selected="category.key == currentCategory ? true : false" 
-        @click="setCurrentCategory(category.key)">
+      <li v-for="category in categories" :key="category.id" class="category__item">
+        <Tabs type="withIcon" use-icon :is-selected="category.id == currentCategory ? true : false" 
+        @click="setCurrentCategory(category.id)">
           {{ category.value }}
         </Tabs>
       </li>
