@@ -178,6 +178,7 @@ function handleSelectedTab(selectedId) {
             component="button"
             color-type="outlined"
             size="medium"
+            @click="reset()"
             >초기화</RoundButton
           >
         </div>
@@ -262,10 +263,13 @@ async function toDate(date) {
   toDateValue.value = moment(date).format("YYYY-MM-DD");
 }
 
-const emit = defineEmits(['search']);
+const emit = defineEmits(['search','reset']);
 
 function search() {
   emit('search', dummyInputValue.value, fromDateValue.value, toDateValue.value);
+}
+function reset() {
+  emit('reset');
 }
 </script>
 <style scoped>

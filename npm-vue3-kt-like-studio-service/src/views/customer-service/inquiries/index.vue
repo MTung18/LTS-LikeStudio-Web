@@ -1,5 +1,5 @@
 <template>
-  <TemplateBoardWrap title="1:1 문의" v-if="listData != ''">
+  <TemplateBoardWrap title="1:1 문의">
     <div class="mt-[4rem] text-center">
       <Button class-bind="!min-w-[18rem]" component="a" href="/customer-service/inquiries/create" color-type="primary"
         size="big" isIcon>
@@ -18,26 +18,28 @@
       </div>
     </CustomerSearchWrap>
 
-    <div class="list">
-      <RouterLink v-for="item in listData.list" :key="item.id" :to="`/customer-service/inquiries/${item.id}/${item.status == 1 ? 'answered' : 'unanswered'
-        }`" class="list__item">
-        <div class="item-no">{{ item.rowNumber }}</div>
-        <div class="item-title">
-          <span class="item-title-text">{{ item.title }}</span>
-        </div>
-        <div class="item-answer">
-          <span v-if="item.status == 1" class="item-answer--complete">답변완료</span>
-          <span v-else>답변대기</span>
-        </div>
-        <div class="item-date">
-          {{ `${item.createDate.slice(0, 4)}.${item.createDate.slice(5, 7)}.${item.createDate.slice(8, 10)}
-                    ${item.createDate.slice(11, 16)}` }}</div>
-      </RouterLink>
+    <div v-if="listData.statusCode == 1">
+      <div class="list">
+        <RouterLink v-for="item in listData.data.list" :key="item.id" :to="`/customer-service/inquiries/${item.id}/${item.status == 1 ? 'answered' : 'unanswered'
+          }`" class="list__item">
+          <div class="item-no">{{ item.rowNumber }}</div>
+          <div class="item-title">
+            <span class="item-title-text">{{ item.title }}</span>
+          </div>
+          <div class="item-answer">
+            <span v-if="item.status == 1" class="item-answer--complete">답변완료</span>
+            <span v-else>답변대기</span>
+          </div>
+          <div class="item-date">
+            {{ `${item.createDate.slice(0, 4)}.${item.createDate.slice(5, 7)}.${item.createDate.slice(8, 10)}
+                        ${item.createDate.slice(11, 16)}` }}</div>
+        </RouterLink>
+      </div>
+      <Pagination :currentPage="currentPage" :pageNumber="totalPages" @numberPage="navigate" />
+      <!-- dev: 1:1 문의를 한적이 없을 때 -->
     </div>
-    <Pagination :currentPage="currentPage" :pageNumber="totalPages" @numberPage="navigate" />
-    <!-- dev: 1:1 문의를 한적이 없을 때 -->
+    <TemplateDataNone v-else />
   </TemplateBoardWrap>
-  <TemplateDataNone v-else />
 </template>
 
 <script setup>
@@ -74,12 +76,13 @@ async function search() {
   let startDate = fromDateValue.value ? fromDateValue.value : ''
   let endDate = toDateValue.value ? toDateValue.value : ''
   await updatePage(inputValue.value, userId, startDate, endDate, '')
+  // console.log('data ',listData.data);
 }
 async function updatePage(keyword, userId, startDate, endDate, page) {
   await lsSupportManagerStore().getLsSupportManagerListForUser(keyword, userId, startDate, endDate, page);
   listData.value = lsSupportManagerListForUser.value;
-  currentPage.value = listData.value.currentPage;
-  totalPages.value = listData.value.totalPages;
+  currentPage.value = listData.value.data.currentPage;
+  totalPages.value = listData.value.data.totalPages;
 }
 async function fromDate(newValue) {
   fromDateValue.value = newValue
