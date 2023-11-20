@@ -104,7 +104,6 @@ const onClickUploadButton = () => {
 
 const onChangeFile = (event) => {
   const file = event.target.files[0];
-  console.log("tunglm1: ",file);
   emit('file-upload', file);
 };
 

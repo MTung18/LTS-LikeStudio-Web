@@ -7,6 +7,9 @@ export const noticeBoardStore = defineStore("notice", () => {
  const listOfNoticeAdmin = ref([]);
  const listNotice = ref([]);
  const noticeBoard = ref();
+ const responseEditNotice = ref();
+ const responseAddNotice = ref();
+ const responseDeleteNotice = ref();
 
  async function getAllNoitceForUser(keyword, page) {
   listOfNoticeUser.value = await NoticeBoardApi.getAllNoitceForUser(keyword, page)
@@ -25,23 +28,32 @@ export const noticeBoardStore = defineStore("notice", () => {
  }
 
  async function deleteNotice(id) {
-  await NoticeBoardApi.deleteDataById(id);
+  responseDeleteNotice.value = await NoticeBoardApi.deleteDataById(id);
  }
 
  async function updateNotice(noticeBoard) {
-  await NoticeBoardApi.updateNotice(noticeBoard);
+  responseEditNotice.value = await NoticeBoardApi.updateNotice(noticeBoard);
  }
+
+ async function addNotice(noticeBoard) {
+  responseAddNotice.value = await NoticeBoardApi.addNotice(noticeBoard);
+ }
+
 
  return {
   listOfNoticeUser,
   listOfNoticeAdmin,
   noticeBoard,
   listNotice,
+  responseAddNotice,
+  responseEditNotice,
+  responseDeleteNotice,
   getAllNoitceForUser,
   getAllNoitceForAdmin,
   getNoticeById,
   findAllNoitce,
   deleteNotice,
-  updateNotice
+  updateNotice,
+  addNotice
  };
 })

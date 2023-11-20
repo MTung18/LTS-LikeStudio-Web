@@ -23,12 +23,13 @@ const FaqApi = {
     }
   },
 
-  async getListFaqForUser(category, param) {
+  async getListFaqForUser(keyword, category, page) {
     try {
       const response = await axios.get(`${baseUrl}/searchForUser`, {
-        params: { 
+        params: {
+          keyword: keyword,
           category: category,
-          keyword: param 
+          page: page
         },
       });
 
@@ -38,19 +39,6 @@ const FaqApi = {
       throw error;
     }
   },
-
-  async getByCategory(param) {
-    try {
-      const response = await axios.get(`${baseUrl}/getByCategory`, {
-        params: { category: param },
-      });
-
-      return response.data;
-    } catch (error) {
-      console.error('Error fetching data:', error);
-      throw error;
-    }
-  }
 };
 
 export default FaqApi;

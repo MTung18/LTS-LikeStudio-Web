@@ -2,24 +2,25 @@
   <TemplateBoardWrap title="FAQ">
     <ul class="category__list">
       <li v-for="category in categories" :key="category.key" class="category__item">
-        <Tabs type="underbar" :is-selected="category.isSelected" @tab-selected="updateSelectedCategory(category.key)">
-          {{ category.category }}
+        <Tabs type="underbar" use-icon :is-selected="category.key == currentCategory ? true : false" 
+        @click="setCurrentCategory(category.key)">
+          {{ category.value }}
         </Tabs>
       </li>
     </ul>
     <CustomerSearchWrap>
       <SearchInput v-model="dummyInputValue" placeholder="검색어를 입력해주세요" size="medium" style-type="square" color-type="gray"
         class-bind="!min-w-[41.2rem]" />
-      <RoundButton component="button" color-type="filed" size="medium" @click="searchByKeyword(categoryKey)">검색
+      <RoundButton component="button" color-type="filed" size="medium" @click="search()">검색
       </RoundButton>
     </CustomerSearchWrap>
-    <div v-if="listDataQuestion.length === 0" class="text-center pt-72">
-      <span class="text-xl font-bold">데이터가 없습니디다.</span>
+    <div v-if="listDataQuestion.data == null">
+          <TemplateDataNone />
     </div>
     <div class="list" v-else>
-      <div class="list__item" v-for="(data) in listDataQuestion" :key="data.id">
+      <div class="list__item" v-for="(data) in listDataQuestion.data.list" :key="data.id">
         <div class="item__question-wrap">
-          <span class="question__symbol">Q</span>
+          <span class="question__symbol">Q.</span>
           <span class="question__title">{{ data.title }}</span>
           <IconButton v-if="!showDropdown[data.id]" class="text-right" class-bind="question__icon" icon-name="chevron_b"
             size="small" @click="toggleDropdown(data.id)" type="outlined" component="button" />
@@ -36,7 +37,7 @@
                 </div>
                 <div class="answer__content-file">
                   <p class="mb-6 text-xl text-slate-950 font-bold">첨부파일</p>
-                  <FileDownload class-bind="!mt-0" v-for="item in listFile" :key="item.id" :files="[
+                  <FileDownload class-bind="!mt-0" v-for="item in data.fileManagerList" :key="item.id" :files="[
                     { id: item.id, filename: item.oriFileName, filePath: item.uniqFileName },
                   ]" />
                 </div>
@@ -45,6 +46,7 @@
           </div>
         </div>
       </div>
+      <Pagination :currentPage="currentPage" :pageNumber="totalPages" @numberPage="navigate" />
     </div>
   </TemplateBoardWrap>
 </template>
@@ -58,90 +60,32 @@ import IconButton from '@/components/IconButton/IconButton.vue';
 import RoundButton from '@/components/RoundButton/RoundButton.vue';
 import SearchInput from '@/components/SearchInput/SearchInput.vue';
 import Tabs from '@/components/Tabs/Tabs.vue';
+import Pagination from '@/components/Pagination/Pagination.vue';
 import TemplateBoardWrap from '@/components/TemplateBoardWrap/TemplateBoardWrap.vue';
+import TemplateDataNone from '@/components/TemplateDataNone/TemplateDataNone.vue';
 import { faqStore } from '../../../stores/faqStore';
-import { fileManagerStore } from '../../../stores/fileManagerStore';
+import { categoryStore } from '../../../stores/categoryStore';
 import { storeToRefs } from 'pinia';
 
 const store = faqStore();
-const fileStore = fileManagerStore();
-const { listOfFaqUser, listOfFaqByCategory } = storeToRefs(store);
-const { listOfFile } = storeToRefs(fileStore);
+const cateStore = categoryStore();
+const { listOfFaqUser } = storeToRefs(store);
+const { listCategory } = storeToRefs(cateStore);
 
 const dummyInputValue = ref('');
-const categories = ref([
-  {
-    key: 1,
-    category: '자주 묻는 질문',
-    dummyLength: 10,
-    isSelected: true,
-  },
-  {
-    key: 2,
-    category: '저작권',
-    dummyLength: 0,
-    isSelected: false,
-  },
-  {
-    key: 3,
-    category: '로그인',
-    dummyLength: 0,
-    isSelected: false,
-  },
-  {
-    key: 4,
-    category: '팀룸',
-    dummyLength: 0,
-    isSelected: false,
-  },
-  {
-    key: 5,
-    category: '사용법',
-    dummyLength: 0,
-    isSelected: false,
-  },
-  {
-    key: 6,
-    category: '다운로드',
-    dummyLength: 0,
-    isSelected: false,
-  },
-  {
-    key: 7,
-    category: 'PDF 인쇄',
-    dummyLength: 0,
-    isSelected: false,
-  },
-  {
-    key: 8,
-    category: '서비스 오류',
-    dummyLength: 0,
-  },
-]);
+const categories = ref([]);
 const listDataQuestion = ref([]);
-const categoryKey = ref(1);
-const listFile = ref([]);
+const currentCategory = ref(1);
+const currentPage = ref();
+const totalPages = ref();
 
 const functionType = 1;
 
-async function getListByCategory(param) {
-  await store.getByCategory(param)
-  listDataQuestion.value = listOfFaqByCategory.value.filter(x => x.show == 1);
+async function setCurrentCategory(param) {
+  currentCategory.value = param
+  await getListFaq('', currentCategory.value, '')
 }
 
-async function updateSelectedCategory(param) {
-  categories.value = categories.value.map((category) => ({
-    ...category,
-    isSelected: category.key === param,
-  }));
-  categoryKey.value = param
-  await getListByCategory(param)
-}
-
-async function gitListFile(functionType, titleId) {
-  await fileStore.getListFile(functionType, titleId)
-  listFile.value = listOfFile.value;
-}
 const showDropdown = ref(Array(listDataQuestion.value.length).fill(false));
 
 const toggleDropdown = async (index) => {
@@ -153,13 +97,33 @@ const closeToggleDropdown = (index) => {
   showDropdown.value[index] = !showDropdown.value[index];
 };
 
-const searchByKeyword = async (categoryKey) => {
-  await store.getListFaqForUser(categoryKey, dummyInputValue.value)
-  listDataQuestion.value = listOfFaqUser.value;
+const getListCategory = async () => {
+  await cateStore.getListCategory(functionType)
+  categories.value = listCategory.value;
+}
+
+async function getListFaq(keyword, category, page) {
+  await store.getListFaqForUser(keyword, category, page)
+  if (listOfFaqUser.value) {
+    listDataQuestion.value = listOfFaqUser.value;
+    currentPage.value = listDataQuestion.value.data.currentPage;
+    totalPages.value = listDataQuestion.value.data.totalPages;
+  } else {
+    listDataQuestion.value = null;
+  }
+}
+
+const search = async () => {
+  await getListFaq(dummyInputValue.value, currentCategory.value, 1)
+}
+
+async function navigate(newPage) {
+  await getListFaq(dummyInputValue.value, currentCategory.value, newPage);
 }
 
 onMounted(async () => {
-  await getListByCategory(categoryKey.value);
+  await getListCategory()
+  await getListFaq("", currentCategory.value , 1);
 });
 </script>
 

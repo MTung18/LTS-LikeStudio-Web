@@ -8,14 +8,14 @@
       <div class="flex gap-x-[8rem]">
         <TemplateEditTextFields label="공지"
           class-bind="relative flex-1 items-center leading-none !border-b-0 before:absolute before:right-[-4rem] before:w-[1px] before:h-[4.6rem] before:bg-gray-gray-ddd before:content-['']">
-          <Switch :toggle="gimValue" />
+          <Switch :toggle="gimValue" @someEvent="changeGim" />
         </TemplateEditTextFields>
         <TemplateEditTextFields label="메인 팝업" required class-bind="flex-1 items-center leading-none !border-b-0">
-          <Switch :toggle="popupValue" />
+          <Switch :toggle="popupValue" @someEvent="changePopup" />
         </TemplateEditTextFields>
       </div>
       <TemplateEditTextFields label="노출" required class-bind="items-center leading-none !border-b-0">
-        <Switch :toggle="showValue" />
+        <Switch :toggle="showValue" @someEvent="changeShow" />
       </TemplateEditTextFields>
       <TemplateEditTextFields label="내용" required v-model="inputRef">
         <textarea class="h-[31.6rem] px-[1.6rem] py-[1.3rem] rounded-[0.6rem] border-[1px] border-gray-gray-ddd w-full"
@@ -46,7 +46,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue';
+import { watch, onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useRoute } from "vue-router";
 
@@ -65,8 +65,8 @@ import { storeToRefs } from 'pinia';
 
 const store = noticeBoardStore();
 const fileStore = fileManagerStore();
-const { noticeBoard } = storeToRefs(store);
-const { listOfFile } = storeToRefs(fileStore);
+const { noticeBoard, responseEditNotice } = storeToRefs(store);
+const { listOfFile, response } = storeToRefs(fileStore);
 const router = useRouter();
 const route = useRoute();
 
@@ -84,6 +84,7 @@ const gimValue = ref();
 const showValue = ref();
 const popupValue = ref();
 const listFileSave = ref([]);
+const res = ref();
 
 const handleFileUpload = async (file) => {
   const sizeInMB = file.size / (1024 * 1024);
@@ -103,6 +104,7 @@ const handleFileUpload = async (file) => {
   }
   listFile.value.push({
     oriFileName: file.name,
+    uniqFileName: null,
   });
   listFileSave.value.push(file)
 }
@@ -121,34 +123,78 @@ const handleEditToList = () => {
   router.push('/site-management/announcements');
 };
 
-const noticeBoardData = ref({});
-const handleEdit = async () => {
-  const formData = new FormData();
-    for (let i = 0; i < listFileSave.value.length; i++) {
-      formData.append('files', listFileSave.value[i])
-    }
-    await fileStore.uploadFile(formData)
+function changeGim(status) {
+  gimValue.value = status ? 1 : 0
+}
 
-  noticeBoardData.value = {
-    noticeBoard: {
-      id: noticeId.value,
-      title: inputRef,
-      content: noticeBoarDetail.value.content,
-      views: 0,
-      create_user: 1,
-      edit_use: 1,
-      gim: gimValue.value,
-      show: showValue.value,
-      popup: popupValue.value 
-    },
-    fileManagerList: listFile.value.map((file) => ({
-      oriFileName: file.oriFileName,
-      createUser: 1,
-      uniqFileName: null, 
-    })),
+function changePopup(status) {
+  popupValue.value = status ? 1 : 0
+}
+
+function changeShow(status) {
+  showValue.value = status ? 1 : 0
+}
+
+const noticeBoardData = ref({});
+const updatedFileManagerList = ref([])
+const handleEdit = async () => {
+  try {
+    if (listFileSave.value.length) {
+      const formData = new FormData();
+      for (let i = 0; i < listFileSave.value.length; i++) {
+        formData.append('files', listFileSave.value[i])
+      }
+      await fileStore.uploadFile(formData)
+      const responseData = response.value
+      if (responseData.statusCode !== 1) {
+        customToast.error('Error upload file.')
+        return
+      }
+      const filePaths = responseData.data.map(item => item.uniqFileName);
+
+      listFile.value.forEach(item => {
+        if (item.uniqFileName !== null) {
+          filePaths.push(item.uniqFileName)
+        }
+      });
+
+      updatedFileManagerList.value = listFile.value.map((file, index) => ({
+        oriFileName: file.oriFileName,
+        createUser: 1,
+        uniqFileName: filePaths[index],
+      }));
+    } else {
+      updatedFileManagerList.value  = [];
+    }
+
+    noticeBoardData.value = {
+      noticeBoard: {
+        id: noticeId.value,
+        title: noticeBoarDetail.value.title,
+        content: noticeBoarDetail.value.content,
+        views: 0,
+        create_user: 1,
+        edit_use: 1,
+        gim: gimValue.value,
+        show: showValue.value,
+        popup: popupValue.value,
+      },
+      fileManagerList: updatedFileManagerList.value,
+    }
+
+    await store.updateNotice(noticeBoardData.value);
+    res.value = responseEditNotice.value
+
+    if (res.value.statusCode === 1) {
+      customToast.success('Successful update Notice.')
+      router.push(`/site-management/announcements`)
+    } else {
+      customToast.error('Error update Notice.');
+    }
+  } catch (error) {
+    console.error('Error during update:', error);
+    customToast.error('An error occurred during update.');
   }
-  // await store.updateNotice(noticeBoardData.value);
-  customToast.success('글을 수정했습니다.');
 };
 
 async function getNoticeById(noticeId) {

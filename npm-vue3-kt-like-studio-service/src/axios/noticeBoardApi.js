@@ -66,12 +66,7 @@ const NoticeBoardApi = {
    const response = await axios.delete(`${baseUrl}/delete`, {
     params: { id: id },
    });
-
-   if (response && response.status === 200) {
-    return true;
-   } else {
-    throw new Error("Failed to delete");
-   }
+   return response.data;
   } catch (error) {
    console.error('Delete error.', error);
    throw error;
@@ -81,11 +76,16 @@ const NoticeBoardApi = {
  async updateNotice(noticeBoard) {
   try {
    const response = await axios.post(`${baseUrl}/update`, noticeBoard);
-   if (response && response.status === 200) {
-    return true;
-   } else {
-    throw new Error("Failed to update notice board");
-   }
+   return response.data;
+  } catch (error) {
+   console.error('Failed to update notice board:', error);
+  }
+ },
+
+ async addNotice(noticeBoard) {
+  try {
+   const response = await axios.post(`${baseUrl}/create`, noticeBoard);
+   return response.data;
   } catch (error) {
    console.error('Failed to update notice board:', error);
   }

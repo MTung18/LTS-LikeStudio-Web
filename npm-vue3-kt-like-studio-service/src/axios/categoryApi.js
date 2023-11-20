@@ -6,7 +6,7 @@ const baseUrl= ClientSide.LikeStudioAPI + "/api/category";
 const CategoryApi = {
  async getListCategory(param) {
    try {
-     const response = await axios.get(`${baseUrl}/getByFunctionType`, {
+     const response = await axios.get(`${baseUrl}/functionType`, {
        params: { functionType: param },
      });
 

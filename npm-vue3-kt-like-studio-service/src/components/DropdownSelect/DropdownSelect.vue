@@ -60,7 +60,6 @@ const props = defineProps({
 });
 
 function selectOpen(e) {
-  console.log("tunglm");
   if (!e.target.parentNode.classList.contains('disable')) {
     const findParent = e.target.parentNode.querySelector('.select-list-wrap');
     const btnIcon = e.target.querySelector('.icon-wrap');

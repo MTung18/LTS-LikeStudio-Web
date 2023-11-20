@@ -20,7 +20,7 @@
             {{ index === 0 ? '이전글' : '다음글' }}
           </span>
           <span v-if="post" class="nav__item-title">{{ post.title }}</span>
-          <span v-if="post.title == undefined" class="nav__item-title">
+          <span v-if="post == undefined" class="nav__item-title">
             {{ index === 0 ? '이전글이 없습니다.' : '다음글이 없습니다.' }}
           </span>
         </button>

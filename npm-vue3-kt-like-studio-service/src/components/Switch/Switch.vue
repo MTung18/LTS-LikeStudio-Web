@@ -14,10 +14,12 @@
 import { ref, watch, defineProps } from 'vue';
 
 const props = defineProps(['toggle']);
+const emit = defineEmits(['someEvent']);
 const isActive = ref(props.toggle);
 
 function toggleActive() {
   isActive.value = !isActive.value;
+  emit('someEvent', isActive.value);
 }
 
 watch(() => {
