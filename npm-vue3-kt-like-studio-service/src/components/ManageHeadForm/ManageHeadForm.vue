@@ -151,9 +151,9 @@ function handleSelectedTab(selectedId) {
           v-if="props.onlySearch && props.onlySearch & !props.noCalender"
           class="select-wrap"
         >
-          <CalendarInput />
+          <CalendarInput @date="fromDate"/>
           <span class="calendar__between">~</span>
-          <CalendarInput />
+          <CalendarInput @date="toDate"/>
         </div>
         <SearchInput
           v-model="dummyInputValue"
@@ -169,6 +169,7 @@ function handleSelectedTab(selectedId) {
             component="button"
             color-type="filed"
             size="medium"
+            @click="search()"
             >검색</RoundButton
           >
           <RoundButton
@@ -177,6 +178,7 @@ function handleSelectedTab(selectedId) {
             component="button"
             color-type="outlined"
             size="medium"
+            @click="reset()"
             >초기화</RoundButton
           >
         </div>
@@ -186,6 +188,7 @@ function handleSelectedTab(selectedId) {
 </template>
 <script setup>
 import { ref } from 'vue';
+import moment from 'moment';
 
 import CalendarInput from '@/components/CalendarInput/CalendarInput.vue';
 import CheckBox from '@/components/CheckBox/CheckBox.vue';
@@ -248,6 +251,26 @@ const props = defineProps({
     default: '',
   },
 });
+
+const fromDateValue = ref();
+const toDateValue = ref();
+
+async function fromDate(date) {
+  fromDateValue.value = moment(date).format("YYYY-MM-DD");
+}
+
+async function toDate(date) {
+  toDateValue.value = moment(date).format("YYYY-MM-DD");
+}
+
+const emit = defineEmits(['search','reset']);
+
+function search() {
+  emit('search', dummyInputValue.value, fromDateValue.value, toDateValue.value);
+}
+function reset() {
+  emit('reset');
+}
 </script>
 <style scoped>
 .manage_head-form {

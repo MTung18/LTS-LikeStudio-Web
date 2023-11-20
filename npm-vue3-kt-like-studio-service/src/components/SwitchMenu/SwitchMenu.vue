@@ -39,7 +39,6 @@ const props = defineProps({
   },
 });
 function switchMenuOpen(e) {
-  console.log(e.target);
   const openTarget = e.target
     .closest('.switch-list')
     .querySelector('.switch-body');

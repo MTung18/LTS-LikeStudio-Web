@@ -11,12 +11,20 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, watch, defineProps } from 'vue';
 
-const isActive = ref(false);
+const props = defineProps(['toggle']);
+const emit = defineEmits(['someEvent']);
+const isActive = ref(props.toggle);
+
 function toggleActive() {
   isActive.value = !isActive.value;
+  emit('someEvent', isActive.value);
 }
+
+watch(() => {
+  isActive.value = props.toggle;
+});
 </script>
 
 <style scoped>
