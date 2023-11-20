@@ -4,25 +4,53 @@
       {{ props.content }}
     </div>
 
-    <FileDownload class-bind="!mt-0" v-for="item in props.files" :key="item.id" :files="[
-      { id: item.id, filename: item.oriFileName, filePath: item.uniqFileName },
-    ]" />
+    <FileDownload :files="props.files" />
 
-    <ul class="nav">
-      <li class="nav__item nav--prev" v-for="(post, index) in [props.prevPost, props.nextPost]" :key="index" :class="{
-        'is-disabled': !post || !post.title
-      }">
-        <button type="button" @click="handleButtonClick(post)" class="nav__item-area">
-          <Icons :icon-name="index === 0 ? 'chevron_t' : 'chevron_b'"
-            :icon-color="post && post.title ? 'var(--color-neutrals-black)' : 'var(--color-gray-bbb)'" :width="1.4"
-            :height="1.4" />
-          <span class="nav__item-desc">
-            {{ index === 0 ? '이전글' : '다음글' }}
+    <ul v-if="props.prevPost && props.nextPost" class="nav">
+      <li class="nav__item nav--prev" :class="!prevPost.title && 'is-disabled'">
+        <button
+          type="button"
+          @click="goToPost(props.prevPost.id)"
+          class="nav__item-area"
+        >
+          <Icons
+            icon-name="chevron_t"
+            :icon-color="
+              props.prevPost.title
+                ? 'var(--color-neutrals-black)'
+                : 'var(--color-gray-bbb)'
+            "
+            :width="1.4"
+            :height="1.4"
+          />
+          <span class="nav__item-desc">이전글</span>
+          <span v-if="prevPost.title" class="nav__item-title">{{
+            props.prevPost.title
+          }}</span>
+          <span v-else class="nav__item-title">이전글이 없습니다.</span>
+        </button>
+      </li>
+      <li class="nav__item nav--prev" :class="!nextPost.title && 'is-disabled'">
+        <button
+          type="button"
+          @click="goToPost(props.nextPost.id)"
+          class="nav__item-area"
+        >
+          <Icons
+            icon-name="chevron_b"
+            :icon-color="
+              props.nextPost.title
+                ? 'var(--color-neutrals-black)'
+                : 'var(--color-gray-bbb)'
+            "
+            :width="1.4"
+            :height="1.4"
+          />
+          <span class="nav__item-desc">다음글</span>
+          <span v-if="nextPost.title" class="nav__item-title">
+            {{ props.nextPost.title }}
           </span>
-          <span v-if="post" class="nav__item-title">{{ post.title }}</span>
-          <span v-if="post == undefined" class="nav__item-title">
-            {{ index === 0 ? '이전글이 없습니다.' : '다음글이 없습니다.' }}
-          </span>
+          <span v-else class="nav__item-title">다음글이 없습니다.</span>
         </button>
       </li>
     </ul>
@@ -31,7 +59,6 @@
 
 <script setup>
 import { useRoute, useRouter } from 'vue-router';
-import { ref } from 'vue';
 
 import FileDownload from '@/components/FileDownload/FileDownload.vue';
 import Icons from '@/components/Icons/Icons.vue';
@@ -51,25 +78,13 @@ const props = defineProps({
   },
   prevPost: {
     type: Object,
-    default: () => { },
+    default: () => {},
   },
   nextPost: {
     type: Object,
-    default: () => { },
+    default: () => {},
   },
 });
-
-const check = ref(false);
-const emit = defineEmits(['someEvent']);
- 
-
-function handleButtonClick(post) {
-  check.value = true;
-  if (post) {
-    goToPost(post.id);
-    emit('someEvent', post.id);
-  }
-}
 
 function goToPost(postId) {
   router.push(`${basePath}/${postId}`);
@@ -78,8 +93,7 @@ function goToPost(postId) {
 
 <style scoped>
 .detail-body {
-  padding: 6rem 0;
-  border-bottom: 1px solid var(--color-gray-ddd);
+  padding-top: 6rem;
 }
 
 .detail-body__content {
@@ -88,6 +102,7 @@ function goToPost(postId) {
 
 .nav {
   margin-top: 6rem;
+  border-bottom: 1px solid var(--color-gray-ddd);
 }
 
 .nav__item {
@@ -97,6 +112,7 @@ function goToPost(postId) {
 
 .nav__item.is-disabled {
   color: var(--color-gray-bbb);
+  pointer-events: none;
 }
 
 .nav__item-area {

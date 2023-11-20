@@ -13,7 +13,7 @@
       v-bind="$attrs"
       :value="props.modelValue"
       :id="props.textareaId"
-      class="text-area__input"
+      class="text-area__input custom-scrollbar"
       @input="$emit('update:modelValue', $event.target.value)"
       @focus="handleFocus"
       @blur="handleBlur"
@@ -81,16 +81,17 @@ const handleBlur = () => {
   display: inline-flex;
   align-items: center;
   width: 100%;
+  height: 100%;
   font-size: var(--fz-m);
 }
 
-.text-area.large .text-area__input {
+.text-area.large {
   min-width: 58rem;
   padding: 1.6rem 2rem;
   height: 28rem;
 }
 
-.text-area.medium .text-area__input {
+.text-area.medium {
   width: 100%;
   padding: 1.3rem 1.6rem;
   height: 11.8rem;

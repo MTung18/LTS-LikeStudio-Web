@@ -21,10 +21,10 @@
 
       <ul class="footer__popup-list">
         <li class="footer__popup-item">
-          <RouterLink to="">이용약관</RouterLink>
+          <RouterLink to="/terms">이용약관</RouterLink>
         </li>
-        <li class="footer__popup-item--bold">
-          <RouterLink to="">개인정보처리방침</RouterLink>
+        <li class="footer__popup-item footer__popup-item--bold">
+          <RouterLink to="/policy">개인정보처리방침</RouterLink>
         </li>
       </ul>
     </div>
@@ -80,6 +80,10 @@ import IconKTLogo from '@/components/base/Footer/IconKTLogo.vue';
   gap: 0 2.3rem;
   margin-left: auto;
   font-size: var(--fz-m);
+}
+
+.footer__popup-item:hover {
+  color: var(--color-primary);
 }
 
 .footer__popup-item--bold {

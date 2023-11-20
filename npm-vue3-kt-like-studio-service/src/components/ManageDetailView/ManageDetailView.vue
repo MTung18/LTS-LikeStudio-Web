@@ -46,7 +46,7 @@
               v-if="item.type === 'textarea'"
               v-bind="$attrs"
               :textarea-id="textareaId"
-              class-bind="w-full"
+              class-bind="w-full !min-w-[auto] !h-[14.4rem]"
               :placeholder="item.placeholder"
             ></TextArea>
             <DropdownSelect
@@ -63,7 +63,7 @@
           <p class="comment">댓글 <b class="num">100</b>개</p>
         </div>
         <div class="detail__comment-body">
-          <ul class="detail__comment-list">
+          <ul class="detail__comment-list custom-scrollbar">
             <li
               class="detail__comment-node"
               v-for="item in props.commentData"
@@ -121,29 +121,29 @@
       </div>
       <div class="detail__btn-area">
         <div>
-          <Button
+          <UIButton
             component="button"
             class="delete-btn"
             color-type="standard"
             size="large"
-            >삭제</Button
+            >삭제</UIButton
           >
         </div>
         <div>
-          <Button
+          <UIButton
             component="button"
             class="cancel-btn"
             color-type="outlined"
             size="large"
-            >취소</Button
+            >취소</UIButton
           >
-          <Button
+          <UIButton
             component="button"
             class="edit-btn"
             color-type="primary"
             size="large"
             @click="handlerEditOpenPopup"
-            >수정</Button
+            >수정</UIButton
           >
         </div>
       </div>
@@ -153,12 +153,12 @@
 <script setup>
 import { v4 as uuid } from 'uuid';
 
-import Button from '@/components/Button/Button.vue';
 import DropdownSelect from '@/components/DropdownSelect/DropdownSelect.vue';
 import RoundButton from '@/components/RoundButton/RoundButton.vue';
 import Switch from '@/components/Switch/Switch.vue';
 import TextArea from '@/components/TextArea/TextArea.vue';
 import TextFields from '@/components/TextFields/TextFields.vue';
+import UIButton from '@/components/UIButton/UIButton.vue';
 
 const inputId = uuid();
 const textareaId = uuid();
@@ -237,8 +237,13 @@ const handlerEditOpenPopup = () => {
   flex-basis: 12rem;
   font-weight: bold;
   flex-shrink: 0;
-  margin-top: 1.3rem;
+  padding: 0.6rem 0;
 }
+
+.detail__info-detail {
+  padding: 0.6rem 0;
+}
+
 .detail__edit-setting {
   flex-basis: calc(100% - 12rem);
 }
@@ -364,5 +369,10 @@ const handlerEditOpenPopup = () => {
 }
 .red {
   color: var(--color-primary);
+}
+
+.detail__comment-list {
+  max-height: 32rem;
+  overflow-y: auto;
 }
 </style>

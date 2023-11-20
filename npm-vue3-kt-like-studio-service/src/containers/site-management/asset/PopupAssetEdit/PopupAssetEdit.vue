@@ -41,7 +41,7 @@
         >
           <Icons icon-name="download" :width="1.4" :height="1.4" />
           다운로드</RoundButton
-        >
+        >드
       </div>
     </div>
     <div class="setting-body">
@@ -83,18 +83,20 @@
     </div>
 
     <div class="flex gap-x-[1rem] justify-center mt-[3.2rem]">
-      <Button component="button" color-type="standard" size="small"
-        >삭제</Button
+      <UIButton component="button" color-type="standard" size="small"
+        >삭제</UIButton
       >
-      <Button
+      <UIButton
         @click="handleClose"
         component="button"
         color-type="outlined"
         size="small"
         class-bind="ml-auto"
-        >취소</Button
+        >취소</UIButton
       >
-      <Button component="button" color-type="primary" size="small">수정</Button>
+      <UIButton component="button" color-type="primary" size="small"
+        >수정</UIButton
+      >
     </div>
   </PopupMedium>
 </template>
@@ -103,7 +105,6 @@
 import { v4 as uuid } from 'uuid';
 import { ref } from 'vue';
 
-import Button from '@/components/Button/Button.vue';
 import DropdownSelect from '@/components/DropdownSelect/DropdownSelect.vue';
 import Icons from '@/components/Icons/Icons.vue';
 import PopupMedium from '@/components/PopupMedium/PopupMedium.vue';
@@ -111,6 +112,7 @@ import RoundButton from '@/components/RoundButton/RoundButton.vue';
 import Switch from '@/components/Switch/Switch.vue';
 import TemplateEditTextFields from '@/components/TemplateEditTextFields/TemplateEditTextFields.vue';
 import TextArea from '@/components/TextArea/TextArea.vue';
+import UIButton from '@/components/UIButton/UIButton.vue';
 
 const props = defineProps({
   isOpen: {

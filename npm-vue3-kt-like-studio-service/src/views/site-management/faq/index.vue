@@ -1,24 +1,62 @@
 <template>
   <TemplateBoardWrap title="FAQ 관리">
-    <ManageHeadForm :input-data1="inputData1" :input-data2="inputData2" :input-data3="inputData3"
-      :input-data4="inputData4" :only-search="true" @search="searchNotice" />
+    <div class="search-filter">
+      <div class="search-filter__bottom">
+        <CalenderGroup
+          :start-date="startDate"
+          :end-date="endDate"
+          @update:startDate="startDate = $event"
+          @update:endDate="endDate = $event"
+          class="mr-[2.6rem]"
+        />
+        <SearchInput
+          placeholder="검색어를 입력해주세요"
+          size="medium"
+          style-type="square"
+          color-type="gray"
+          class="flex-1 mr-[1.4rem]"
+        />
+        <RoundButton
+          component="button"
+          color-type="filed"
+          size="medium"
+          class="mr-[1.4rem]"
+          >검색</RoundButton
+        >
+        <RoundButton component="button" color-type="outlined" size="medium"
+          >초기화</RoundButton
+        >
+      </div>
+    </div>
 
     <div class="select-wrap flex justify-between">
       <ul class="category__list">
-        <li v-for="category in categories" :key="category.id" class="category__item">
-          <Tabs type="withIcon" use-icon :is-selected="category.id == currentCategory ? true : false"
-            @click="setCurrentCategory(category.id)">
-            {{ category.value }}</Tabs>
+        <li
+          v-for="category in categories"
+          :key="category.id"
+          class="category__item"
+        >
+          <Tabs
+            type="withIcon"
+            use-icon
+            :is-selected="category.isSelected"
+            @tab-selected="updateSelectedCategory(category.id)"
+          >
+            {{ category.category }}</Tabs
+          >
         </li>
       </ul>
-      <RoundButton component="button" color-type="filed" size="medium">등록</RoundButton>
+      <RoundButton
+        component="a"
+        href="/site-management/faq/create"
+        color-type="filed"
+        size="medium"
+        >등록</RoundButton
+      >
     </div>
-    <div class="manage_list-wrap">
+    <div v-if="tableData && tableData.length > 0" class="manage_list-wrap">
       <div class="manage_table-wrap">
-        <template v-if="tableData == null">
-          <TemplateDataNone />
-        </template>
-        <table v-else>
+        <table>
           <thead>
             <tr>
               <th width="2.24%">NO</th>
@@ -30,18 +68,18 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="item in tableData.list" :key="item.id">
-              <td class="num">{{ item.rowNumber }}</td>
-              <td>{{ item.categoryValue }}</td>
+            <tr v-for="item in tableData" :key="item.id">
+              <td class="num">{{ item.no }}</td>
+              <td>{{ item.cate }}</td>
               <td class="title !text-left">
-                <RouterLink to="/site-management/faq/edit">{{
+                <RouterLink :to="`/site-management/faq/${item.id}/edit`">{{
                   item.title
                 }}</RouterLink>
               </td>
 
-              <td>{{ item.show == 1 ? "Y" : "N" }}</td>
-              <td>{{ item.userName }}</td>
-              <td class="date">{{ moment(item.createDate).format("YYYY.MM.DD HH:mm") }}</td>
+              <td>{{ item.show }}</td>
+              <td>{{ item.author }}</td>
+              <td class="date">{{ item.correctDate }}</td>
               <!--              <td :class="item.answer ? 'complete' : 'waiting'">-->
               <!--                {{ item.answer ? '답변완료' : '답변대기' }}-->
               <!--              </td>-->
@@ -50,83 +88,202 @@
         </table>
       </div>
     </div>
-    <Pagination v-if="tableData != null" :currentPage="currentPage" :pageNumber="totalPages" @numberPage="navigate" />
+    <div v-if="tableData && tableData.length <= 0">
+      <TemplateDataNone />
+    </div>
+    <Pagination v-if="tableData && tableData.length > 0" />
   </TemplateBoardWrap>
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue';
+import { ref } from 'vue';
 
-import moment from 'moment';
-import ManageHeadForm from '@/components/ManageHeadForm/ManageHeadForm.vue';
+import CalenderGroup from '@/components/CalenderGroup/CalenderGroup.vue';
 import Pagination from '@/components/Pagination/Pagination.vue';
 import RoundButton from '@/components/RoundButton/RoundButton.vue';
+import SearchInput from '@/components/SearchInput/SearchInput.vue';
 import Tabs from '@/components/Tabs/Tabs.vue';
 import TemplateBoardWrap from '@/components/TemplateBoardWrap/TemplateBoardWrap.vue';
 import TemplateDataNone from '@/components/TemplateDataNone/TemplateDataNone.vue';
-import { faqStore } from '../../../stores/faqStore';
-import { categoryStore } from '../../../stores/categoryStore';
-import { storeToRefs } from 'pinia';
 
-const functionType = 1;
-
-const storeOfCategory = categoryStore();
-const storeOfFaq = faqStore();
-const { listCategory } = storeToRefs(storeOfCategory);
-const { listOfFaqAdmin } = storeToRefs(storeOfFaq);
-
-const categories = ref([]);
-const tableData = ref([]);
-const currentCategory = ref("");
-const currentPage = ref();
-const totalPages = ref();
-const dummyInputValue = ref('');
-const fromDateValue = ref('');
-const toDateValue = ref('');
-
-async function setCurrentCategory(param) {
-  currentCategory.value = param
-  await getListForAdmin('', currentCategory.value, '', '', '')
-}
-
-async function getListCategory(functionType) {
-  await storeOfCategory.getListCategory(functionType)
-  categories.value = listCategory.value;
-  categories.value.unshift({
+const startDate = ref('');
+const endDate = ref('');
+const categories = ref([
+  {
     id: 0,
-    value: "Default",
-    functionType: 1,
-    key: ""
-  });
-}
+    category: '전체',
+    dummyLength: 10,
+    isSelected: true,
+  },
+  {
+    id: 1,
+    category: '자주 묻는 질문 10',
+    dummyLength: 0,
+    isSelected: false,
+  },
+  {
+    id: 2,
+    category: '저작권',
+    dummyLength: 0,
+    isSelected: false,
+  },
+  {
+    id: 3,
+    category: '로그인',
+    dummyLength: 0,
+    isSelected: false,
+  },
+  {
+    id: 4,
+    category: '팀룸',
+    dummyLength: 0,
+    isSelected: false,
+  },
+  {
+    id: 5,
+    category: '사용법',
+    dummyLength: 0,
+    isSelected: false,
+  },
+  {
+    id: 6,
+    category: '다운로드',
+    dummyLength: 0,
+    isSelected: false,
+  },
+  {
+    id: 7,
+    category: 'PDF 인쇄',
+    dummyLength: 0,
+    isSelected: false,
+  },
+  {
+    id: 8,
+    category: '서비스 오류',
+    dummyLength: 0,
+    isSelected: false,
+  },
+]);
+const tableData = [
+  {
+    id: 1,
+    no: 100,
+    cate: '공식 VMD',
+    title:
+      '2023년 10월10월10월10월10월10월10월10월10월10월10월10월10월10월10월10월10월10월10월10월10월10월10월',
+    fileNumber: '1234',
+    show: 'N',
+    author: '홍길동',
+    correctDate: '2023.09.18 15:32',
+    answer: false,
+  },
+  {
+    id: 2,
+    no: 99,
+    cate: '공식 VMD',
+    title: '2023년 10월',
+    fileNumber: '1234',
+    show: 'N',
+    author: '홍길동',
+    correctDate: '2023.09.18 15:32',
+    answer: false,
+  },
+  {
+    id: 3,
+    no: 98,
+    cate: '공식 VMD',
+    title: '2023년 10월',
+    fileNumber: '1234',
+    show: 'N',
+    author: '홍길동',
+    correctDate: '2023.09.18 15:32',
+    answer: true,
+  },
+  {
+    id: 4,
+    no: 97,
+    cate: '공식 VMD',
+    title: '2023년 10월',
+    fileNumber: '1234',
+    show: 'N',
+    author: '홍길동',
+    correctDate: '2023.09.18 15:32',
+    answer: true,
+  },
+  {
+    id: 5,
+    no: 95,
+    cate: '공식 VMD',
+    title: '2023년 10월',
+    fileNumber: '1234',
+    show: 'N',
+    author: '홍길동',
+    correctDate: '2023.09.18 15:32',
+    answer: true,
+  },
+  {
+    id: 6,
+    no: 94,
+    cate: '공식 VMD',
+    title: '2023년 10월',
+    fileNumber: '1234',
+    show: 'N',
+    author: '홍길동',
+    correctDate: '2023.09.18 15:32',
+    answer: true,
+  },
+  {
+    id: 7,
+    no: 93,
+    cate: '공식 VMD',
+    title: '2023년 10월',
+    fileNumber: '1234',
+    show: 'N',
+    author: '홍길동',
+    correctDate: '2023.09.18 15:32',
+    answer: true,
+  },
+  {
+    id: 8,
+    no: 92,
+    cate: '공식 VMD',
+    title: '2023년 10월',
+    fileNumber: '1234',
+    show: 'N',
+    author: '홍길동',
+    correctDate: '2023.09.18 15:32',
+    answer: true,
+  },
+  {
+    id: 9,
+    no: 91,
+    cate: '공식 VMD',
+    title: '2023년 10월',
+    fileNumber: '1234',
+    show: 'N',
+    author: '홍길동',
+    correctDate: '2023.09.18 15:32',
+    answer: true,
+  },
+  {
+    id: 10,
+    no: 90,
+    cate: '공식 VMD',
+    title: '2023년 10월',
+    fileNumber: '1234',
+    show: 'N',
+    author: '홍길동',
+    correctDate: '2023.09.18 15:32',
+    answer: true,
+  },
+];
 
-async function searchNotice(dummyInput, category, fromDate, toDate) {
-  dummyInputValue.value = dummyInput;
-  fromDateValue.value = fromDate;
-  toDateValue.value = toDate;
-  currentCategory.value = category;
-  await getListForAdmin(dummyInputValue.value, currentCategory.value, fromDateValue.value, toDateValue.value, 1);
+function updateSelectedCategory(selectedId) {
+  categories.value = categories.value.map((category) => ({
+    ...category,
+    isSelected: category.id === selectedId,
+  }));
 }
-
-async function getListForAdmin(keyword, category, startDate, endDate, page) {
-  await storeOfFaq.getListFaqForAdmin(keyword, category, startDate, endDate, page);
-  if (listOfFaqAdmin.value) {
-    tableData.value = listOfFaqAdmin.value.data;
-    currentPage.value = tableData.value.currentPage;
-    totalPages.value = tableData.value.totalPages;
-  } else {
-    tableData.value = null;
-  }
-}
-
-async function navigate(newPage) {
-  await getListForAdmin(dummyInputValue.value, currentCategory.value, fromDateValue.value, toDateValue.value, newPage);
-}
-
-onMounted(async () => {
-  await getListCategory(functionType)
-  await getListForAdmin("", "", "", "", 1)
-})
 </script>
 
 <style scoped>
@@ -134,11 +291,10 @@ onMounted(async () => {
   color: var(--color-gray-777);
   font-weight: 400;
 }
-
 .select-wrap {
-  margin-bottom: 2.4rem;
+  padding-bottom: 2.4rem;
+  border-bottom: 1px solid var(--color-neutrals-black);
 }
-
 .category__list {
   display: flex;
   align-items: flex-end;
@@ -146,18 +302,30 @@ onMounted(async () => {
   font-size: 1.6rem;
   line-height: 2.4rem;
 }
-
 .manage_list-wrap {
   max-height: 748px;
   overflow: auto;
 }
-
 .complete {
   color: var(--color-primary);
 }
-
 .manage_list-wrap table tbody td.title a {
   border-bottom: 0;
   line-height: 1;
+}
+
+.search-filter {
+  max-width: 1200px;
+  padding: 2.6rem;
+  margin: 7.2rem auto 7.2rem;
+  background-color: #f6f6f6;
+}
+
+.search-filter__bottom {
+  display: flex;
+}
+
+.search-filter__top + .search-filter__bottom {
+  margin-top: 2.6rem;
 }
 </style>

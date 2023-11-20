@@ -102,15 +102,13 @@ const props = defineProps({
 .round-button.medium {
   min-width: 7.5rem;
   height: 4.6rem;
-  padding-top: 1.3rem;
-  padding-bottom: 1.3rem;
+  line-height: 4.6rem;
 }
 
 .round-button.small {
   min-width: 6.4rem;
   height: 3.6rem;
-  padding-top: 0.8rem;
-  padding-bottom: 0.8rem;
+  line-height: 3.6rem;
   font-size: var(--fz-s);
 }
 

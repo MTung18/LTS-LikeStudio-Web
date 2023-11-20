@@ -14,7 +14,7 @@
     </div>
     <div class="setting-body">
       <div class="manage_list-wrap">
-        <div class="manage_table-wrap">
+        <div class="manage_table-wrap custom-scrollbar">
           <table>
             <thead>
               <tr>
@@ -66,46 +66,33 @@
         </div>
       </div>
       <Pagination v-if="tableData1 && tableData1.length > 0" :page-number="5" />
-      <div class="radio-area">
-        <p class="cate">형태</p>
-        <div class="radio-list">
-          <Radio
-            :check-list="'제작'"
-            :id="'agree1'"
-            :name="'agree'"
-            checked="checked"
-          />
-          <Radio :check-list="'열람'" :id="'agree2'" :name="'agree'" />
-        </div>
-      </div>
     </div>
 
     <div
       class="flex gap-x-[1rem] justify-center mt-[3.2rem]"
       v-if="tableData1 && tableData1.length > 0"
     >
-      <Button
+      <UIButton
         @click="handleClose"
         component="button"
         color-type="outlined"
         size="small"
-        >취소</Button
+        >취소</UIButton
       >
-      <Button component="button" color-type="primary" size="small"
-        >업로드</Button
+      <UIButton component="button" color-type="primary" size="small"
+        >업로드</UIButton
       >
     </div>
   </PopupMedium>
 </template>
 
 <script setup>
-import Button from '@/components/Button/Button.vue';
 import Icons from '@/components/Icons/Icons.vue';
 import ManageHeadForm from '@/components/ManageHeadForm/ManageHeadForm.vue';
 import Pagination from '@/components/Pagination/Pagination.vue';
 import PopupMedium from '@/components/PopupMedium/PopupMedium.vue';
-import Radio from '@/components/Radio/Radio.vue';
 import TemplateDataNone from '@/components/TemplateDataNone/TemplateDataNone.vue';
+import UIButton from '@/components/UIButton/UIButton.vue';
 
 const props = defineProps({
   isOpen: {
@@ -187,15 +174,34 @@ const handleClose = () => {
 </script>
 
 <style scoped>
+.manage_list-wrap {
+  border-top: 1px solid var(--color-neutrals-black);
+}
+
+.manage_list-wrap table thead th {
+  padding: 1.6rem 0;
+}
 .manage_list-wrap table tbody td {
   font-weight: 400;
+  padding: 1.8rem 1rem;
+  line-height: 1.4;
 }
+
+.manage_table-wrap {
+  max-height: 33.2rem;
+}
+
+.manage_table-wrap :deep(th) {
+  position: sticky;
+  top: 0;
+  background-color: var(--color-neutrals-white-100);
+  z-index: 1;
+}
+
 .setting-head {
   padding-bottom: 2.4rem;
 }
 
-.setting-body {
-}
 .depth-list {
   display: flex;
   gap: 0.6rem;

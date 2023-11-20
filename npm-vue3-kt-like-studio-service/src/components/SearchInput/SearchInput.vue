@@ -10,11 +10,7 @@
     ]"
   >
     <button type="button">
-      <Icons
-        icon-name="search"
-        :width="props.size === 'large' ? 2.4 : 1.6"
-        :height="props.size === 'large' ? 2.4 : 1.6"
-      />
+      <Icons icon-name="search" :width="2.4" :height="2.4" />
     </button>
     <label class="search__input-wrap">
       <input
@@ -30,12 +26,13 @@
       v-if="props.modelValue !== '' && props.modelValue.length > 0"
       type="button"
       @click="removeModelValue"
+      class="search__remove-btn"
     >
       <Icons
         icon-name="delete_bold"
         icon-color="var(--color-gray-777)"
-        :width="props.size === 'large' ? 2.4 : 1.6"
-        :height="props.size === 'large' ? 2.4 : 1.6"
+        :width="2.4"
+        :height="2.4"
       />
     </button>
   </div>
@@ -96,6 +93,7 @@ const removeModelValue = () => {
 
 <style scoped>
 .search {
+  position: relative;
   display: inline-flex;
   align-items: center;
   gap: 0 1.2rem;
@@ -115,8 +113,9 @@ const removeModelValue = () => {
 }
 
 .search.large {
+  max-width: 58.6rem;
   height: 5.6rem;
-  padding: 0 2.4rem;
+  padding: 0 7.2rem 0 2.4rem;
   font-size: var(--fz-xl);
   font-weight: 500;
 }
@@ -132,7 +131,8 @@ const removeModelValue = () => {
 }
 
 .search.medium {
-  padding: 0 1.6rem;
+  max-width: 56.6rem;
+  padding: 0 5.6rem 0 1.6rem;
   height: 4.6rem;
   font-size: var(--fz-m);
 }
@@ -156,5 +156,12 @@ const removeModelValue = () => {
 
 .search.gray {
   border-color: var(--color-gray-ddd);
+}
+
+.search__remove-btn {
+  position: absolute;
+  top: 50%;
+  right: 1.6rem;
+  transform: translateY(-50%);
 }
 </style>

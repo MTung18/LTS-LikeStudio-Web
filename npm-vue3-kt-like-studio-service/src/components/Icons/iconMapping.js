@@ -1,3 +1,4 @@
+import IconAdd from '@/components/Icons/Icon/IconAdd.vue';
 import IconAi from '@/components/Icons/Icon/IconAi.vue';
 import IconArrowNext from '@/components/Icons/Icon/IconArrowNext.vue';
 import IconArrowNextBold from '@/components/Icons/Icon/IconArrowNextBold.vue';
@@ -24,9 +25,13 @@ import IconChevronTBold from '@/components/Icons/Icon/IconChevronTBold.vue';
 import IconCirCleCheck from '@/components/Icons/Icon/IconCirCleCheck.vue';
 import IconDelete from '@/components/Icons/Icon/IconDelete.vue';
 import IconDeleteBold from '@/components/Icons/Icon/IconDeleteBold.vue';
+import IconDoubleChevronL from '@/components/Icons/Icon/IconDoubleChevronL.vue';
+import IconDoubleChevronR from '@/components/Icons/Icon/IconDoubleChevronR.vue';
 import IconDownload from '@/components/Icons/Icon/IconDownload.vue';
 import IconError from '@/components/Icons/Icon/IconError.vue';
 import IconEtc from '@/components/Icons/Icon/IconEtc.vue';
+import IconFix from '@/components/Icons/Icon/IconFix.vue';
+import IconFolder from '@/components/Icons/Icon/IconFolder.vue';
 import IconLike from '@/components/Icons/Icon/IconLike.vue';
 import IconLink from '@/components/Icons/Icon/IconLink.vue';
 import IconPdf from '@/components/Icons/Icon/IconPdf.vue';
@@ -38,9 +43,9 @@ import IconSheet from '@/components/Icons/Icon/IconSheet.vue';
 import IconSort from '@/components/Icons/Icon/IconSort.vue';
 import IconText from '@/components/Icons/Icon/IconText.vue';
 import IconTrash from '@/components/Icons/Icon/IconTrash.vue';
+import IconUser from '@/components/Icons/Icon/IconUser.vue';
 import IconVideo from '@/components/Icons/Icon/IconVideo.vue';
 import IconZip from '@/components/Icons/Icon/IconZip.vue';
-import IconChevronRR from '@/components/Icons/Icon/IconChevronRR.vue';
 
 const iconMapping = {
   chevron_prev: IconChevronsNext,
@@ -67,6 +72,8 @@ const iconMapping = {
   chevron_t: IconChevronT,
   chevron_l: IconChevronL,
   chevron_r: IconChevronR,
+  double_chevron_l: IconDoubleChevronL,
+  double_chevron_r: IconDoubleChevronR,
   download: IconDownload,
   delete: IconDelete,
   calender: IconCalender,
@@ -85,7 +92,10 @@ const iconMapping = {
   audio: IconAudio,
   video: IconVideo,
   trash: IconTrash,
-  chevronRR: IconChevronRR
+  add: IconAdd,
+  fix: IconFix,
+  folder: IconFolder,
+  user: IconUser,
 };
 
 export default iconMapping;

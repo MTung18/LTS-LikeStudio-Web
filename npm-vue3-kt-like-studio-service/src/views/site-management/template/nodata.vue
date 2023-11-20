@@ -1,19 +1,83 @@
 <template>
   <ManageListWrap title="템플릿 관리">
-    <ManageHeadForm
-      :input-data1="inputData1"
-      :input-data2="inputData2"
-      :input-data3="inputData3"
-      :input-data4="inputData4"
-    />
-    <div class="select-wrap w-full ml-auto mr-auto mb-[2rem]">
+    <div class="search-filter">
+      <div class="search-filter__top">
+        <div class="top__left">
+          <DropdownSelect
+            :select-list="registeredDate.listData"
+            :default-select="registeredDate.defaultSelect"
+            class-bind="!min-w-[auto] !w-[10.7rem] mr-[1.4rem]"
+          ></DropdownSelect>
+          <CalenderGroup
+            :start-date="startDate"
+            :end-date="endDate"
+            @update:startDate="startDate = $event"
+            @update:endDate="endDate = $event"
+          />
+        </div>
+        <div class="top__center">
+          <div class="mr-[2rem]">
+            <span class="inline-block mr-[0.8rem] text-fz-m font-bold"
+              >노출</span
+            >
+            <DropdownSelect
+              :select-list="visibilityData.listData"
+              :default-select="visibilityData.defaultSelect"
+              class="!w-[10.7rem] !min-w-[auto]"
+            ></DropdownSelect>
+          </div>
+          <div class="mr-[2rem]">
+            <span class="inline-block mr-[0.8rem] text-fz-m font-bold"
+              >용도</span
+            >
+            <DropdownSelect
+              :select-list="applicationData.listData"
+              :default-select="applicationData.defaultSelect"
+              class="!w-[10.7rem] !min-w-[auto]"
+            ></DropdownSelect>
+          </div>
+          <div>
+            <span class="inline-block mr-[0.8rem] text-fz-m font-bold"
+              >상품서비스</span
+            >
+            <DropdownSelect
+              :select-list="serviceData.listData"
+              :default-select="serviceData.defaultSelect"
+              class="!w-[10.7rem] !min-w-[auto]"
+            ></DropdownSelect>
+          </div>
+        </div>
+      </div>
+      <div class="search-filter__bottom">
+        <SearchInput
+          placeholder="검색어를 입력해주세요"
+          size="medium"
+          style-type="square"
+          color-type="gray"
+          class="flex-1 mr-[1.4rem]"
+        />
+        <RoundButton
+          component="button"
+          color-type="filed"
+          size="medium"
+          class="mr-[1.4rem]"
+          >검색</RoundButton
+        >
+        <RoundButton component="button" color-type="outlined" size="medium"
+          >초기화</RoundButton
+        >
+      </div>
+    </div>
+    <div
+      class="select-wrap w-full text-right pb-[2rem] border-b-neutrals-black border-b-[1px]"
+    >
       <DropdownSelect
         :select-list="optionList.listData"
         :default-select="optionList.defaultSelect"
         class-bind="!min-w-[auto] !w-[14rem] ml-auto mr-0 "
       ></DropdownSelect>
     </div>
-    <div class="manage_list-wrap">
+    <div v-if="tableData && tableData.length > 0" class="manage_list-wrap">
       <div class="manage_table-wrap">
         <table>
           <thead>
@@ -37,7 +101,7 @@
               <th width="155px">등록일시</th>
             </tr>
           </thead>
-          <tbody v-if="tableData && tableData.length > 0">
+          <tbody>
             <tr v-for="item in tableData" :key="item.id">
               <td class="num">{{ item.no }}</td>
               <td class="thumb">
@@ -70,20 +134,27 @@
           </tbody>
         </table>
       </div>
-      <div v-if="tableData && tableData.length <= 0">
-        <TemplateDataNone />
-      </div>
+    </div>
+    <div v-if="tableData && tableData.length <= 0">
+      <TemplateDataNone />
     </div>
     <Pagination v-if="tableData && tableData.length > 0" />
   </ManageListWrap>
 </template>
 
 <script setup>
+import { ref } from 'vue';
+
+import CalenderGroup from '@/components/CalenderGroup/CalenderGroup.vue';
 import DropdownSelect from '@/components/DropdownSelect/DropdownSelect.vue';
-import ManageHeadForm from '@/components/ManageHeadForm/ManageHeadForm.vue';
 import ManageListWrap from '@/components/ManageListWrap/ManageListWrap.vue';
 import Pagination from '@/components/Pagination/Pagination.vue';
+import RoundButton from '@/components/RoundButton/RoundButton.vue';
+import SearchInput from '@/components/SearchInput/SearchInput.vue';
 import TemplateDataNone from '@/components/TemplateDataNone/TemplateDataNone.vue';
+
+const startDate = ref('');
+const endDate = ref('');
 
 const optionList = {
   defaultSelect: '댓글 많은 순',
@@ -103,79 +174,119 @@ const optionList = {
   ],
 };
 const tableData = [];
-const inputData1 = {
+const registeredDate = {
   id: 1,
   cate: '등록일',
   defaultSelect: '등록일',
   listData: [
     {
       id: 1,
-      listName: '로그인1',
+      listName: '등록일',
     },
     {
       id: 2,
-      listName: '로그인2',
-    },
-    {
-      id: 3,
-      listName: '로그인3',
+      listName: '선택일',
     },
   ],
 };
-const inputData2 = {
+const visibilityData = {
   id: 1,
   cate: '노출',
   defaultSelect: '노출',
   listData: [
     {
       id: 1,
-      listName: '로그인1',
+      listName: '노출',
     },
     {
       id: 2,
-      listName: '로그인2',
+      listName: '미노출',
     },
     {
       id: 3,
-      listName: '로그인3',
+      listName: '전체',
     },
   ],
 };
-const inputData3 = {
+const applicationData = {
   id: 1,
   cate: '용도',
   defaultSelect: '전체',
   listData: [
     {
       id: 1,
-      listName: '로그인1',
+      listName: '전체',
     },
     {
       id: 2,
-      listName: '로그인2',
+      listName: '포스터',
     },
     {
       id: 3,
-      listName: '로그인3',
+      listName: '브로셔',
+    },
+    {
+      id: 4,
+      listName: '책받침',
+    },
+    {
+      id: 5,
+      listName: '전단지',
+    },
+    {
+      id: 6,
+      listName: 'X배너',
+    },
+    {
+      id: 7,
+      listName: 'SNS용',
+    },
+    {
+      id: 8,
+      listName: 'PPT',
+    },
+    {
+      id: 9,
+      listName: '기타',
     },
   ],
 };
-const inputData4 = {
+const serviceData = {
   id: 1,
   cate: '상품서비스',
   defaultSelect: '전체',
   listData: [
     {
       id: 1,
-      listName: '로그인1',
+      listName: '전체',
     },
     {
       id: 2,
-      listName: '로그인2',
+      listName: '무선',
     },
     {
       id: 3,
-      listName: '로그인3',
+      listName: '유선',
+    },
+    {
+      id: 4,
+      listName: '결합',
+    },
+    {
+      id: 5,
+      listName: '가족',
+    },
+    {
+      id: 6,
+      listName: '외국인',
+    },
+    {
+      id: 7,
+      listName: '멤버쉽',
+    },
+    {
+      id: 8,
+      listName: '제휴카드',
     },
   ],
 };
@@ -190,5 +301,48 @@ const getImageUrl = (name) => {
 }
 .manage_table-wrap :deep(table) {
   width: 1913px;
+}
+
+.search-filter {
+  max-width: 1200px;
+  padding: 2.6rem;
+  margin: 7.2rem auto 10rem;
+  background-color: #f6f6f6;
+}
+
+.search-filter__top {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0 4.2rem;
+}
+
+.top__left {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.top__left::after {
+  position: absolute;
+  top: 0;
+  right: -2.1rem;
+  content: '';
+  width: 1px;
+  height: 100%;
+  background-color: var(--color-gray-ddd);
+}
+
+.top__center {
+  display: flex;
+  align-items: center;
+}
+
+.search-filter__bottom {
+  display: flex;
+}
+
+.search-filter__top + .search-filter__bottom {
+  margin-top: 2.6rem;
 }
 </style>

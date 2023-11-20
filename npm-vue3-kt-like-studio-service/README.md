@@ -112,16 +112,48 @@ src/
 - scope (선택): 커밋의 영향 범위를 나타냅니다. 예를 들어, 특정 컴포넌트 또는 파일명 등이 될 수 있습니다.
 - subject (필수): 커밋의 간략한 설명입니다.
 
+#### Style
+- layout
+  - max: 2560px
+  - min: 1260px
+
+
+## 환경 설정 안내
+
+추후에 프로젝트 시나리오 상 실행 환경을 분기해야될 수도 있어 env 파일을 사용합니다.
+
+### '.env' 파일 설정
+프로젝트 루트 디렉토리에서 '.env.[mode]' 파일 생성합니다.
+이 파일에는 현재 [mode]의 포트 번호를 지정합니다.
+
+예시내용 :
+```javascript
+VITE_PORT=5555
+```
+
+다음 명령어로 서버 실행:
+```sh
+npm run dev
+
+npm run dev:stage
+```
+
 ## Project Setup_
 
 ```sh
 npm install
 ```
 
-### Compile and Hot-Reload for Development
+### Compile and Hot-Reload for Development / mode = local
 
 ```sh
 npm run dev
+```
+
+### Compile and Hot-Reload for Development / mode = stage
+
+```sh
+npm run dev:stage
 ```
 
 ### Compile and Minify for Production

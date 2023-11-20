@@ -79,37 +79,37 @@
       </div>
     </div>
     <div class="flex gap-x-[1rem] justify-center mt-[3.2rem]">
-      <Button
+      <UIButton
         @click="handleClose"
         component="button"
         color-type="outlined"
         size="small"
-        >닫기</Button
+        >닫기</UIButton
       >
-      <Button
+      <UIButton
         component="button"
         v-if="tableData1 && tableData1.length > 0"
         color-type="primary"
         size="small"
-        >업로드</Button
+        >업로드</UIButton
       >
-      <Button
+      <UIButton
         component="button"
         v-if="tableData1 && tableData1.length <= 0"
         disabled
         color-type="primary"
         size="small"
-        >업로드</Button
+        >업로드</UIButton
       >
     </div>
   </PopupMedium>
 </template>
 
 <script setup>
-import Button from '@/components/Button/Button.vue';
 import Icons from '@/components/Icons/Icons.vue';
 import PopupMedium from '@/components/PopupMedium/PopupMedium.vue';
 import RoundButton from '@/components/RoundButton/RoundButton.vue';
+import UIButton from '@/components/UIButton/UIButton.vue';
 
 const props = defineProps({
   isOpen: {

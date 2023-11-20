@@ -8,8 +8,9 @@
       v-for="item in [1, 2, 3, 4, 5]"
       :key="item"
       class="template-item"
-      role="button"
       tabindex="0"
+      @click="handleSliderLayoutPopupOpen"
+      @keydown.enter="handleSliderLayoutPopupOpen"
     >
       <figure class="template-img-wrap">
         <img :src="getImageUrl(item)" alt="예시 이미지" />
@@ -38,6 +39,10 @@ import { ref } from 'vue';
 
 import Icons from '@/components/Icons/Icons.vue';
 import SlideCategory from '@/containers/home/SlideCategory.vue';
+import useMainStore from '@/stores/modules/main';
+
+const mainStore = useMainStore();
+const { handleSliderLayoutPopupOpen } = mainStore;
 
 const dummyCategories = ref([
   {
@@ -158,7 +163,7 @@ const getImageUrl = (name) => {
 
 .item-detail__category-list {
   display: flex;
-  gap: 0 2.8rem;
+  gap: 0 1.4rem;
   margin-top: 1.6rem;
   font-size: var(--fz-m);
   font-weight: 500;
@@ -167,18 +172,24 @@ const getImageUrl = (name) => {
 
 .item-detail__category-item {
   position: relative;
+  max-width: 50%;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 
-.item-detail__category-item:not(:last-child):before {
+.item-detail__category-item:last-child::before {
   position: absolute;
   top: 0;
-  right: -1.4rem;
+  left: 0;
   content: '';
   width: 1px;
   height: 100%;
   background-color: rgba(255, 255, 255, 0.3);
 }
-
+.item-detail__category-item:last-child {
+  padding-left: 1.4rem;
+}
 .item-detail__length {
   display: flex;
   align-items: center;

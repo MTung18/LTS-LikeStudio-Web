@@ -2,7 +2,7 @@
   <Teleport to="#popup" v-if="isOpen">
     <div class="popup medium">
       <div class="popup__wrap">
-        <div class="popup__area">
+        <div class="popup__area" :class="[props.classBindArea]">
           <button
             type="button"
             v-if="props.useCloseButton"
@@ -25,6 +25,7 @@
 </template>
 
 <script setup>
+import { disableBodyScroll, enableBodyScroll } from 'body-scroll-lock';
 import { onBeforeUnmount, onMounted, watch } from 'vue';
 
 import Icons from '@/components/Icons/Icons.vue';
@@ -42,6 +43,10 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  classBindArea: {
+    type: String,
+    default: '',
+  },
 });
 
 const emit = defineEmits(['close-button']);
@@ -49,10 +54,11 @@ const emit = defineEmits(['close-button']);
 watch(
   () => props.isOpen,
   (newValue) => {
+    console.log('newValue', newValue);
     if (newValue) {
-      document.body.classList.add('is-scrollFixed');
+      disableBodyScroll(document.body);
     } else {
-      document.body.classList.remove('is-scrollFixed');
+      enableBodyScroll(document.body);
     }
   },
 );
@@ -63,12 +69,12 @@ function closePopup() {
 
 onMounted(() => {
   if (props.isOpen) {
-    document.body.classList.add('is-scrollFixed');
+    disableBodyScroll(document.body);
   }
 });
 
 onBeforeUnmount(() => {
-  document.body.classList.remove('is-scrollFixed');
+  enableBodyScroll(document.body);
 });
 </script>
 
@@ -98,10 +104,11 @@ onBeforeUnmount(() => {
   flex-direction: column;
   justify-content: center;
   margin: 11.1rem auto 15.6rem auto;
+  padding: 0 24px;
 }
 
 .popup.medium .popup__area {
-  width: 59rem;
+  width: 63.8rem;
 }
 
 .popup__content {
@@ -111,7 +118,7 @@ onBeforeUnmount(() => {
 }
 
 .popup__title {
-  margin-bottom: 2rem;
+  margin-bottom: 2.4rem;
   font-size: var(--ttl-m);
   font-weight: 700;
 }

@@ -11,14 +11,16 @@
       placeholder="태그를 ,(쉼표) 구분해주세요."
     />
     <div class="flex gap-x-[1rem] justify-center mt-[3.2rem]">
-      <Button
+      <UIButton
         @click="handleClose"
         component="button"
         color-type="outlined"
         size="small"
-        >취소</Button
+        >취소</UIButton
       >
-      <Button component="button" color-type="primary" size="small">수정</Button>
+      <UIButton component="button" color-type="primary" size="small"
+        >수정</UIButton
+      >
     </div>
   </PopupMedium>
 </template>
@@ -27,9 +29,9 @@
 import { v4 as uuid } from 'uuid';
 import { ref } from 'vue';
 
-import Button from '@/components/Button/Button.vue';
 import PopupMedium from '@/components/PopupMedium/PopupMedium.vue';
 import TextArea from '@/components/TextArea/TextArea.vue';
+import UIButton from '@/components/UIButton/UIButton.vue';
 
 const props = defineProps({
   isOpen: {

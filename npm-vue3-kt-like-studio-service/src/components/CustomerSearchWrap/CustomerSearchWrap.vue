@@ -11,7 +11,7 @@
   display: flex;
   gap: 0 1.4rem;
   align-items: center;
-  justify-content: end;
+  justify-content: flex-end;
   margin-top: 4rem;
   padding-bottom: 2rem;
   border-bottom: 1px solid var(--color-neutrals-black);

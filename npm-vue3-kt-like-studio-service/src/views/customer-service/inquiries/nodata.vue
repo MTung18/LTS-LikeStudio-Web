@@ -2,7 +2,7 @@
   <TemplateBoardWrap title="1:1 문의">
     <template v-if="!firstVisit">
       <div class="mt-[4rem] text-center">
-        <Button
+        <UIButton
           class-bind="!min-w-[18rem]"
           component="a"
           href="/customer-service/inquiries/create"
@@ -15,7 +15,7 @@
             icon-name="arrow_next_bold"
             icon-color="var(--color-neutrals-white-100)"
           />
-        </Button>
+        </UIButton>
       </div>
       <CustomerSearchWrap>
         <CalenderGroup />
@@ -49,7 +49,6 @@
 <script setup>
 import { ref } from 'vue';
 
-import Button from '@/components/Button/Button.vue';
 import CalenderGroup from '@/components/CalenderGroup/CalenderGroup.vue';
 import CustomerSearchWrap from '@/components/CustomerSearchWrap/CustomerSearchWrap.vue';
 import Icons from '@/components/Icons/Icons.vue';
@@ -57,6 +56,7 @@ import RoundButton from '@/components/RoundButton/RoundButton.vue';
 import SearchInput from '@/components/SearchInput/SearchInput.vue';
 import TemplateBoardWrap from '@/components/TemplateBoardWrap/TemplateBoardWrap.vue';
 import TemplateDataNone from '@/components/TemplateDataNone/TemplateDataNone.vue';
+import UIButton from '@/components/UIButton/UIButton.vue';
 import FirstVisit from '@/containers/customer-service/inquiries/FirstVisit.vue';
 
 const dummyInputValue = ref('');

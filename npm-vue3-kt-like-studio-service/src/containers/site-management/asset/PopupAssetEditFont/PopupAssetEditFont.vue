@@ -5,9 +5,45 @@
     @close-button="handleClose"
   >
     <TemplateEditTextFields size="small" label="썸네일">
-      <RoundButton component="button" color-type="filed" size="small"
-        >파일선택</RoundButton
-      >
+      <div class="upload-group">
+        <div>
+          <RoundButton
+            component="button"
+            color-type="filed"
+            size="small"
+            @click="onClickUploadButton"
+            >파일선택</RoundButton
+          >
+        </div>
+        <!-- eslint-disable-next-line vuejs-accessibility/form-control-has-label-->
+        <input
+          ref="fileRef"
+          class="visually--hidden"
+          type="file"
+          readonly
+          @change="onChangeFile"
+        />
+        <div
+          v-if="props.fileCaptionTitle || fileFormat || fileFormat.length > 0"
+          class="upload-group__inner"
+        >
+          <p v-if="props.fileCaptionTitle" class="upload-group__title">
+            {{ props.fileCaptionTitle }}
+          </p>
+          <ul
+            v-if="fileFormat && fileFormat.length > 0"
+            class="upload-group__list"
+          >
+            <li
+              v-for="(format, idx) in fileFormat"
+              :key="idx"
+              class="upload-group__item"
+            >
+              {{ format }}
+            </li>
+          </ul>
+        </div>
+      </div>
       <p class="sub-txt">50MB 이하의 jpg, jpeg, png 만 업로드 가능합니다.</p>
       <ul class="file-upload-list">
         <li>
@@ -21,9 +57,45 @@
       </ul>
     </TemplateEditTextFields>
     <TemplateEditTextFields size="small" label="SVG">
-      <RoundButton component="button" color-type="filed" size="small"
-        >파일선택</RoundButton
-      >
+      <div class="upload-group">
+        <div>
+          <RoundButton
+            component="button"
+            color-type="filed"
+            size="small"
+            @click="onClickUploadButton"
+            >파일선택</RoundButton
+          >
+        </div>
+        <!-- eslint-disable-next-line vuejs-accessibility/form-control-has-label-->
+        <input
+          ref="fileRef"
+          class="visually--hidden"
+          type="file"
+          readonly
+          @change="onChangeFile"
+        />
+        <div
+          v-if="props.fileCaptionTitle || fileFormat || fileFormat.length > 0"
+          class="upload-group__inner"
+        >
+          <p v-if="props.fileCaptionTitle" class="upload-group__title">
+            {{ props.fileCaptionTitle }}
+          </p>
+          <ul
+            v-if="fileFormat && fileFormat.length > 0"
+            class="upload-group__list"
+          >
+            <li
+              v-for="(format, idx) in fileFormat"
+              :key="idx"
+              class="upload-group__item"
+            >
+              {{ format }}
+            </li>
+          </ul>
+        </div>
+      </div>
       <p class="sub-txt">
         50MB 이하의 svg 만 업로드 가능합니다. clipPath가 포함된 svg만 업로드
         해주세요.
@@ -49,15 +121,15 @@
       <Switch />
     </TemplateEditTextFields>
     <div class="flex gap-x-[1rem] justify-center mt-[3.2rem]">
-      <Button
+      <UIButton
         @click="handleClose"
         component="button"
         color-type="outlined"
         size="small"
-        >취소</Button
+        >취소</UIButton
       >
-      <Button component="button" color-type="primary" size="small"
-        >업로드</Button
+      <UIButton component="button" color-type="primary" size="small"
+        >업로드</UIButton
       >
     </div>
   </PopupMedium>
@@ -67,28 +139,58 @@
 import { v4 as uuid } from 'uuid';
 import { ref } from 'vue';
 
-import Button from '@/components/Button/Button.vue';
 import Icons from '@/components/Icons/Icons.vue';
 import PopupMedium from '@/components/PopupMedium/PopupMedium.vue';
 import RoundButton from '@/components/RoundButton/RoundButton.vue';
 import Switch from '@/components/Switch/Switch.vue';
 import TemplateEditTextFields from '@/components/TemplateEditTextFields/TemplateEditTextFields.vue';
 import TextArea from '@/components/TextArea/TextArea.vue';
+import UIButton from '@/components/UIButton/UIButton.vue';
 
 const props = defineProps({
   isOpen: {
     type: Boolean,
     default: false,
   },
+  styleType: {
+    type: String,
+    default: 'file',
+    validator: (value) => {
+      return ['file', 'image'].includes(value);
+    },
+  },
+  files: {
+    type: Array,
+    default: () => [],
+  },
+  fileCaptionTitle: {
+    type: String,
+    default: null,
+  },
+  fileFormat: {
+    type: Array,
+    default: () => [],
+  },
 });
 
 const textareaId2 = uuid();
 const textareaRef = ref('');
 
-const emit = defineEmits(['close-button']);
+const emit = defineEmits(['close-button', 'file-upload', 'file-remove']);
 
 const handleClose = () => {
   emit('close-button', false);
+};
+
+const fileRef = ref();
+
+const onClickUploadButton = () => {
+  fileRef.value.click();
+};
+
+const onChangeFile = (event) => {
+  const file = event.target.files[0];
+  emit('file-upload', file);
 };
 </script>
 

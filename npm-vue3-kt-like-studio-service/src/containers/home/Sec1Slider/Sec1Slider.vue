@@ -13,7 +13,11 @@
         <template v-for="item in [0, 1, 2, 3]" :key="item">
           <swiper-slide>
             <RouterLink to="">
-              <img src="./img/banner_area.png" alt="예시 이미지1" />
+              <img
+                src="./img/main_banner.png"
+                alt="예시 이미지1"
+                class="mx-auto"
+              />
             </RouterLink>
           </swiper-slide>
         </template>
@@ -67,7 +71,6 @@ const moduleConfig = {
 }
 
 .slide-container {
-  max-width: 1428px;
   margin: 0 auto;
 }
 
@@ -80,17 +83,21 @@ const moduleConfig = {
 }
 
 .navigation-slide--prev {
-  left: 0;
+  left: 8rem;
 }
 
 .navigation-slide--next {
-  right: 0;
+  right: 8rem;
 }
 
 .pagination {
   display: flex;
   justify-content: center;
-  margin-top: 4.8rem;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 3.4rem;
+  z-index: 10;
 }
 
 .pagination :deep(.swiper-pagination-bullet) {

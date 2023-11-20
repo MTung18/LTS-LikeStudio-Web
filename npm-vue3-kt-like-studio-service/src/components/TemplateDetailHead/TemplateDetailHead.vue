@@ -12,8 +12,7 @@
         {{ props.writer }} ({{ props.writerPosition }})
       </li>
       <li v-if="props.date" class="head__item item-date">
-        {{ `${props.date.slice(0, 4)}.${props.date.slice(5, 7)}.${props.date.slice(8, 10)}
-                        ${props.date.slice(11, 16)}` }}
+        {{ props.date }}
       </li>
     </ul>
   </div>

@@ -14,8 +14,8 @@
           required
           class-bind="items-center leading-none !border-b-0"
         >
-          <Switch />
-        </TemplateEditTextFields>
+          <Switch /> </TemplateEditTextFields
+        >출
       </div>
       <TemplateEditTextFields
         :fields-id="inputId"
@@ -48,6 +48,7 @@
           @file-remove="handleFileRemove"
           :files="dummyfiles"
           file-caption-title="첨부파일은 최대 10개, 1개 파일당 50MB 이하의 아래 확장자만 업로드 가능합니다."
+          file-max-length="10"
           :file-format="[
             '압축 파일 : zip, 7z, alz, egg',
             '문서 파일 : xls, xlsx, ppt, pptx, doc, docx, pdf',
@@ -71,29 +72,29 @@
 
     <template #foot>
       <div class="flex mt-[6rem] justify-center gap-x-[1rem]">
-        <Button
+        <UIButton
           component="button"
           color-type="standard"
           size="large"
           class-bind="!min-w-[14rem]"
           @click="handleEditDelete"
-          >삭제</Button
+          >삭제</UIButton
         >
-        <Button
+        <UIButton
           component="button"
           color-type="outlined"
           size="large"
           class-bind="!min-w-[14rem] !ml-auto"
           @click="handleEditToList"
-          >목록</Button
+          >목록</UIButton
         >
-        <Button
+        <UIButton
           component="button"
           color-type="primary"
           size="large"
           class-bind="!min-w-[14rem]"
           @click="handleEdit"
-          >수정</Button
+          >수정</UIButton
         >
       </div>
     </template>
@@ -105,7 +106,6 @@ import { v4 as uuid } from 'uuid';
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 
-import Button from '@/components/Button/Button.vue';
 import DropdownSelect from '@/components/DropdownSelect/DropdownSelect.vue';
 import Switch from '@/components/Switch/Switch.vue';
 import TemplateEdit from '@/components/TemplateEdit/TemplateEdit.vue';
@@ -113,6 +113,7 @@ import TemplateEditFileFields from '@/components/TemplateEditFileFields/Template
 import TemplateEditInfo from '@/components/TemplateEditInfo/TemplateEditInfo.vue';
 import TemplateEditTextFields from '@/components/TemplateEditTextFields/TemplateEditTextFields.vue';
 import TextFields from '@/components/TextFields/TextFields.vue';
+import UIButton from '@/components/UIButton/UIButton.vue';
 import customToast from '@/untils/custom_toast';
 
 const router = useRouter();
