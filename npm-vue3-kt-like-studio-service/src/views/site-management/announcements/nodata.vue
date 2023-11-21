@@ -1,12 +1,33 @@
 <template>
   <TemplateBoardWrap title="공지사항 관리">
-    <ManageHeadForm
-      :input-data1="inputData1"
-      :input-data2="inputData2"
-      :input-data3="inputData3"
-      :input-data4="inputData4"
-      :only-search="true"
-    />
+    <div class="search-filter">
+      <div class="search-filter__bottom">
+        <CalenderGroup
+          :start-date="startDate"
+          :end-date="endDate"
+          @update:startDate="startDate = $event"
+          @update:endDate="endDate = $event"
+          class="mr-[2.6rem]"
+        />
+        <SearchInput
+          placeholder="검색어를 입력해주세요"
+          size="medium"
+          style-type="square"
+          color-type="gray"
+          class="flex-1 mr-[1.4rem]"
+        />
+        <RoundButton
+          component="button"
+          color-type="filed"
+          size="medium"
+          class="mr-[1.4rem]"
+          >검색</RoundButton
+        >
+        <RoundButton component="button" color-type="outlined" size="medium"
+          >초기화</RoundButton
+        >
+      </div>
+    </div>
 
     <div class="select-wrap flex justify-between">
       <div class="flex gap-[0.8rem] items-center">
@@ -21,7 +42,7 @@
         >등록</RoundButton
       >
     </div>
-    <div class="manage_list-wrap">
+    <div v-if="tableData && tableData.length > 0" class="manage_list-wrap">
       <div class="manage_table-wrap">
         <table>
           <thead>
@@ -34,7 +55,7 @@
               <th width="134px">작성일시</th>
             </tr>
           </thead>
-          <tbody v-if="tableData && tableData.length > 0">
+          <tbody>
             <tr v-for="item in tableData" :key="item.id">
               <td class="num">{{ item.no }}</td>
               <td class="title !text-left">
@@ -60,23 +81,28 @@
           </tbody>
         </table>
       </div>
-      <div v-if="tableData && tableData.length <= 0">
-        <TemplateDataNone />
-      </div>
+    </div>
+    <div v-if="tableData && tableData.length <= 0">
+      <TemplateDataNone />
     </div>
     <Pagination v-if="tableData && tableData.length > 0" />
   </TemplateBoardWrap>
 </template>
 
 <script setup>
+import { ref } from 'vue';
+
+import CalenderGroup from '@/components/CalenderGroup/CalenderGroup.vue';
 import DropdownSelect from '@/components/DropdownSelect/DropdownSelect.vue';
 import Icons from '@/components/Icons/Icons.vue';
-import ManageHeadForm from '@/components/ManageHeadForm/ManageHeadForm.vue';
 import Pagination from '@/components/Pagination/Pagination.vue';
 import RoundButton from '@/components/RoundButton/RoundButton.vue';
+import SearchInput from '@/components/SearchInput/SearchInput.vue';
 import TemplateBoardWrap from '@/components/TemplateBoardWrap/TemplateBoardWrap.vue';
 import TemplateDataNone from '@/components/TemplateDataNone/TemplateDataNone.vue';
 
+const startDate = ref('');
+const endDate = ref('');
 const optionList = {
   defaultSelect: '전체',
   listData: [
@@ -95,82 +121,6 @@ const optionList = {
   ],
 };
 const tableData = [];
-const inputData1 = {
-  id: 1,
-  cate: '등록일',
-  defaultSelect: '등록일',
-  listData: [
-    {
-      id: 1,
-      listName: '로그인1',
-    },
-    {
-      id: 2,
-      listName: '로그인2',
-    },
-    {
-      id: 3,
-      listName: '로그인3',
-    },
-  ],
-};
-const inputData2 = {
-  id: 1,
-  cate: '노출',
-  defaultSelect: '노출',
-  listData: [
-    {
-      id: 1,
-      listName: '로그인1',
-    },
-    {
-      id: 2,
-      listName: '로그인2',
-    },
-    {
-      id: 3,
-      listName: '로그인3',
-    },
-  ],
-};
-const inputData3 = {
-  id: 1,
-  cate: '용도',
-  defaultSelect: '전체',
-  listData: [
-    {
-      id: 1,
-      listName: '로그인1',
-    },
-    {
-      id: 2,
-      listName: '로그인2',
-    },
-    {
-      id: 3,
-      listName: '로그인3',
-    },
-  ],
-};
-const inputData4 = {
-  id: 1,
-  cate: '상품서비스',
-  defaultSelect: '전체',
-  listData: [
-    {
-      id: 1,
-      listName: '로그인1',
-    },
-    {
-      id: 2,
-      listName: '로그인2',
-    },
-    {
-      id: 3,
-      listName: '로그인3',
-    },
-  ],
-};
 </script>
 
 <style scoped>
@@ -179,7 +129,8 @@ const inputData4 = {
   font-weight: 400;
 }
 .select-wrap {
-  margin-bottom: 2.4rem;
+  padding-bottom: 2.4rem;
+  border-bottom: 1px solid var(--color-neutrals-black);
 }
 .drop-txt {
   font-size: 1.4rem;
@@ -218,5 +169,20 @@ const inputData4 = {
   border-radius: 50px;
   margin-right: 1.6rem;
   color: var(--color-primary);
+}
+
+.search-filter {
+  max-width: 1200px;
+  padding: 2.6rem;
+  margin: 7.2rem auto 7.2rem;
+  background-color: #f6f6f6;
+}
+
+.search-filter__bottom {
+  display: flex;
+}
+
+.search-filter__top + .search-filter__bottom {
+  margin-top: 2.6rem;
 }
 </style>

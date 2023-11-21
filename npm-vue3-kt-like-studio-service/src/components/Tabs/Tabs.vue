@@ -2,7 +2,7 @@
   <button
     type="button"
     class="tabs"
-    :class="[props.type, props.isSelected && 'selected']"
+    :class="[props.type, props.size, props.isSelected && 'selected']"
     @click="handleTabClick"
   >
     <Icons
@@ -25,6 +25,13 @@ const props = defineProps({
       return ['black', 'underbar', 'withIcon'].includes(value);
     },
   },
+  size: {
+    type: String,
+    default: 'medium',
+    validator(value) {
+      return ['medium', 'small'].includes(value);
+    },
+  },
   useIcon: {
     type: Boolean,
     default: false,
@@ -43,13 +50,20 @@ function handleTabClick(id) {
 </script>
 
 <style scoped>
+.tabs.medium {
+  font-size: var(--fz-xl);
+}
+
+.tabs.small {
+  font-size: var(--fz-l);
+}
+
 .tabs.black {
   min-width: 8.2rem;
   padding: 0 2.6rem;
   height: 4.8rem;
   line-height: 4.8rem;
   border-radius: 4.8rem;
-  font-size: var(--fz-l);
   font-weight: 500;
   border: 1px solid var(--color-gray-ddd);
   color: var(--color-neutrals-black);
@@ -63,7 +77,6 @@ function handleTabClick(id) {
 
 .tabs.underbar {
   position: relative;
-  font-size: var(--fz-xl);
   color: var(--color-gray-444);
   padding-bottom: 1rem;
 }
@@ -90,7 +103,6 @@ function handleTabClick(id) {
   display: flex;
   align-items: center;
   gap: 0 0.6rem;
-  font-size: var(--fz-xl);
   color: var(--color-gray-777);
 }
 

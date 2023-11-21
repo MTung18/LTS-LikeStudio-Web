@@ -22,7 +22,7 @@
       >
     </div>
     <div class="manage_list-wrap">
-      <div class="manage_table-wrap">
+      <div class="manage_table-wrap custom-scrollbar">
         <table>
           <thead>
             <tr>
@@ -79,37 +79,37 @@
       </div>
     </div>
     <div class="flex gap-x-[1rem] justify-center mt-[3.2rem]">
-      <Button
+      <UIButton
         @click="handleClose"
         component="button"
         color-type="outlined"
         size="small"
-        >닫기</Button
+        >닫기</UIButton
       >
-      <Button
+      <UIButton
         component="button"
         v-if="tableData1 && tableData1.length > 0"
         color-type="primary"
         size="small"
-        >업로드</Button
+        >업로드</UIButton
       >
-      <Button
+      <UIButton
         component="button"
         v-if="tableData1 && tableData1.length <= 0"
         disabled
         color-type="primary"
         size="small"
-        >업로드</Button
+        >업로드</UIButton
       >
     </div>
   </PopupMedium>
 </template>
 
 <script setup>
-import Button from '@/components/Button/Button.vue';
 import Icons from '@/components/Icons/Icons.vue';
 import PopupMedium from '@/components/PopupMedium/PopupMedium.vue';
 import RoundButton from '@/components/RoundButton/RoundButton.vue';
+import UIButton from '@/components/UIButton/UIButton.vue';
 
 const props = defineProps({
   isOpen: {
@@ -170,6 +170,7 @@ const tableData1 = [
 
 <style scoped>
 .manage_list-wrap {
+  border-top: 1px solid var(--color-neutrals-black);
   border-bottom: 1px solid var(--color-gray-ddd);
 }
 .manage_list-wrap table thead th {
@@ -180,10 +181,19 @@ const tableData1 = [
   padding: 1.8rem 1rem;
   line-height: 1.4;
 }
+
 .manage_list-wrap table tbody td.title a {
   border-bottom: 0;
   padding-top: 0;
 }
+
+.manage_table-wrap :deep(th) {
+  position: sticky;
+  top: 0;
+  background-color: var(--color-neutrals-white-100);
+  z-index: 1;
+}
+
 .upload-list {
   display: flex;
   gap: 1.2rem;
@@ -208,7 +218,6 @@ const tableData1 = [
 }
 .manage_table-wrap {
   max-height: 33.2rem;
-  height: 33.2rem;
 }
 .manage_table-wrap .complete,
 .complete .num {

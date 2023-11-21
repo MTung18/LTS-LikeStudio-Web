@@ -4,125 +4,130 @@
     @close-button="handleClose"
     useCloseButton
   >
-    <div class="template-add">
-      <div class="template-add__head">
-        <p class="template-add__title">템플릿 추가</p>
-        <Button
-          component="button"
-          color-type="primary"
-          size="medium"
-          class-bind="!min-w-[11rem] ml-auto"
-          >저장</Button
-        >
-      </div>
-      <div class="preview">
-        <div class="preview__head">
-          <div class="preview__action">
-            <DropdownSelect
-              :select-list="dummyCategories"
-              default-select="카테고리 선택"
-              class-bind="!min-w-[auto]"
-            />
-            <p class="preview__desc">
-              카테고리를 선택하고 템플릿 5개를 고른 후, 저장 버튼을 눌러주세요.
-            </p>
-          </div>
-          <div class="preview__container">
-            <ul class="preview__list">
-              <li
-                v-for="item in [1, 2, 3, 4, 5]"
-                :key="item"
-                class="preview__item"
-              >
-                <figure class="preview__img-wrap">
-                  <img
-                    class="preview__img"
-                    :src="getImageUrl(item)"
-                    alt="예시 이미지"
-                  />
-                </figure>
-                <button type="button" class="preview__remove-btn">
-                  <Icons
-                    icon-name="delete"
-                    icon-color="var(--color-neutrals-white-100)"
-                    :width="1.4"
-                    :height="1.4"
-                  />
-                </button>
-              </li>
-            </ul>
-          </div>
-        </div>
-        <!-- dev: 검색어 바 -->
-        <div class="preview__search-wrap">
-          <div class="preview__search-area">
-            <SearchInput
-              v-model="dummyInputValue"
-              placeholder="검색어를 입력해주세요"
-              size="medium"
-              style-type="square"
-              color-type="gray"
-              class-bind="flex-1"
-            />
-            <RoundButton component="button" color-type="filed" size="medium"
-              >검색</RoundButton
-            >
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- dev: 템플릿 리스트 -->
-    <div class="list">
-      <div class="list__head">
-        <div class="list__total">
-          총 <span class="list__total-length">252</span>개
-        </div>
-        <ul class="list__order">
-          <li
-            v-for="order in orderType"
-            :key="order.id"
-            class="list__order-item"
-            :class="order.isSelected && 'is-selected'"
+    <div class="px-[4rem] py-[3.2rem]">
+      <div class="template-add">
+        <div class="template-add__head">
+          <p class="template-add__title">템플릿 추가</p>
+          <UIButton
+            component="button"
+            color-type="primary"
+            size="medium"
+            class-bind="!min-w-[11rem] ml-auto"
+            @click="handleSaveClick"
+            >저장</UIButton
           >
-            <button type="button" @click="handlerSelectOrder(order.id)">
-              {{ order.orderName }}
-            </button>
+        </div>
+        <div class="preview">
+          <div class="preview__head">
+            <div class="preview__action">
+              <DropdownSelect
+                :select-list="dummyCategories"
+                default-select="카테고리 선택"
+                class-bind="!min-w-[auto]"
+              />
+              <p class="preview__desc">
+                카테고리를 선택하고 템플릿 5개를 고른 후, 저장 버튼을
+                눌러주세요.
+              </p>
+            </div>
+            <div class="preview__container">
+              <ul class="preview__list">
+                <li
+                  v-for="item in [1, 2, 3, 4, 5]"
+                  :key="item"
+                  class="preview__item"
+                >
+                  <figure class="preview__img-wrap">
+                    <img
+                      class="preview__img"
+                      :src="getImageUrl(item)"
+                      alt="예시 이미지"
+                    />
+                  </figure>
+                  <button type="button" class="preview__remove-btn">
+                    <Icons
+                      icon-name="delete"
+                      icon-color="var(--color-neutrals-white-100)"
+                      :width="1.4"
+                      :height="1.4"
+                    />
+                  </button>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <!-- dev: 검색어 바 -->
+          <div class="preview__search-wrap">
+            <div class="preview__search-area">
+              <SearchInput
+                v-model="dummyInputValue"
+                placeholder="검색어를 입력해주세요"
+                size="medium"
+                style-type="square"
+                color-type="gray"
+                class-bind="flex-1"
+              />
+              <RoundButton component="button" color-type="filed" size="medium"
+                >검색</RoundButton
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- dev: 템플릿 리스트 -->
+      <div class="list">
+        <div class="list__head">
+          <div class="list__total">
+            총 <span class="list__total-length">252</span>개
+          </div>
+          <ul class="list__order">
+            <li
+              v-for="order in orderType"
+              :key="order.id"
+              class="list__order-item"
+              :class="order.isSelected && 'is-selected'"
+            >
+              <button type="button" @click="handlerSelectOrder(order.id)">
+                {{ order.orderName }}
+              </button>
+            </li>
+          </ul>
+        </div>
+
+        <ul class="list__group custom-scrollbar">
+          <li v-for="item in dummyTemplate" :key="item.id" class="list__item">
+            <figure>
+              <img :src="getImageUrl(`thu_${item.id}`)" alt="예시 이미지" />
+            </figure>
+            <CheckBox
+              v-model="item.isChecked"
+              :id="`${item.id}`"
+              :shape-type="'round'"
+              class-bind="list__checkbox"
+            />
           </li>
         </ul>
+        <Loading class-bind="mt-[3.2rem]" />
       </div>
-
-      <ul class="list__group custom-scrollbar">
-        <li v-for="item in dummyTemplate" :key="item.id" class="list__item">
-          <figure>
-            <img :src="getImageUrl(`thu_${item.id}`)" alt="예시 이미지" />
-          </figure>
-          <CheckBox
-            v-model="item.isChecked"
-            :id="`${item.id}`"
-            :shape-type="'round'"
-            class-bind="list__checkbox"
-          />
-        </li>
-      </ul>
-      <Loading class-bind="mt-[3.2rem]" />
+      <!-- dev: 데이터 없을 시 -->
+      <!--    <TemplateDataNone />-->
     </div>
-    <!-- dev: 데이터 없을 시 -->
-    <!--    <TemplateDataNone />-->
   </PopupLarge>
 </template>
 
 <script setup>
 import { ref } from 'vue';
 
-import Button from '@/components/Button/Button.vue';
 import CheckBox from '@/components/CheckBox/CheckBox.vue';
 import DropdownSelect from '@/components/DropdownSelect/DropdownSelect.vue';
 import Icons from '@/components/Icons/Icons.vue';
+import Loading from '@/components/Loading/Loading.vue';
 import PopupLarge from '@/components/PopupLarge/PopupLarge.vue';
 import RoundButton from '@/components/RoundButton/RoundButton.vue';
 import SearchInput from '@/components/SearchInput/SearchInput.vue';
-import Loading from '@/containers/site-management/main/Loading/Loading.vue';
+import UIButton from '@/components/UIButton/UIButton.vue';
+import customToast from '@/untils/custom_toast';
 
 const props = defineProps({
   isOpen: {
@@ -285,6 +290,12 @@ const handlerSelectOrder = (selectedId) => {
     ...order,
     isSelected: order.id === selectedId,
   }));
+};
+
+const handleSaveClick = () => {
+  customToast.success('저장했습니다.', {
+    containerClassName: 'custom-toast-bottom',
+  });
 };
 </script>
 

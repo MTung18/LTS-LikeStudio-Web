@@ -27,7 +27,7 @@ import { ref, useAttrs, watchEffect } from 'vue';
 const props = defineProps({
   inputId: {
     type: String,
-    required: true,
+    default: null,
   },
   modelValue: {
     type: [String, Number],

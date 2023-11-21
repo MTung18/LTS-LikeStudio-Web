@@ -1,35 +1,51 @@
 <template>
   <div class="pagination">
     <div class="pagination__prev-wrap">
-      <IconButton :disabled="isDisabledPrevButton" icon-name="arrow_prev_bold" size="semi-medium" type="outlined"
-        component="button" @click="firstPage()" />
-      <IconButton :disabled="isDisabledPrevButton" icon-name="chevron_l" size="semi-medium" type="outlined"
-        component="button" @click="prevPage()" />
+      <IconButton
+        icon-name="double_chevron_l"
+        size="semi-medium"
+        type="outlined"
+        component="button"
+      />
+      <IconButton
+        icon-name="chevron_l"
+        size="semi-medium"
+        type="outlined"
+        component="button"
+      />
     </div>
 
     <ul class="pagination__list">
-      <li v-for="item in props.pageNumber" :key="item" class="pagination__item"
-        :class="currentPage === item && 'is-selected'">
-        <button type="button" @click="navigate(item)">{{ item }}</button>
+      <li
+        v-for="item in props.pageNumber"
+        :key="item"
+        class="pagination__item"
+        :class="currentPage === item && 'is-selected'"
+      >
+        <button type="button">{{ item }}</button>
       </li>
     </ul>
 
     <div class="pagination__next-wrap">
-      <IconButton :disabled="isDisabledNextButton" icon-name="chevron_r" size="semi-medium" type="outlined"
-        component="button" @click="nextPage()" />
-      <IconButton :disabled="isDisabledNextButton" icon-name="arrow_next_bold" size="semi-medium" type="outlined"
-        component="button" @click="lastPage()" />
+      <IconButton
+        icon-name="chevron_r"
+        size="semi-medium"
+        type="outlined"
+        component="button"
+      />
+      <IconButton
+        icon-name="double_chevron_r"
+        size="semi-medium"
+        type="outlined"
+        component="button"
+      />
     </div>
   </div>
 </template>
 
 <script setup>
 import IconButton from '@/components/IconButton/IconButton.vue';
-import { onMounted, ref, watch } from 'vue';
 
-
-const isDisabledPrevButton = ref(false);
-const isDisabledNextButton = ref(false);
 const props = defineProps({
   currentPage: {
     type: Number,
@@ -39,38 +55,6 @@ const props = defineProps({
     type: Number,
     default: 10,
   },
-});
-
-const emit = defineEmits(['numberPage']);
-
-function navigate(newPage) {
-  emit('numberPage', newPage);
-}
-
-function prevPage() {
-  emit('numberPage', props.currentPage - 1);
-}
-
-function firstPage() {
-  emit('numberPage', 1);
-}
-
-function nextPage() {
-  emit('numberPage', props.currentPage + 1);
-}
-
-function lastPage() {
-  emit('numberPage', props.pageNumber);
-}
-
-watch(() => props.currentPage, (newValue, oldValue) => {
-  isDisabledPrevButton.value = newValue === 1;
-  isDisabledNextButton.value = newValue === props.pageNumber;
-});
-
-onMounted(() => {
-  isDisabledPrevButton.value = props.currentPage === 1;
-  isDisabledNextButton.value = props.currentPage === props.pageNumber;
 });
 </script>
 
@@ -89,7 +73,7 @@ onMounted(() => {
 
 .pagination__list {
   display: flex;
-  gap: 0 2.4rem;
+  gap: 0 2rem;
   margin: 0 2.8rem;
 }
 

@@ -24,25 +24,27 @@
         label="내용"
         required
         v-model="inputRef"
+        class="!pb-[3.2rem]"
       >
         <TextArea
           v-bind="$attrs"
           :textarea-id="textareaId"
           v-model="textareaRef"
           placeholder="내용 입력"
-          class-bind="w-full mb-[2.8rem]"
+          class-bind="w-full"
         />
       </TemplateEditTextFields>
 
       <TemplateEditTextFields
         label="첨부파일"
-        class-bind="pt-[3.2rem] border-t-[1px] border-t-gray-gray-ddd"
+        class-bind="pt-[3.2rem] !pb-[3.2rem] border-t-[1px] border-t-gray-gray-ddd"
       >
         <TemplateEditFileFields
           @file-upload="handleFileUpload"
           @file-remove="handleFileRemove"
           :files="dummyfiles"
           file-caption-title="첨부파일은 최대 3개, 1개 파일당 50MB 이하의 아래 확장자만 업로드 가능합니다."
+          fileMaxLength="3"
           :file-format="[
             '압축 파일 : zip, 7z, alz, egg',
             '문서 파일 : xls, xlsx, ppt, pptx, doc, docx, pdf',
@@ -55,21 +57,21 @@
 
     <template #foot>
       <div class="flex mt-[6rem] justify-center gap-x-[1rem]">
-        <Button
+        <UIButton
           component="button"
           color-type="outlined"
           size="large"
           class-bind="!min-w-[14rem]"
           @click="handleCreateCancel"
-          >취소</Button
+          >취소</UIButton
         >
-        <Button
+        <UIButton
           component="button"
           color-type="primary"
           size="large"
           class-bind="!min-w-[14rem]"
           @click="handleCreateSubmit"
-          >등록</Button
+          >등록</UIButton
         >
       </div>
     </template>
@@ -80,13 +82,13 @@
 import { v4 as uuid } from 'uuid';
 import { ref } from 'vue';
 
-import Button from '@/components/Button/Button.vue';
 import DropdownSelect from '@/components/DropdownSelect/DropdownSelect.vue';
 import TemplateEdit from '@/components/TemplateEdit/TemplateEdit.vue';
 import TemplateEditFileFields from '@/components/TemplateEditFileFields/TemplateEditFileFields.vue';
 import TemplateEditTextFields from '@/components/TemplateEditTextFields/TemplateEditTextFields.vue';
 import TextArea from '@/components/TextArea/TextArea.vue';
 import TextFields from '@/components/TextFields/TextFields.vue';
+import UIButton from '@/components/UIButton/UIButton.vue';
 import customToast from '@/untils/custom_toast';
 
 const inputId = uuid();

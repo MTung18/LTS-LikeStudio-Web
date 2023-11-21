@@ -3,10 +3,22 @@
     <template v-if="props.styleType === 'image'">
       <div class="upload-group upload-group--image">
         <div>
-          <RoundButton component="button" color-type="filed" size="medium" @click="onClickUploadButton">파일선택</RoundButton>
+          <RoundButton
+            component="button"
+            color-type="filed"
+            size="medium"
+            @click="onClickUploadButton"
+            >파일선택</RoundButton
+          >
         </div>
         <!-- eslint-disable-next-line vuejs-accessibility/form-control-has-label-->
-        <input ref="fileRef" class="visually--hidden" type="file" readonly @change="onChangeFile" />
+        <input
+          ref="fileRef"
+          class="visually--hidden"
+          type="file"
+          readonly
+          @change="onChangeFile"
+        />
         <div class="upload-group__inner">
           <p class="upload-group__title">
             가로 1920px X 세로 680px<br />20MB 이하의 JPG, JPEG, GIF, PNG 파일
@@ -16,19 +28,45 @@
 
       <div class="preview-wrap">
         <figure class="preview">
-          <img class="preview__img" src="./img/img_example.png" alt="예시 이미지" />
+          <img
+            class="preview__img"
+            src="./img/img_example.png"
+            alt="예시 이미지"
+          />
         </figure>
         <button type="button" class="preview__remove-btn">
-          <Icons icon-name="delete" icon-color="var(--color-neutrals-white-100)" :width="1.4" :height="1.4" />
+          <Icons
+            icon-name="delete"
+            icon-color="var(--color-neutrals-white-100)"
+            :width="1.4"
+            :height="1.4"
+          />
         </button>
       </div>
-      <ul v-if="props.files && props.files.length > 0" class="upload-image-list">
-        <li v-for="(file, index) in props.files" :key="file.id" class="upload-image-item">
-          <button type="button" @click="onDownloadFile(file.filePath, file.filename)" class="upload-image-button">
-            <IconButton icon-name="download" size="small" type="outlined" component="button"
-              class-bind="upload-image-icon" @click="onRemoveFile(index)" />
+      <ul
+        v-if="props.files && props.files.length > 0"
+        class="upload-image-list"
+      >
+        <li
+          v-for="file in props.files"
+          :key="file.id"
+          class="upload-image-item"
+        >
+          <button
+            type="button"
+            @click="onDownloadFile"
+            class="upload-image-button"
+          >
+            <IconButton
+              icon-name="download"
+              size="small"
+              type="outlined"
+              component="button"
+              class-bind="upload-image-icon"
+              @click="onRemoveFile"
+            />
             <p class="upload-image-filename">
-              <span>{{ file.name }}</span>
+              <span>{{ file.filename }}</span>
             </p>
           </button>
         </li>
@@ -37,17 +75,38 @@
     <template v-else>
       <div class="upload-group">
         <div>
-          <RoundButton component="button" color-type="filed" size="medium" @click="onClickUploadButton">파일선택({{
-            files.length }}/10)</RoundButton>
+          <RoundButton
+            component="button"
+            color-type="filed"
+            size="medium"
+            @click="onClickUploadButton"
+            >파일선택({{ files.length }}/{{ fileMaxLength }})</RoundButton
+          >
         </div>
         <!-- eslint-disable-next-line vuejs-accessibility/form-control-has-label-->
-        <input ref="fileRef" class="visually--hidden" type="file" readonly @change="onChangeFile" />
-        <div v-if="props.fileCaptionTitle || fileFormat || fileFormat.length > 0" class="upload-group__inner">
+        <input
+          ref="fileRef"
+          class="visually--hidden"
+          type="file"
+          readonly
+          @change="onChangeFile"
+        />
+        <div
+          v-if="props.fileCaptionTitle || fileFormat || fileFormat.length > 0"
+          class="upload-group__inner"
+        >
           <p v-if="props.fileCaptionTitle" class="upload-group__title">
             {{ props.fileCaptionTitle }}
           </p>
-          <ul v-if="fileFormat && fileFormat.length > 0" class="upload-group__list">
-            <li v-for="(format, idx) in fileFormat" :key="idx" class="upload-group__item">
+          <ul
+            v-if="fileFormat && fileFormat.length > 0"
+            class="upload-group__list"
+          >
+            <li
+              v-for="(format, idx) in fileFormat"
+              :key="idx"
+              class="upload-group__item"
+            >
               {{ format }}
             </li>
           </ul>
@@ -55,11 +114,21 @@
       </div>
 
       <ul v-if="props.files && props.files.length > 0" class="upload-file-list">
-        <li v-for="(file, index) in props.files" :key="file.id" class="upload-file-item">
-          <button type="button" @click="onDownloadFile(file)">
-            {{ file.oriFileName }}
+        <li v-for="file in props.files" :key="file.id" class="upload-file-item">
+          <button
+            type="button"
+            class="upload-file-item__name"
+            @click="onDownloadFile"
+          >
+            {{ file.filename }}
           </button>
-          <IconButton icon-name="delete" size="small" type="outlined" component="button" @click="onRemoveFile(index)" />
+          <IconButton
+            icon-name="delete"
+            size="small"
+            type="outlined"
+            component="button"
+            @click="onRemoveFile"
+          />
         </li>
       </ul>
     </template>
@@ -93,6 +162,10 @@ const props = defineProps({
     type: Array,
     default: () => [],
   },
+  fileMaxLength: {
+    type: Number,
+    default: null,
+  },
 });
 
 const fileRef = ref();
@@ -107,38 +180,12 @@ const onChangeFile = (event) => {
   emit('file-upload', file);
 };
 
-const onRemoveFile = (index) => {
-  emit('file-remove', index);
+const onRemoveFile = () => {
+  emit('file-remove', 'dummyfile');
 };
 
-const onDownloadFile = async (file) => {
-  const convertedPath = file.uniqFileName.replace(/\\/g, '/');
-  const finalPath = convertedPath.split('public')[1];
-  const finalString = finalPath.replace(/\/+/g, '/');
-  const fileUrl = finalString;
-
-  try {
-    const response = await fetch(fileUrl);
-    if (response.ok) {
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
-
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = filename;
-      link.style.display = 'none';
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-
-      customToast.success('Successfully downloaded file');
-    } else {
-      customToast.error('Error while downloading file');
-    }
-  } catch (error) {
-    console.error('Error while downloading file', error);
-    customToast.error('Error while downloading file');
-  }
+const onDownloadFile = () => {
+  console.log('download file');
 };
 </script>
 
@@ -176,6 +223,7 @@ const onDownloadFile = async (file) => {
   align-items: center;
   justify-content: space-between;
   flex-grow: 1;
+  gap: 0 1rem;
   height: 5.2rem;
   padding: 0 2rem;
   background-color: #f6f6f6;
@@ -184,8 +232,18 @@ const onDownloadFile = async (file) => {
   font-size: var(--fz-m);
 }
 
-.upload-file-item+.upload-file-item {
+.upload-file-item + .upload-file-item {
   margin-top: 1.2rem;
+}
+
+.upload-file-item__name {
+  min-width: 0;
+  flex: 1;
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: left;
 }
 
 .preview-wrap {

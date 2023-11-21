@@ -5,14 +5,16 @@ import IconCirCleCheck from '@/components/Icons/Icon/IconCirCleCheck.vue';
 import IconError from '@/components/Icons/Icon/IconError.vue';
 
 const customToast = {
-  success: (message) => {
+  success: (message, options = {}) => {
     toast.success(message, {
       icon: IconCirCleCheck,
+      ...options,
     });
   },
-  error: (message) => {
+  error: (message, options = {}) => {
     toast.error(message, {
       icon: IconError,
+      ...options,
     });
   },
 };

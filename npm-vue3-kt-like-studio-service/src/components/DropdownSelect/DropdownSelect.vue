@@ -1,9 +1,15 @@
-<!-- <template>
+<template>
   <div
+    ref="dropdownContainerRef"
     class="select-area"
-    :class="[props.classBind, disabled && props.disabled]"
+    :class="[props.classBind, props.disabled && 'disable']"
   >
-    <button type="button" class="select-btn" @click="selectOpen">
+    <button
+      type="button"
+      class="select-btn"
+      :data-id="dropdownId"
+      @click="handleSelectToggle"
+    >
       {{ props.defaultSelect }}
       <Icons
         icon-name="chevron_b_bold"
@@ -16,17 +22,21 @@
         v-if="props.disabled"
       />
     </button>
-    <div class="select-list-wrap">
-      <ul>
+    <div ref="selectListWrapRef" class="select-list-wrap">
+      <ul ref="selectListRef">
         <li class="select-list-node select">
-          <button type="button">{{ props.defaultSelect }}</button>
+          <button @click="handleOptionSelect(defaultSelect)" type="button">
+            {{ props.defaultSelect }}
+          </button>
         </li>
         <li
           class="select-list-node"
           v-for="item in props.selectList"
           :key="item.id"
         >
-          <button type="button">{{ item.listName }}</button>
+          <button @click="handleOptionSelect(item.id)" type="button">
+            {{ item.listName }}
+          </button>
         </li>
       </ul>
     </div>
@@ -34,6 +44,9 @@
 </template>
 
 <script setup>
+import { v4 as uuid } from 'uuid';
+import { onMounted, onUnmounted, ref, watch } from 'vue';
+
 import Icons from '@/components/Icons/Icons.vue';
 
 const props = defineProps({
@@ -59,23 +72,54 @@ const props = defineProps({
   },
 });
 
-function selectOpen(e) {
-  if (!e.target.parentNode.classList.contains('disable')) {
-    const findParent = e.target.parentNode.querySelector('.select-list-wrap');
-    const btnIcon = e.target.querySelector('.icon-wrap');
-    const listH =
-      findParent.querySelector('.select-list-wrap > ul').clientHeight + 14;
+const dropdownId = uuid();
+const dropdownContainerRef = ref(null);
+const selectListWrapRef = ref(null);
+const selectListRef = ref(null);
+const btnIcon = ref(null);
+const selectListHeight = ref(null);
+const betweenPadding = 14;
+const optionIsOpen = ref(false);
 
-    findParent.style.height = `${listH}px`;
-    if (findParent.clientHeight <= 15) {
-      findParent.style.height = `${listH}px`;
-      btnIcon.style.transform = 'rotate(180deg) translateY(50%)';
+watch(
+  () => optionIsOpen.value,
+  (newValue) => {
+    if (newValue) {
+      selectListWrapRef.value.style.height = `${selectListHeight.value}px`;
+      btnIcon.value.style.transform = 'rotate(180deg) translateY(50%)';
     } else {
-      findParent.style.height = `0px`;
-      btnIcon.style.transform = 'translateY(-50%)';
+      selectListWrapRef.value.style.height = `0px`;
+      btnIcon.value.style.transform = 'translateY(-50%)';
     }
+  },
+);
+
+const handleSelectToggle = () => {
+  optionIsOpen.value = !optionIsOpen.value;
+};
+
+const handleOptionSelect = (id) => {
+  console.log('id', id);
+  handleSelectToggle();
+};
+
+const handleDropdownClose = (e) => {
+  const { target } = e;
+  const targetId = target.getAttribute('data-id');
+  if (!target || !targetId || targetId !== dropdownId) {
+    optionIsOpen.value = false;
   }
-}
+};
+
+onMounted(() => {
+  btnIcon.value = dropdownContainerRef.value.querySelector('.icon-wrap');
+  selectListHeight.value = selectListRef.value.offsetHeight + betweenPadding;
+  document.addEventListener('click', handleDropdownClose);
+});
+
+onUnmounted(() => {
+  document.removeEventListener('click', handleDropdownClose);
+});
 </script>
 
 <style scoped>
@@ -83,14 +127,6 @@ function selectOpen(e) {
   position: relative;
   display: inline-block;
   min-width: 58rem;
-  width: 100%;
-  border: 1px solid var(--color-gray-ddd);
-  border-radius: 0.6rem;
-  background: var(--color-neutrals-white-100);
-}
-
-.select-area:hover {
-  border-color: var(--color-primary);
 }
 
 .select-btn {
@@ -98,12 +134,21 @@ function selectOpen(e) {
   box-sizing: border-box;
   overflow: hidden;
   padding: 1.1rem 4.8rem 1.1rem 1.2rem;
+  border-radius: 0.6rem;
+  border: 1px solid var(--color-gray-ddd);
+  background: var(--color-neutrals-white-100);
   font-size: var(--fz-m);
   width: 100%;
+  height: 4.6rem;
   max-width: 58rem;
   text-overflow: ellipsis;
   white-space: nowrap;
   text-align: left;
+  line-height: 1;
+}
+
+.select-area:hover .select-btn {
+  border-color: var(--color-primary);
 }
 
 .select-btn .icon-wrap {
@@ -144,10 +189,6 @@ function selectOpen(e) {
   background: #f6f6f6;
 }
 
-.select-list-node {
-  padding: 1.2rem 2.4rem;
-}
-
 .select-list-node:hover {
   color: var(--color-neutrals-black);
   background: #f6f6f6;
@@ -155,6 +196,7 @@ function selectOpen(e) {
 
 .select-list-node button {
   width: 100%;
+  padding: 1.2rem 2.4rem;
   text-align: left;
 }
 
@@ -164,47 +206,14 @@ function selectOpen(e) {
 
 .select-area.disable {
   color: var(--color-gray-777);
+  pointer-events: none;
 }
+
 .select-area.disable .select-btn {
   background: #f6f6f6;
 }
+
 :deep(.select-wrap.disable .icon-wrap) {
   --icon-color: var(--color-gray-777) !important;
 }
-</style> -->
-
-<template>
-  <div class="dropdown-select w-full h-20 ">
-    <select v-model="selectedValue" @change="handleChange" class="w-full h-20 border-solid border-2 border-black rounded-xl text-2xl cursor-pointer">
-      <option :value="null" disabled selected hidden>전체</option>
-      <option v-for="option in selectList" :key="option.id" :value="option.id" class="text-2xl cursor-pointer">
-        {{ option.listName }}
-      </option>
-    </select>
-  </div>
-</template>
-
-<script setup>
-import { ref, defineProps, defineEmits, onMounted } from 'vue';
-
-const props = defineProps(['selectList', 'defaultSelect']);
-const emit = defineEmits();
-
-const selectedValue = ref(null);
-
-const handleChange = (event) => {
-  const selectedOption = props.selectList.find(option => option.id === parseInt(event.target.value, 10));
-  selectedValue.value = selectedOption.id;
-  emit('select', selectedOption);
-};
-
-onMounted(() => {
-  // Set the default selected value when the component is mounted
-  if (props.defaultSelect) {
-    const defaultOption = props.selectList.find(option => option.listName === props.defaultSelect);
-    if (defaultOption) {
-      selectedValue.value = defaultOption.id;
-    }
-  }
-});
-</script>
+</style>

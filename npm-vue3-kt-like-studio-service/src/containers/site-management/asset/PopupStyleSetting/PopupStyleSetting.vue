@@ -25,24 +25,24 @@
     </div>
 
     <div class="flex gap-x-[1rem] justify-center mt-[3.2rem]">
-      <Button
+      <UIButton
         @click="handleClose"
         component="button"
         color-type="outlined"
         size="small"
-        >취소</Button
+        >취소</UIButton
       >
-      <Button component="button" color-type="primary" size="small"
-        >업로드</Button
+      <UIButton component="button" color-type="primary" size="small"
+        >업로드</UIButton
       >
     </div>
   </PopupMedium>
 </template>
 
 <script setup>
-import Button from '@/components/Button/Button.vue';
 import PopupMedium from '@/components/PopupMedium/PopupMedium.vue';
 import Radio from '@/components/Radio/Radio.vue';
+import UIButton from '@/components/UIButton/UIButton.vue';
 
 const props = defineProps({
   isOpen: {

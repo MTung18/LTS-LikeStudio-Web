@@ -11,26 +11,19 @@
       <li
         v-for="item in [0, 1, 2, 3, 4, 5]"
         :key="item"
-        class="rolling__item"
-        role="button"
+        class="rolling__item group"
         tabindex="0"
+        @click="handleSliderLayoutPopupOpen"
+        @keydown.enter="handleSliderLayoutPopupOpen"
       >
         <img :src="getImageUrl(item + 1)" alt="예시 이미지" />
-        <div class="item-detail">
-          <div class="item-detail__area">
-            <b class="item-detail__title"
-              >KT만의 강인한 혜택 이강인 가족 패키지</b
-            >
-            <ul class="item-detail__category-list">
-              <li class="item-detail__category-item">전략기획팀</li>
-              <li class="item-detail__category-item">김동욱</li>
-            </ul>
-            <div class="item-detail__length">
-              <Icons icon-name="sheet" />
-              <span>2</span>
-            </div>
-          </div>
-        </div>
+        <GalleryDetailInfo
+          class="group-hover:flex"
+          title="KT만의 강인한 혜택 이강인 가족 패키지"
+          position="전략기획팀"
+          writer="김동욱"
+          :item-length="2"
+        />
       </li>
     </ul>
   </div>
@@ -39,7 +32,11 @@
 <script setup>
 import { onMounted, ref } from 'vue';
 
-import Icons from '@/components/Icons/Icons.vue';
+import GalleryDetailInfo from '@/components/GalleryDetailInfo/GalleryDetailInfo.vue';
+import useMainStore from '@/stores/modules/main';
+
+const mainStore = useMainStore();
+const { handleSliderLayoutPopupOpen } = mainStore;
 
 const isRolling = ref(true);
 const rollingContainer = ref(null);
@@ -136,7 +133,7 @@ const getImageUrl = (name) => {
 
 .item-detail__category-list {
   display: flex;
-  gap: 0 2.8rem;
+  gap: 0 1.4rem;
   margin-top: 1.6rem;
   font-size: var(--fz-m);
   font-weight: 500;
@@ -145,18 +142,24 @@ const getImageUrl = (name) => {
 
 .item-detail__category-item {
   position: relative;
+  max-width: 50%;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 
-.item-detail__category-item:not(:last-child):before {
+.item-detail__category-item:last-child::before {
   position: absolute;
   top: 0;
-  right: -1.4rem;
+  left: 0;
   content: '';
   width: 1px;
   height: 100%;
   background-color: rgba(255, 255, 255, 0.3);
 }
-
+.item-detail__category-item:last-child {
+  padding-left: 1.4rem;
+}
 .item-detail__length {
   display: flex;
   align-items: center;

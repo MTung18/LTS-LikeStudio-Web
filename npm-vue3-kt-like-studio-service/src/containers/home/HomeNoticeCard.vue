@@ -9,12 +9,15 @@
         size="large"
         type="outlined"
         component="a"
-        href=""
+        href="/customer-service/announcements"
       />
     </div>
     <ul class="notice__list">
       <li class="notice__item" v-for="item in data" :key="item.id">
-        <RouterLink to="" class="notice__item-wrap">
+        <RouterLink
+          to="/customer-service/announcements/1"
+          class="notice__item-wrap"
+        >
           <p class="notice__item-title">{{ item.title }}</p>
           <span class="notice__item-date">{{ item.date }}</span>
         </RouterLink>

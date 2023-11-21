@@ -66,46 +66,33 @@
         </div>
       </div>
       <Pagination v-if="tableData1 && tableData1.length > 0" :page-number="5" />
-      <div class="radio-area" v-if="tableData1 && tableData1.length > 0">
-        <p class="cate">형태</p>
-        <div class="radio-list">
-          <Radio
-            :check-list="'동의'"
-            :id="'agree1'"
-            :name="'agree'"
-            checked="checked"
-          />
-          <Radio :check-list="'미동의'" :id="'agree2'" :name="'agree'" />
-        </div>
-      </div>
     </div>
 
     <div
       class="flex gap-x-[1rem] justify-center mt-[3.2rem]"
       v-if="tableData1 && tableData1.length > 0"
     >
-      <Button
+      <UIButton
         @click="handleClose"
         component="button"
         color-type="outlined"
         size="small"
-        >취소</Button
+        >취소</UIButton
       >
-      <Button component="button" color-type="primary" size="small"
-        >업로드</Button
+      <UIButton component="button" color-type="primary" size="small"
+        >업로드</UIButton
       >
     </div>
   </PopupMedium>
 </template>
 
 <script setup>
-import Button from '@/components/Button/Button.vue';
 import Icons from '@/components/Icons/Icons.vue';
 import ManageHeadForm from '@/components/ManageHeadForm/ManageHeadForm.vue';
 import Pagination from '@/components/Pagination/Pagination.vue';
 import PopupMedium from '@/components/PopupMedium/PopupMedium.vue';
-import Radio from '@/components/Radio/Radio.vue';
 import TemplateDataNone from '@/components/TemplateDataNone/TemplateDataNone.vue';
+import UIButton from '@/components/UIButton/UIButton.vue';
 
 const props = defineProps({
   isOpen: {

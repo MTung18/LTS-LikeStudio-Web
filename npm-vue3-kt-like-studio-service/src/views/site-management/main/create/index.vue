@@ -74,7 +74,7 @@
             :check-list="'새창'"
             :id="'no'"
             :shape-type="'square'"
-            :name="'choise'"
+            :name="'choice'"
           ></CheckBox>
         </div>
       </TemplateEditTextFields>
@@ -96,21 +96,21 @@
 
     <template #foot>
       <div class="flex mt-[6rem] justify-center gap-x-[1rem]">
-        <Button
+        <UIButton
           component="button"
           color-type="outlined"
           size="large"
           class-bind="!min-w-[14rem]"
           @click="handleCreateCancel"
-          >취소</Button
+          >취소</UIButton
         >
-        <Button
+        <UIButton
           component="button"
           color-type="primary"
           size="large"
           class-bind="!min-w-[14rem]"
           @click="handleCreateSubmit"
-          >등록</Button
+          >등록</UIButton
         >
       </div>
     </template>
@@ -121,7 +121,6 @@
 import { v4 as uuid } from 'uuid';
 import { ref } from 'vue';
 
-import Button from '@/components/Button/Button.vue';
 import CalenderGroup from '@/components/CalenderGroup/CalenderGroup.vue';
 import CheckBox from '@/components/CheckBox/CheckBox.vue';
 import RoundTabs from '@/components/RoundTabs/RoundTabs.vue';
@@ -130,6 +129,7 @@ import TemplateEdit from '@/components/TemplateEdit/TemplateEdit.vue';
 import TemplateEditFileFields from '@/components/TemplateEditFileFields/TemplateEditFileFields.vue';
 import TemplateEditTextFields from '@/components/TemplateEditTextFields/TemplateEditTextFields.vue';
 import TextFields from '@/components/TextFields/TextFields.vue';
+import UIButton from '@/components/UIButton/UIButton.vue';
 import customToast from '@/untils/custom_toast';
 
 const inputId = uuid();
