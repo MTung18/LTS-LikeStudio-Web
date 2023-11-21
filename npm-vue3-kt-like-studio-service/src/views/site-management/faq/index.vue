@@ -11,7 +11,7 @@
             {{ category.value }}</Tabs>
         </li>
       </ul>
-      <RoundButton component="button" color-type="filed" size="medium">등록</RoundButton>
+        <RoundButton  href="/site-management/faq/create" component="a" color-type="filed" size="medium">등록</RoundButton>
     </div>
     <div class="manage_list-wrap">
       <div class="manage_table-wrap">
@@ -34,7 +34,7 @@
               <td class="num">{{ item.rowNumber }}</td>
               <td>{{ item.categoryValue }}</td>
               <td class="title !text-left">
-                <RouterLink to="/site-management/faq/edit">{{
+                <RouterLink :to="`/site-management/faq/${item.id}/edit`">{{
                   item.title
                 }}</RouterLink>
               </td>
@@ -93,7 +93,7 @@ async function getListCategory(functionType) {
   await storeOfCategory.getListCategory(functionType)
   categories.value = listCategory.value;
   categories.value.unshift({
-    id: 0,
+    id: "0",
     value: "Default",
     functionType: 1,
     key: ""

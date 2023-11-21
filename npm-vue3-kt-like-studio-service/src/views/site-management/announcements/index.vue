@@ -9,9 +9,8 @@
         <DropdownSelect :selectList="optionList.listData" :dselectefault-="optionList.defaultSelect"
           @select="handleSelect"></DropdownSelect>
       </div>
-      <RouterLink to="/site-management/announcements/create">
-        <RoundButton component="button" color-type="filed" size="medium">등록</RoundButton>
-      </RouterLink>
+      <RoundButton component="a" href="/site-management/announcements/create" color-type="filed" size="medium">등록
+      </RoundButton>
     </div>
     <div class="manage_list-wrap">
       <div class="manage_table-wrap">
@@ -133,7 +132,8 @@ onMounted(async () => {
 }
 
 .select-wrap {
-  margin-bottom: 2.4rem;
+  padding-bottom: 2.4rem;
+  border-bottom: 1px solid var(--color-neutrals-black);
 }
 
 .drop-txt {
@@ -177,6 +177,20 @@ onMounted(async () => {
   border-radius: 50px;
   margin-right: 1.6rem;
   color: var(--color-primary);
-  height: 30px;
+}
+
+.search-filter {
+  max-width: 1200px;
+  padding: 2.6rem;
+  margin: 7.2rem auto 7.2rem;
+  background-color: #f6f6f6;
+}
+
+.search-filter__bottom {
+  display: flex;
+}
+
+.search-filter__top+.search-filter__bottom {
+  margin-top: 2.6rem;
 }
 </style>

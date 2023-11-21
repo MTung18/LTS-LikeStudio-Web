@@ -176,6 +176,7 @@ const onDownloadFile = async (file) => {
   align-items: center;
   justify-content: space-between;
   flex-grow: 1;
+  gap: 0 1rem;
   height: 5.2rem;
   padding: 0 2rem;
   background-color: #f6f6f6;
@@ -186,6 +187,16 @@ const onDownloadFile = async (file) => {
 
 .upload-file-item+.upload-file-item {
   margin-top: 1.2rem;
+}
+
+.upload-file-item__name {
+  min-width: 0;
+  flex: 1;
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: left;
 }
 
 .preview-wrap {

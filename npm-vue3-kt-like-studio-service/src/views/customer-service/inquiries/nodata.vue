@@ -2,7 +2,7 @@
   <TemplateBoardWrap title="1:1 문의">
     <template v-if="!firstVisit">
       <div class="mt-[4rem] text-center">
-        <Button
+        <UIButton
           class-bind="!min-w-[18rem]"
           component="a"
           href="/customer-service/inquiries/create"
@@ -15,7 +15,7 @@
             icon-name="arrow_next_bold"
             icon-color="var(--color-neutrals-white-100)"
           />
-        </Button>
+        </UIButton>
       </div>
       <CustomerSearchWrap>
         <CalenderGroup />

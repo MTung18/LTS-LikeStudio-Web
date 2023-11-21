@@ -13,11 +13,12 @@
         :files="dummyData.files"
         :prev-post="dummyData.prevPost"
         :next-post="dummyData.nextPost"
+        class="pb-[6rem] border-gray-gray-ddd border-b-[1px]"
       />
       <TemplateEditTextFields
         v-if="props.state === 'unanswered' || state === 'edit'"
         label="답변"
-        class-bind="pt-[2.8rem]"
+        class-bind="relative pt-[2.8rem] after:absolute after:bottom-[-1px] after:left-0 after:content-[''] after:w-full after:h-[1px] after:bg-neutrals-black"
       >
         <TextArea
           v-bind="$attrs"
@@ -31,6 +32,7 @@
           @file-remove="handleFileRemove"
           :files="dummyfiles"
           file-caption-title="첨부파일은 최대 10개, 1개 파일당 50MB 이하의 아래 확장자만 업로드 가능합니다."
+          fileMaxLength="10"
           :file-format="[
             '압축 파일 : zip, 7z, alz, egg',
             '문서 파일 : xls, xlsx, ppt, pptx, doc, docx, pdf',
@@ -42,6 +44,7 @@
       <DetailAnswer
         v-if="props.state === 'answered'"
         :content="dummyAnswer.content"
+        class="before:absolute before:bottom-[-1px] before:left-0 after:content-[''] before:w-full before:h-[1px] before:bg-neutrals-black"
       >
         <FileDownload :files="dummyAnswer.files" />
         <TemplateEditInfo
@@ -61,45 +64,45 @@
         v-if="state === 'unanswered' || state === 'edit'"
         class="flex gap-x-[1rem] justify-center"
       >
-        <Button
+        <UIButton
           component="button"
           color-type="outlined"
           size="large"
           class-bind="!min-w-[14rem]"
           @click="onDeleteButton"
-          >취소</Button
+          >취소</UIButton
         >
-        <Button
+        <UIButton
           component="button"
           color-type="primary"
           size="large"
           class-bind="!min-w-[14rem]"
           @click="onSubmitButton"
-          >답변 등록</Button
+          >답변 등록</UIButton
         >
       </div>
       <div v-if="state === 'answered'" class="flex gap-x-[1rem]">
-        <Button
+        <UIButton
           component="button"
           color-type="standard"
           size="large"
           class-bind="!min-w-[14rem]"
-          >답변 삭제</Button
+          >답변 삭제</UIButton
         >
-        <Button
+        <UIButton
           component="a"
           href="/site-management/inquiries"
           color-type="outlined"
           size="large"
           class-bind="ml-auto !min-w-[14rem]"
-          >목록</Button
+          >목록</UIButton
         >
-        <Button
+        <UIButton
           component="button"
           color-type="primary"
           size="large"
           class-bind="!min-w-[14rem]"
-          >답변 수정</Button
+          >답변 수정</UIButton
         >
       </div>
     </template>
@@ -111,7 +114,6 @@ import { v4 as uuid } from 'uuid';
 import { defineProps, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
-import Button from '@/components/Button/Button.vue';
 import FileDownload from '@/components/FileDownload/FileDownload.vue';
 import TemplateDetailBody from '@/components/TemplateDetailBody/TemplateDetailBody.vue';
 import TemplateDetailHead from '@/components/TemplateDetailHead/TemplateDetailHead.vue';
@@ -120,6 +122,7 @@ import TemplateEditFileFields from '@/components/TemplateEditFileFields/Template
 import TemplateEditInfo from '@/components/TemplateEditInfo/TemplateEditInfo.vue';
 import TemplateEditTextFields from '@/components/TemplateEditTextFields/TemplateEditTextFields.vue';
 import TextArea from '@/components/TextArea/TextArea.vue';
+import UIButton from '@/components/UIButton/UIButton.vue';
 import DetailAnswer from '@/containers/customer-service/inquiries/DetailAnswer.vue';
 
 const router = useRouter();

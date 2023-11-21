@@ -4,6 +4,7 @@
       {{ props.content }}
     </div>
 
+    <!-- <FileDownload :files="props.files" /> -->
     <FileDownload class-bind="!mt-0" v-for="item in props.files" :key="item.id" :files="[
       { id: item.id, filename: item.oriFileName, filePath: item.uniqFileName },
     ]" />
@@ -26,6 +27,55 @@
         </button>
       </li>
     </ul>
+
+    <!-- <ul v-if="props.prevPost && props.nextPost" class="nav">
+      <li class="nav__item nav--prev" :class="!prevPost.title && 'is-disabled'">
+        <button
+          type="button"
+          @click="goToPost(props.prevPost.id)"
+          class="nav__item-area"
+        >
+          <Icons
+            icon-name="chevron_t"
+            :icon-color="
+              props.prevPost.title
+                ? 'var(--color-neutrals-black)'
+                : 'var(--color-gray-bbb)'
+            "
+            :width="1.4"
+            :height="1.4"
+          />
+          <span class="nav__item-desc">이전글</span>
+          <span v-if="prevPost.title" class="nav__item-title">{{
+            props.prevPost.title
+          }}</span>
+          <span v-else class="nav__item-title">이전글이 없습니다.</span>
+        </button>
+      </li>
+      <li class="nav__item nav--prev" :class="!nextPost.title && 'is-disabled'">
+        <button
+          type="button"
+          @click="goToPost(props.nextPost.id)"
+          class="nav__item-area"
+        >
+          <Icons
+            icon-name="chevron_b"
+            :icon-color="
+              props.nextPost.title
+                ? 'var(--color-neutrals-black)'
+                : 'var(--color-gray-bbb)'
+            "
+            :width="1.4"
+            :height="1.4"
+          />
+          <span class="nav__item-desc">다음글</span>
+          <span v-if="nextPost.title" class="nav__item-title">
+            {{ props.nextPost.title }}
+          </span>
+          <span v-else class="nav__item-title">다음글이 없습니다.</span>
+        </button>
+      </li>
+    </ul> -->
   </div>
 </template>
 

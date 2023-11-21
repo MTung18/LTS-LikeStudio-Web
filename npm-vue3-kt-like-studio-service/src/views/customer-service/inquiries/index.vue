@@ -1,50 +1,58 @@
 <template>
   <TemplateBoardWrap title="1:1 문의">
-    <div class="mt-[4rem] text-center">
-      <Button class-bind="!min-w-[18rem]" component="a" href="/customer-service/inquiries/create" color-type="primary"
-        size="big" isIcon>
-        문의하기
-        <Icons icon-name="arrow_next_bold" icon-color="var(--color-neutrals-white-100)" />
-      </Button>
-    </div>
-    <CustomerSearchWrap>
-      <CalenderGroup @fromDate="fromDate" @toDate="toDate" />
-      <SearchInput v-model="inputValue" placeholder="검색어를 입력해주세요" size="medium" style-type="square" color-type="gray"
-        class-bind="ml-auto !min-w-[41.2rem]" />
-      <div class="search__button-group">
-        <RoundButton component="button" color-type="filed" size="medium" @click="search()">검색</RoundButton>
-
-        <RoundButton component="button" color-type="outlined" size="medium">초기화</RoundButton>
+    <template v-if="!firstVisit">
+      <div class="mt-[4rem] text-center">
+        <UIButton class-bind="!min-w-[18rem]" component="a" href="/customer-service/inquiries/create" color-type="primary"
+          size="big" isIcon>
+          문의하기
+          <Icons icon-name="arrow_next_bold" icon-color="var(--color-neutrals-white-100)" />
+        </UIButton>
       </div>
-    </CustomerSearchWrap>
+      <CustomerSearchWrap>
+        <CalenderGroup @fromDate="fromDate" @toDate="toDate" />
+        <SearchInput v-model="inputValue" placeholder="검색어를 입력해주세요" size="medium" style-type="square" color-type="gray"
+          class-bind="ml-auto !min-w-[41.2rem]" />
+        <div class="search__button-group">
+          <RoundButton component="button" color-type="filed" size="medium" @click="search()">검색</RoundButton>
 
-    <div v-if="listData.statusCode == 1">
-      <div class="list">
-        <RouterLink v-for="item in listData.data.list" :key="item.id" :to="`/customer-service/inquiries/${item.id}/${item.status == 1 ? 'answered' : 'unanswered'
-          }`" class="list__item">
-          <div class="item-no">{{ item.rowNumber }}</div>
-          <div class="item-title">
-            <span class="item-title-text">{{ item.title }}</span>
-          </div>
-          <div class="item-answer">
-            <span v-if="item.status == 1" class="item-answer--complete">답변완료</span>
-            <span v-else>답변대기</span>
-          </div>
-          <div class="item-date">
-            {{ `${item.createDate.slice(0, 4)}.${item.createDate.slice(5, 7)}.${item.createDate.slice(8, 10)}
-                        ${item.createDate.slice(11, 16)}` }}</div>
-        </RouterLink>
-      </div>
-      <Pagination :currentPage="currentPage" :pageNumber="totalPages" @numberPage="navigate" />
-      <!-- dev: 1:1 문의를 한적이 없을 때 -->
-    </div>
-    <TemplateDataNone v-else />
+          <RoundButton component="button" color-type="outlined" size="medium">초기화</RoundButton>
+        </div>
+      </CustomerSearchWrap>
+
+      <template v-if="listData.statusCode == 1">
+        <div class="list">
+          <RouterLink v-for="item in listData.data.list" :key="item.id" :to="`/customer-service/inquiries/${item.id}/${item.status == 1 ? 'answered' : 'unanswered'
+            }`" class="list__item">
+            <div class="item-no">{{ item.rowNumber }}</div>
+            <div class="item-title">
+              <span class="item-title-text">{{ item.title }}</span>
+            </div>
+            <div class="item-answer">
+              <span v-if="item.status == 1" class="item-answer--complete">답변완료</span>
+              <span v-else>답변대기</span>
+            </div>
+            <div class="item-date">
+              {{ `${item.createDate.slice(0, 4)}.${item.createDate.slice(5, 7)}.${item.createDate.slice(8, 10)}
+                            ${item.createDate.slice(11, 16)}` }}</div>
+          </RouterLink>
+        </div>
+        <Pagination :currentPage="currentPage" :pageNumber="totalPages" @numberPage="navigate" />
+        <!-- dev: 1:1 문의를 한적이 없을 때 -->
+      </template>
+      <template v-else>
+        <TemplateDataNone />
+      </template>
+    </template>
+    <template v-else>
+      <FirstVisit />
+    </template>
   </TemplateBoardWrap>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue';
-import Button from '@/components/Button/Button.vue';
+import UIButton from '@/components/UIButton/UIButton.vue';
+import FirstVisit from '@/containers/customer-service/inquiries/FirstVisit.vue';
 import CalenderGroup from '@/components/CalenderGroup/CalenderGroup.vue';
 import CustomerSearchWrap from '@/components/CustomerSearchWrap/CustomerSearchWrap.vue';
 import Icons from '@/components/Icons/Icons.vue';
@@ -63,6 +71,7 @@ const currentPage = ref();
 const totalPages = ref();
 const fromDateValue = ref()
 const toDateValue = ref()
+const firstVisit = ref(false);
 
 const userId = 1
 

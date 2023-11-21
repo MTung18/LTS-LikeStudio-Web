@@ -7,13 +7,13 @@
           :check-list="'미선택'"
           :id="'no'"
           :shape-type="'square'"
-          :name="'choise'"
+          :name="'choice'"
         ></CheckBox>
         <CheckBox
           :check-list="'선택'"
           :id="'yes'"
           :shape-type="'square'"
-          :name="'choise'"
+          :name="'choice'"
         ></CheckBox>
       </div>
       <p class="article__select-desc">check-box [suquare]</p>
@@ -22,13 +22,13 @@
           :check-list="'미선택'"
           :id="'no1'"
           :shape-type="'round'"
-          :name="'choise1'"
+          :name="'choice1'"
         ></CheckBox>
         <CheckBox
           :check-list="'선택'"
           :id="'yes1'"
           :shape-type="'round'"
-          :name="'choise1'"
+          :name="'choice1'"
         ></CheckBox>
       </div>
       <p class="article__select-desc">check-box [round]</p>

@@ -89,7 +89,7 @@ const handleCheckboxChange = (event) => {
 }
 
 .input-check__inner {
-  display: inline-flex;
+  display: flex;
   align-items: center;
   gap: 0 1rem;
   font-size: 1.4rem;
@@ -100,7 +100,8 @@ const handleCheckboxChange = (event) => {
   width: 2.4rem;
   height: 2.4rem;
   border-radius: 9999px;
-  border: 2px solid var(--color-gray-ddd);
+  border: 1px solid var(--color-gray-ddd);
+  background-color: var(--color-neutrals-white-100);
 }
 
 .square .input-check__box {
@@ -108,7 +109,8 @@ const handleCheckboxChange = (event) => {
   width: 1.8rem;
   height: 1.8rem;
   border-radius: 0.4rem;
-  border: 2px solid var(--color-gray-ddd);
+  border: 1px solid var(--color-gray-ddd);
+  background-color: var(--color-neutrals-white-100);
 }
 
 .input-check__box .check_icon {
@@ -132,7 +134,7 @@ input:checked + .input-check__inner .input-check__box .check_icon {
   display: block;
 }
 
-.round .input-check__name {
+.input-check__name {
   font-size: var(--fz-m);
   color: var(--color-gray-444);
 }
