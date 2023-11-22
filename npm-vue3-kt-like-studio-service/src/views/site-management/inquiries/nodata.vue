@@ -1,10 +1,10 @@
 <template>
   <TemplateBoardWrap title="1:1 문의 관리">
     <ManageHeadForm
-      :input-data1="inputData1"
-      :input-data2="inputData2"
-      :input-data3="inputData3"
-      :input-data4="inputData4"
+      :date-drop-down-select-data="registeredDate"
+      :first-drop-down-data="visibilityData"
+      :second-drop-down-data="applicationData"
+      :third-drop-down-data="serviceData"
       :only-search="true"
     />
 
@@ -31,7 +31,7 @@
         class-bind="!min-w-[12rem] ml-auto mr-0 "
       ></DropdownSelect>
     </div>
-    <div class="manage_list-wrap">
+    <div v-if="tableData && tableData.length > 0" class="manage_list-wrap">
       <div class="manage_table-wrap">
         <table>
           <thead>
@@ -44,7 +44,7 @@
               <th width="134px">답변여부</th>
             </tr>
           </thead>
-          <tbody v-if="tableData && tableData.length > 0">
+          <tbody>
             <tr v-for="item in tableData" :key="item.id">
               <td class="num">{{ item.no }}</td>
               <td>{{ item.cate }}</td>
@@ -63,9 +63,9 @@
           </tbody>
         </table>
       </div>
-      <div v-if="tableData && tableData.length <= 0">
-        <TemplateDataNone />
-      </div>
+    </div>
+    <div v-if="tableData && tableData.length <= 0">
+      <TemplateDataNone />
     </div>
     <Pagination v-if="tableData && tableData.length > 0" />
   </TemplateBoardWrap>
@@ -137,79 +137,119 @@ const optionList = {
   ],
 };
 const tableData = [];
-const inputData1 = {
+const registeredDate = {
   id: 1,
   cate: '등록일',
   defaultSelect: '등록일',
   listData: [
     {
       id: 1,
-      listName: '로그인1',
+      listName: '등록일',
     },
     {
       id: 2,
-      listName: '로그인2',
-    },
-    {
-      id: 3,
-      listName: '로그인3',
+      listName: '선택일',
     },
   ],
 };
-const inputData2 = {
+const visibilityData = {
   id: 1,
   cate: '노출',
   defaultSelect: '노출',
   listData: [
     {
       id: 1,
-      listName: '로그인1',
+      listName: '노출',
     },
     {
       id: 2,
-      listName: '로그인2',
+      listName: '미노출',
     },
     {
       id: 3,
-      listName: '로그인3',
+      listName: '전체',
     },
   ],
 };
-const inputData3 = {
+const applicationData = {
   id: 1,
   cate: '용도',
   defaultSelect: '전체',
   listData: [
     {
       id: 1,
-      listName: '로그인1',
+      listName: '전체',
     },
     {
       id: 2,
-      listName: '로그인2',
+      listName: '포스터',
     },
     {
       id: 3,
-      listName: '로그인3',
+      listName: '브로셔',
+    },
+    {
+      id: 4,
+      listName: '책받침',
+    },
+    {
+      id: 5,
+      listName: '전단지',
+    },
+    {
+      id: 6,
+      listName: 'X배너',
+    },
+    {
+      id: 7,
+      listName: 'SNS용',
+    },
+    {
+      id: 8,
+      listName: 'PPT',
+    },
+    {
+      id: 9,
+      listName: '기타',
     },
   ],
 };
-const inputData4 = {
+const serviceData = {
   id: 1,
   cate: '상품서비스',
   defaultSelect: '전체',
   listData: [
     {
       id: 1,
-      listName: '로그인1',
+      listName: '전체',
     },
     {
       id: 2,
-      listName: '로그인2',
+      listName: '무선',
     },
     {
       id: 3,
-      listName: '로그인3',
+      listName: '유선',
+    },
+    {
+      id: 4,
+      listName: '결합',
+    },
+    {
+      id: 5,
+      listName: '가족',
+    },
+    {
+      id: 6,
+      listName: '외국인',
+    },
+    {
+      id: 7,
+      listName: '멤버쉽',
+    },
+    {
+      id: 8,
+      listName: '제휴카드',
     },
   ],
 };
@@ -227,7 +267,8 @@ function updateSelectedCategory(selectedId) {
   font-weight: 400;
 }
 .select-wrap {
-  margin-bottom: 2.4rem;
+  padding-bottom: 2.4rem;
+  border-bottom: 1px solid var(--color-neutrals-black);
 }
 .category__list {
   display: flex;
@@ -246,5 +287,19 @@ function updateSelectedCategory(selectedId) {
 .manage_list-wrap table tbody td.title a {
   border-bottom: 0;
   line-height: 1;
+}
+.search-filter {
+  max-width: 1200px;
+  padding: 2.6rem;
+  margin: 7.2rem auto 7.2rem;
+  background-color: #f6f6f6;
+}
+
+.search-filter__bottom {
+  display: flex;
+}
+
+.search-filter__top + .search-filter__bottom {
+  margin-top: 2.6rem;
 }
 </style>

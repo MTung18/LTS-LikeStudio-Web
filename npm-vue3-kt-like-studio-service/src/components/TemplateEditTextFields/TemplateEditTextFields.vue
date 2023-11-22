@@ -31,7 +31,7 @@ const props = defineProps({
     type: String,
     default: 'medium',
     validator(value) {
-      return ['medium', 'small'].includes(value);
+      return ['medium', 'small', 'xsmall'].includes(value);
     },
   },
   classBind: {
@@ -45,7 +45,7 @@ const props = defineProps({
 .template-edit-input {
   display: flex;
   gap: 0 2rem;
-  padding-bottom: 3.2rem;
+  padding-bottom: 2.8rem;
 }
 
 .small.template-edit-input {
@@ -68,6 +68,11 @@ const props = defineProps({
   width: 10rem;
 }
 
+.xsmall .template-edit-input__label {
+  width: 10rem;
+  padding: 0.6rem 0;
+}
+
 .required {
   font-size: var(--fz-xl);
   font-weight: 700;
@@ -77,5 +82,7 @@ const props = defineProps({
 .template-edit-input__input-wrap {
   flex-grow: 1;
   flex-shrink: initial;
+  min-width: 0;
+  font-size: 0;
 }
 </style>

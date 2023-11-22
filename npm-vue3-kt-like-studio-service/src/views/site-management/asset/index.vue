@@ -1,3 +1,8 @@
+<!--
+  231109 :
+  - 테이블 마크업이나 로직이 변경 될 수 있음
+  - 에셋 업로드 팝업의 테이블 마크업이나 로직이 변경 될 수 있음
+-->
 <template>
   <ManageListWrap title="에셋 관리">
     <div class="tab-list max-w-[1200px] mx-[auto]">
@@ -10,15 +15,86 @@
       </div>
     </div>
     <div class="tab-node" v-show="dummyTabs[0].isSelected">
-      <ManageHeadForm
-        :input-data1="inputData1"
-        :input-data2="inputData2"
-        :input-data3="inputData3"
-        :input-data4="inputData4"
-        :input-data5="inputData5"
-      />
+      <div class="search-filter">
+        <div class="search-filter__top">
+          <div class="top__left">
+            <DropdownSelect
+              :select-list="registeredDate.listData"
+              :default-select="registeredDate.defaultSelect"
+              class-bind="!min-w-[auto] !w-[10rem] mr-[1.4rem]"
+            ></DropdownSelect>
+            <CalenderGroup
+              :start-date="startDate"
+              :end-date="endDate"
+              @update:startDate="startDate = $event"
+              @update:endDate="endDate = $event"
+            />
+          </div>
+          <div class="top__center">
+            <div class="mr-[2rem]">
+              <span class="inline-block mr-[0.8rem] text-fz-m font-bold"
+                >노출</span
+              >
+              <DropdownSelect
+                :select-list="visibilityData.listData"
+                :default-select="visibilityData.defaultSelect"
+                class="!w-[10rem] !min-w-[auto]"
+              ></DropdownSelect>
+            </div>
+            <div class="flex items-center mr-[2rem]">
+              <span class="inline-block mr-[0.8rem] text-fz-m font-bold"
+                >1차<br />카테고리</span
+              >
+              <DropdownSelect
+                :select-list="applicationData.listData"
+                :default-select="applicationData.defaultSelect"
+                class="!w-[10rem] !min-w-[auto]"
+              ></DropdownSelect>
+            </div>
+            <div class="flex items-center mr-[2rem]">
+              <span class="inline-block mr-[0.8rem] text-fz-m font-bold"
+                >2차<br />카테고리</span
+              >
+              <DropdownSelect
+                :select-list="serviceData.listData"
+                :default-select="serviceData.defaultSelect"
+                class="!w-[10rem] !min-w-[auto]"
+              ></DropdownSelect>
+            </div>
+            <div class="flex items-center">
+              <span class="inline-block mr-[0.8rem] text-fz-m font-bold"
+                >파일 구분</span
+              >
+              <DropdownSelect
+                :select-list="fileTypeData.listData"
+                :default-select="fileTypeData.defaultSelect"
+                class="!w-[10rem] !min-w-[auto]"
+              ></DropdownSelect>
+            </div>
+          </div>
+        </div>
+        <div class="search-filter__bottom">
+          <SearchInput
+            placeholder="검색어를 입력해주세요"
+            size="medium"
+            style-type="square"
+            color-type="gray"
+            class="flex-1 mr-[1.4rem] !max-w-none"
+          />
+          <RoundButton
+            component="button"
+            color-type="filed"
+            size="medium"
+            class="mr-[1.4rem]"
+            >검색</RoundButton
+          >
+          <RoundButton component="button" color-type="outlined" size="medium"
+            >초기화</RoundButton
+          >
+        </div>
+      </div>
       <div
-        class="select-wrap w-full ml-auto mr-auto flex items-center mb-[2rem]"
+        class="select-wrap flex w-full text-right pb-[2rem] border-b-neutrals-black border-b-[1px]"
       >
         <div class="btn-area flex gap-[0.8rem]">
           <RoundButton
@@ -69,7 +145,7 @@
         >
       </div>
       <div class="manage_list-wrap">
-        <div class="manage_table-wrap">
+        <div class="manage_table-wrap custom-scrollbar">
           <table>
             <thead>
               <tr>
@@ -78,7 +154,7 @@
                     :check-list="''"
                     :id="'allCheck'"
                     :shape-type="'square'"
-                    :name="'choise'"
+                    :name="'choice'"
                     @change="allCheckEvent"
                   ></CheckBox>
                 </th>
@@ -105,7 +181,7 @@
                     :check-list="''"
                     :id="`check${item.id}`"
                     :shape-type="'square'"
-                    :name="'choise'"
+                    :name="'choice'"
                   ></CheckBox>
                 </td>
                 <td class="num">{{ item.no }}</td>
@@ -130,7 +206,7 @@
                 <td>{{ item.registrant }}</td>
                 <td>{{ item.registrateDate }}</td>
                 <td>
-                  <Button
+                  <UIButton
                     component="button"
                     color-type="outlined"
                     size="small"
@@ -138,7 +214,7 @@
                     class="!border-[#ddd] !font-normal"
                   >
                     <Icons icon-name="download" :width="1.4" :height="1.4" />
-                    다운로드</Button
+                    다운로드</UIButton
                   >
                 </td>
               </tr>
@@ -152,9 +228,57 @@
       <Pagination v-if="tableData && tableData.length > 0" />
     </div>
     <div class="tab-node" v-show="dummyTabs[1].isSelected">
-      <ManageHeadForm :input-data1="inputData1" :input-data2="inputData6" />
+      <div class="search-filter">
+        <div class="search-filter__top">
+          <div class="top__left">
+            <DropdownSelect
+              :select-list="registeredDate.listData"
+              :default-select="registeredDate.defaultSelect"
+              class-bind="!min-w-[auto] !w-[10rem] mr-[1.4rem]"
+            ></DropdownSelect>
+            <CalenderGroup
+              :start-date="startDate"
+              :end-date="endDate"
+              @update:startDate="startDate = $event"
+              @update:endDate="endDate = $event"
+            />
+          </div>
+          <div class="top__center">
+            <div class="mr-[2rem]">
+              <span class="inline-block mr-[0.8rem] text-fz-m font-bold"
+                >노출</span
+              >
+              <DropdownSelect
+                :select-list="visibilityData.listData"
+                :default-select="visibilityData.defaultSelect"
+                class="!w-[10.7rem] !min-w-[auto]"
+              ></DropdownSelect>
+            </div>
+          </div>
+        </div>
+        <div class="search-filter__bottom">
+          <SearchInput
+            placeholder="검색어를 입력해주세요"
+            size="medium"
+            style-type="square"
+            color-type="gray"
+            class="flex-1 mr-[1.4rem] !max-w-none"
+          />
+          <RoundButton
+            component="button"
+            color-type="filed"
+            size="medium"
+            class="mr-[1.4rem]"
+            >검색</RoundButton
+          >
+          <RoundButton component="button" color-type="outlined" size="medium"
+            >초기화</RoundButton
+          >
+        </div>
+      </div>
+
       <div
-        class="select-wrap w-full ml-auto mr-auto flex items-center mb-[2rem]"
+        class="select-wrap flex w-full text-right pb-[2rem] border-b-neutrals-black border-b-[1px]"
       >
         <div class="btn-area flex gap-[0.8rem]">
           <RoundButton
@@ -162,16 +286,8 @@
             color-type="lightOutlined"
             size="small"
             class="!h-[4.6rem]"
-            @click="popupCategorySettingIsOpen = true"
-            >카테고리 설정</RoundButton
-          >
-          <RoundButton
-            component="button"
-            color-type="lightOutlined"
-            size="small"
-            class="!h-[4.6rem]"
-            @click="popupTagSettingIsOpen = true"
-            >태그 설정</RoundButton
+            @click="popupStyleIsOpen = true"
+            >스타일 설정</RoundButton
           >
           <RoundButton
             component="button"
@@ -205,7 +321,7 @@
         >
       </div>
       <div class="manage_list-wrap">
-        <div class="manage_table-wrap">
+        <div class="manage_table-wrap custom-scrollbar">
           <table>
             <thead>
               <tr>
@@ -214,7 +330,7 @@
                     :check-list="''"
                     :id="'allCheck2'"
                     :shape-type="'square'"
-                    :name="'choise'"
+                    :name="'choice'"
                     @change="allCheckEvent"
                   ></CheckBox>
                 </th>
@@ -238,7 +354,7 @@
                     :check-list="''"
                     :id="`check1_${item.id}`"
                     :shape-type="'square'"
-                    :name="'choise'"
+                    :name="'choice'"
                   ></CheckBox>
                 </td>
                 <td class="num">{{ item.no }}</td>
@@ -260,7 +376,7 @@
                 <td>{{ item.registrant }}</td>
                 <td>{{ item.registrateDate }}</td>
                 <td>
-                  <Button
+                  <UIButton
                     component="button"
                     color-type="outlined"
                     size="small"
@@ -268,7 +384,7 @@
                     class="!border-[#ddd] !font-normal"
                   >
                     <Icons icon-name="download" :width="1.4" :height="1.4" />
-                    다운로드</Button
+                    다운로드</UIButton
                   >
                 </td>
               </tr>
@@ -282,15 +398,89 @@
       <Pagination v-if="tableData && tableData.length > 0" />
     </div>
     <div class="tab-node" v-show="dummyTabs[2].isSelected">
-      <ManageHeadForm
-        :input-data1="inputData1"
-        :input-data2="inputData2"
-        :input-data3="inputData3"
-        :input-data4="inputData4"
-        :check-box-list="checkBoxList.checkData"
-      />
+      <div class="search-filter">
+        <div class="search-filter__top">
+          <div class="top__left">
+            <DropdownSelect
+              :select-list="registeredDate.listData"
+              :default-select="registeredDate.defaultSelect"
+              class-bind="!min-w-[auto] !w-[10rem] mr-[1.4rem]"
+            ></DropdownSelect>
+            <CalenderGroup
+              :start-date="startDate"
+              :end-date="endDate"
+              @update:startDate="startDate = $event"
+              @update:endDate="endDate = $event"
+            />
+          </div>
+          <div class="top__center">
+            <div class="mr-[0.8rem]">
+              <span class="inline-block mr-[0.8rem] text-fz-m font-bold"
+                >노출</span
+              >
+              <DropdownSelect
+                :select-list="visibilityData.listData"
+                :default-select="visibilityData.defaultSelect"
+                class="!w-[9rem] !min-w-[auto]"
+              ></DropdownSelect>
+            </div>
+            <div class="flex items-center mr-[0.8rem]">
+              <span class="inline-block mr-[0.8rem] text-fz-m font-bold"
+                >스타일</span
+              >
+              <DropdownSelect
+                :select-list="applicationData.listData"
+                :default-select="applicationData.defaultSelect"
+                class="!w-[9rem] !min-w-[auto]"
+              ></DropdownSelect>
+            </div>
+            <div class="flex items-center">
+              <span class="inline-block mr-[0.8rem] text-fz-m font-bold"
+                >라이센스</span
+              >
+              <DropdownSelect
+                :select-list="serviceData.listData"
+                :default-select="serviceData.defaultSelect"
+                class="!w-[9rem] !min-w-[auto]"
+              ></DropdownSelect>
+            </div>
+          </div>
+          <div class="top__right">
+            <div class="top__right__checkbox-list">
+              <CheckBox
+                v-for="item in checkBoxList.checkData"
+                :key="item.id"
+                :check-list="item.checkList"
+                :id="item.checkId"
+                :shape-type="'square'"
+                :name="item.checkId"
+                >{{ item }}</CheckBox
+              >
+            </div>
+          </div>
+        </div>
+        <div class="search-filter__bottom">
+          <SearchInput
+            placeholder="검색어를 입력해주세요"
+            size="medium"
+            style-type="square"
+            color-type="gray"
+            class="flex-1 mr-[1.4rem] !max-w-none"
+          />
+          <RoundButton
+            component="button"
+            color-type="filed"
+            size="medium"
+            class="mr-[1.4rem]"
+            >검색</RoundButton
+          >
+          <RoundButton component="button" color-type="outlined" size="medium"
+            >초기화</RoundButton
+          >
+        </div>
+      </div>
       <div
-        class="select-wrap w-full ml-auto mr-auto flex items-center mb-[2rem]"
+        class="select-wrap flex w-full text-right pb-[2rem] border-b-neutrals-black border-b-[1px]"
       >
         <div class="btn-area flex gap-[0.8rem]">
           <RoundButton
@@ -298,16 +488,8 @@
             color-type="lightOutlined"
             size="small"
             class="!h-[4.6rem]"
-            @click="popupCategorySettingIsOpen = true"
-            >카테고리 설정</RoundButton
-          >
-          <RoundButton
-            component="button"
-            color-type="lightOutlined"
-            size="small"
-            class="!h-[4.6rem]"
-            @click="popupTagSettingIsOpen = true"
-            >태그 설정</RoundButton
+            @click="popupStyleIsOpen = true"
+            >스타일 설정</RoundButton
           >
           <RoundButton
             component="button"
@@ -336,12 +518,12 @@
           component="button"
           color-type="filed"
           size="medium"
-          @click="popupAssetUploadFontIsOpen = true"
+          @click="popupFontUploadIsOpen = true"
           >업로드</RoundButton
         >
       </div>
       <div class="manage_list-wrap">
-        <div class="manage_table-wrap">
+        <div class="manage_table-wrap custom-scrollbar">
           <table>
             <thead>
               <tr>
@@ -350,7 +532,7 @@
                     :check-list="''"
                     :id="'allCheck1'"
                     :shape-type="'square'"
-                    :name="'choise'"
+                    :name="'choice'"
                     @change="allCheckEvent"
                   ></CheckBox>
                 </th>
@@ -378,14 +560,14 @@
                     :check-list="''"
                     :id="`check2_${item.id}`"
                     :shape-type="'square'"
-                    :name="'choise'"
+                    :name="'choice'"
                   ></CheckBox>
                 </td>
                 <td class="num">{{ item.no }}</td>
                 <td class="title !text-left">
-                  <RouterLink to="/site-management/template/detail">{{
-                    item.title
-                  }}</RouterLink>
+                  <button type="button" @click="popupFontEditIsOpen = true">
+                    {{ item.title }}
+                  </button>
                 </td>
 
                 <td>{{ item.show }}</td>
@@ -401,7 +583,7 @@
                 <td>{{ item.registrant }}</td>
                 <td>{{ item.registrateDate }}</td>
                 <td>
-                  <Button
+                  <UIButton
                     component="button"
                     color-type="outlined"
                     size="small"
@@ -409,7 +591,7 @@
                     class="!border-[#ddd] !font-normal"
                   >
                     <Icons icon-name="download" :width="1.4" :height="1.4" />
-                    다운로드</Button
+                    다운로드</UIButton
                   >
                 </td>
               </tr>
@@ -440,8 +622,8 @@
     @close-button="popupAssetEditIsOpen = false"
   />
   <PopupAssetUploadFrames
-    :is-open="popupAssetUploadFontIsOpen"
-    @close-button="popupAssetUploadFontIsOpen = false"
+    :is-open="popupAssetUploadFrameIsOpen"
+    @close-button="popupAssetUploadFrameIsOpen = false"
   />
   <PopupAssetEditFont
     :is-open="popupAssetUploadFontIsOpen"
@@ -451,31 +633,41 @@
     :is-open="popupUploadIsOpen"
     @close-button="popupUploadIsOpen = false"
   />
-
   <PopupStyleSetting
-    :is-open="popupStyleSettingIsOpen"
-    @close-button="popupStyleSettingIsOpen = false"
+    :is-open="popupStyleIsOpen"
+    @close-button="popupStyleIsOpen = false"
+  />
+  <PopupFontUpload
+    :is-open="popupFontUploadIsOpen"
+    @close-button="popupFontUploadIsOpen = false"
+  />
+  <PopupFontEdit
+    :is-open="popupFontEditIsOpen"
+    @close-button="popupFontEditIsOpen = false"
   />
 </template>
 
 <script setup>
 import { ref } from 'vue';
 
-import Button from '@/components/Button/Button.vue';
+import CalenderGroup from '@/components/CalenderGroup/CalenderGroup.vue';
 import CheckBox from '@/components/CheckBox/CheckBox.vue';
 import DropdownSelect from '@/components/DropdownSelect/DropdownSelect.vue';
 import Icons from '@/components/Icons/Icons.vue';
-import ManageHeadForm from '@/components/ManageHeadForm/ManageHeadForm.vue';
 import ManageListWrap from '@/components/ManageListWrap/ManageListWrap.vue';
 import Pagination from '@/components/Pagination/Pagination.vue';
 import RoundButton from '@/components/RoundButton/RoundButton.vue';
 import RoundTabs from '@/components/RoundTabs/RoundTabs.vue';
+import SearchInput from '@/components/SearchInput/SearchInput.vue';
 import TemplateDataNone from '@/components/TemplateDataNone/TemplateDataNone.vue';
+import UIButton from '@/components/UIButton/UIButton.vue';
 import PopupAssetEdit from '@/containers/site-management/asset/PopupAssetEdit/PopupAssetEdit.vue';
 import PopupAssetEditFont from '@/containers/site-management/asset/PopupAssetEditFont/PopupAssetEditFont.vue';
 import PopupAssetUploadFrames from '@/containers/site-management/asset/PopupAssetUploadFrames/PopupAssetUploadFrames.vue';
 import PopupAssetVisibilitySetting from '@/containers/site-management/asset/PopupAssetVisibilitySetting/PopupAssetVisibilitySetting.vue';
 import PopupCategorySetting from '@/containers/site-management/asset/PopupCategorySetting/PopupCategorySetting.vue';
+import PopupFontEdit from '@/containers/site-management/asset/PopupFontEdit/PopupFontEdit.vue';
+import PopupFontUpload from '@/containers/site-management/asset/PopupFontUpload/PopupFontUpload.vue';
 import PopupStyleSetting from '@/containers/site-management/asset/PopupStyleSetting/PopupStyleSetting.vue';
 import PopupTagSetting from '@/containers/site-management/asset/PopupTagSetting/PopupTagSetting.vue';
 import PopupUpload from '@/containers/site-management/asset/PopupUpload/PopupUpload.vue';
@@ -487,7 +679,11 @@ const popupAssetEditIsOpen = ref(false);
 const popupAssetUploadFrameIsOpen = ref(false);
 const popupAssetUploadFontIsOpen = ref(false);
 const popupUploadIsOpen = ref(false);
-const popupStyleSettingIsOpen = ref(false);
+const popupStyleIsOpen = ref(false);
+const popupFontUploadIsOpen = ref(false);
+const popupFontEditIsOpen = ref(false);
+const startDate = ref('');
+const endDate = ref('');
 const optionList = {
   defaultSelect: '등록 순',
   listData: [
@@ -697,26 +893,22 @@ const tableData = [
     registrateDate: '2023.09.18 15:32',
   },
 ];
-const inputData1 = {
+const registeredDate = {
   id: 1,
   cate: '등록일',
   defaultSelect: '등록일',
   listData: [
     {
       id: 1,
-      listName: '로그인1',
+      listName: '등록일',
     },
     {
       id: 2,
-      listName: '로그인2',
-    },
-    {
-      id: 3,
-      listName: '로그인3',
+      listName: '선택일',
     },
   ],
 };
-const inputData2 = {
+const visibilityData = {
   id: 1,
   cate: '노출',
   defaultSelect: '전체',
@@ -735,7 +927,7 @@ const inputData2 = {
     },
   ],
 };
-const inputData3 = {
+const applicationData = {
   id: 1,
   cate: '1차<br/>카테고리',
   defaultSelect: '전체',
@@ -754,7 +946,7 @@ const inputData3 = {
     },
   ],
 };
-const inputData4 = {
+const serviceData = {
   id: 1,
   cate: '2차<br/>카테고리',
   defaultSelect: '전체',
@@ -773,44 +965,30 @@ const inputData4 = {
     },
   ],
 };
-const inputData5 = {
+const fileTypeData = {
   id: 1,
   cate: '파일 구분',
-  defaultSelect: '전체',
+  defaultSelect: '옵션',
   listData: [
     {
       id: 1,
-      listName: '로그인1',
+      listName: '전체',
     },
     {
       id: 2,
-      listName: '로그인2',
+      listName: '비트맵',
     },
     {
       id: 3,
-      listName: '로그인3',
+      listName: '백터',
+    },
+    {
+      id: 4,
+      listName: '그룹',
     },
   ],
 };
-const inputData6 = {
-  id: 1,
-  cate: '노출',
-  defaultSelect: '노출',
-  listData: [
-    {
-      id: 1,
-      listName: '로그인1',
-    },
-    {
-      id: 2,
-      listName: '로그인2',
-    },
-    {
-      id: 3,
-      listName: '로그인3',
-    },
-  ],
-};
+
 const checkBoxList = {
   id: 1,
   cate: 'language',
@@ -877,11 +1055,20 @@ function handleSelectedTab(selectedId) {
 </script>
 <style scoped>
 .manage_table-wrap {
-  max-height: 1100px;
+  max-height: calc(100vh - 150px);
 }
+
 .manage_table-wrap :deep(table) {
   width: 2219px;
 }
+
+.manage_table-wrap :deep(th) {
+  position: sticky;
+  top: 0;
+  background-color: var(--color-neutrals-white-100);
+  z-index: 1;
+}
+
 .tab-list {
   display: flex;
   margin-bottom: 4rem;
@@ -893,5 +1080,70 @@ function handleSelectedTab(selectedId) {
 }
 :deep(.round-tabs) {
   width: 100%;
+}
+
+.search-filter {
+  max-width: 1200px;
+  padding: 2.6rem;
+  margin: 4rem auto 10rem;
+  background-color: #f6f6f6;
+}
+
+.search-filter__top {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0 2rem;
+}
+
+.top__left {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.top__left::after {
+  position: absolute;
+  top: 0;
+  right: -1rem;
+  content: '';
+  width: 1px;
+  height: 100%;
+  background-color: var(--color-gray-ddd);
+}
+
+.top__center {
+  display: flex;
+  align-items: center;
+}
+
+.top__right {
+  display: flex;
+  align-self: stretch;
+}
+
+.top__right__checkbox-list {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0 1rem;
+}
+
+.top__right__checkbox-list::after {
+  position: absolute;
+  top: 0;
+  left: -1rem;
+  content: '';
+  width: 1px;
+  height: 100%;
+  background-color: var(--color-gray-ddd);
+}
+
+.search-filter__bottom {
+  display: flex;
+}
+
+.search-filter__top + .search-filter__bottom {
+  margin-top: 2.6rem;
 }
 </style>

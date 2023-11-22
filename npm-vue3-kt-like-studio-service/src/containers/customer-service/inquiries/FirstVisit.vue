@@ -12,7 +12,7 @@
       라이크 스튜디오를 이용해 주셔서 감사합니다. <br />
       문의 사항을 남겨주시면 빠르고 친절한 답변 드리겠습니다.
     </p>
-    <Button
+    <UIButton
       component="button"
       color-type="primary"
       size="big"
@@ -24,13 +24,13 @@
         icon-name="arrow_next_bold"
         icon-color="var(--color-neutrals-white-100)"
       />
-    </Button>
+    </UIButton>
   </div>
 </template>
 
 <script setup>
-import Button from '@/components/Button/Button.vue';
 import Icons from '@/components/Icons/Icons.vue';
+import UIButton from '@/components/UIButton/UIButton.vue';
 </script>
 
 <style scoped>

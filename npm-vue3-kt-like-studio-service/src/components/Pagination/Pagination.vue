@@ -1,7 +1,7 @@
 <template>
   <div class="pagination">
     <div class="pagination__prev-wrap">
-      <IconButton :disabled="isDisabledPrevButton" icon-name="arrow_prev_bold" size="semi-medium" type="outlined"
+      <IconButton :disabled="isDisabledPrevButton" icon-name="double_chevron_l" size="semi-medium" type="outlined"
         component="button" @click="firstPage()" />
       <IconButton :disabled="isDisabledPrevButton" icon-name="chevron_l" size="semi-medium" type="outlined"
         component="button" @click="prevPage()" />
@@ -17,7 +17,7 @@
     <div class="pagination__next-wrap">
       <IconButton :disabled="isDisabledNextButton" icon-name="chevron_r" size="semi-medium" type="outlined"
         component="button" @click="nextPage()" />
-      <IconButton :disabled="isDisabledNextButton" icon-name="arrow_next_bold" size="semi-medium" type="outlined"
+      <IconButton :disabled="isDisabledNextButton" icon-name="double_chevron_r" size="semi-medium" type="outlined"
         component="button" @click="lastPage()" />
     </div>
   </div>
@@ -89,7 +89,7 @@ onMounted(() => {
 
 .pagination__list {
   display: flex;
-  gap: 0 2.4rem;
+  gap: 0 2rem;
   margin: 0 2.8rem;
 }
 

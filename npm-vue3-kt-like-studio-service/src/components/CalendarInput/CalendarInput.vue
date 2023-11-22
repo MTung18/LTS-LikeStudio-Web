@@ -1,4 +1,6 @@
 <template>
+  <!-- <div class="datepicker" :class="[props.isDisabled && 'is-disabled']">
+    <date-picker :value="props.modelValue" @input="updateValue"> -->
   <div class="datepicker">
     <date-picker v-model="date">
       <template #default="{ inputValue, togglePopover }">
@@ -9,6 +11,13 @@
           role="button"
           tabindex="0"
         >
+        <!-- <input
+            class="datepicker__input"
+            v-bind="$attrs"
+            :value="inputValue"
+            :disabled="isDisabled"
+            readonly
+          /> -->
           <input class="datepicker__input" :value="inputValue" readonly />
           <Icons icon-name="calender_bold" icon-color="var(--color-gray-777)" />
         </div>
@@ -30,13 +39,37 @@ const emit = defineEmits(['date']);
 watch(date, (newValue) => {
   emit('date', newValue);
 });
+
+// const props = defineProps({
+//   modelValue: {
+//     type: String,
+//     default: '',
+//   },
+//   isDisabled: {
+//     type: Boolean,
+//     default: false,
+//   },
+// });
+
+
+// const emit = defineEmits(['update:modelValue']);
+
+// const updateValue = (newValue) => {
+//   console.log('CalendarInput', newValue);
+//   emit('update:modelValue', newValue);
+// };
 </script>
 
 <style scoped>
 .datepicker {
+  height: 4.6rem;
   border-radius: 0.4rem;
   border: 1px solid var(--color-gray-ddd);
   background: var(--color-neutrals-white-100);
+}
+
+.datepicker.is-disabled {
+  background-color: #f6f6f6;
 }
 
 .datepicker:hover {
@@ -47,7 +80,7 @@ watch(date, (newValue) => {
   display: flex;
   align-items: center;
   gap: 0 1.2rem;
-  height: 4.6rem;
+  height: 100%;
   padding: 0 1.6rem;
 }
 

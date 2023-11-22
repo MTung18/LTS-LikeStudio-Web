@@ -34,12 +34,12 @@
 
     <template #foot>
       <div class="flex mt-[6rem] justify-center gap-x-[1rem]">
-        <Button component="button" color-type="standard" size="large" class-bind="!min-w-[14rem]"
-          @click="handleEditDelete">삭제</Button>
-        <Button component="button" color-type="outlined" size="large" class-bind="!min-w-[14rem] !ml-auto"
-          @click="handleEditToList">목록</Button>
-        <Button component="button" color-type="primary" size="large" class-bind="!min-w-[14rem]"
-          @click="handleEdit">수정</Button>
+        <UIButton component="button" color-type="standard" size="large" class-bind="!min-w-[14rem]"
+          @click="handleEditDelete">삭제</UIButton>
+        <UIButton component="button" color-type="outlined" size="large" class-bind="!min-w-[14rem] !ml-auto"
+          @click="handleEditToList">목록</UIButton>
+        <UIButton component="button" color-type="primary" size="large" class-bind="!min-w-[14rem]"
+          @click="handleEdit">수정</UIButton>
       </div>
     </template>
   </TemplateEdit>
@@ -49,7 +49,7 @@
 import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
-import Button from '@/components/Button/Button.vue';
+import UIButton from '@/components/UIButton/UIButton.vue';
 import Switch from '@/components/Switch/Switch.vue';
 import TemplateEdit from '@/components/TemplateEdit/TemplateEdit.vue';
 import TemplateEditFileFields from '@/components/TemplateEditFileFields/TemplateEditFileFields.vue';

@@ -39,84 +39,82 @@ function handleSelectedTab(selectedId) {
         class="manage_setting-list"
         v-if="!props.onlySearch"
         :class="[
-          props.inputData5 ? '!gap-[1.2rem]' : '',
+          props.fileTypeData ? '!gap-[1.2rem]' : '',
           props.checkBoxList ? '!gap-[1rem]' : '',
         ]"
       >
         <li
           class="manage_setting-node"
           :class="[
-            props.inputData5 ? '!gap-[1.4rem]' : '',
+            props.fileTypeData ? '!gap-[1.4rem]' : '',
             props.checkBoxList ? '!gap-[1rem]' : '',
           ]"
         >
-          <div class="select-wrap" v-if="props.inputData1">
+          <div class="select-wrap" v-if="props.registeredDate">
             <DropdownSelect
-              :select-list="props.inputData1.listData"
-              :default-select="props.inputData1.defaultSelect"
+              :select-list="props.registeredDate.listData"
+              :default-select="props.registeredDate.defaultSelect"
               :class="props.checkBoxList ? ' !w-[10rem]' : ''"
               class-bind="!min-w-[auto] !w-[10.7rem]"
             ></DropdownSelect>
           </div>
           <div class="select-wrap">
-            <CalendarInput />
-            <span class="calendar__between">~</span>
-            <CalendarInput />
+            <CalenderGroup />
           </div>
         </li>
         <li
           class="manage_setting-node"
           :class="[
-            props.inputData5 ? '!pl-[1.2rem]' : '',
+            props.fileTypeData ? '!pl-[1.2rem]' : '',
             props.checkBoxList ? '!pl-[1rem] !gap-[0.8rem]' : '',
           ]"
         >
-          <div class="select-wrap" v-if="props.inputData2">
-            <span v-html="props.inputData2.cate"></span>
+          <div class="select-wrap" v-if="props.visibilityData">
+            <span v-html="props.visibilityData.cate"></span>
             <DropdownSelect
-              :select-list="props.inputData2.listData"
-              :default-select="props.inputData2.defaultSelect"
+              :select-list="props.visibilityData.listData"
+              :default-select="props.visibilityData.defaultSelect"
               :class="[
-                props.inputData5
+                props.fileTypeData
                   ? '!min-w-[auto] !w-[12.1rem] '
                   : '!min-w-[auto] !w-[10.7rem]',
                 props.checkBoxList ? '!w-[9rem]' : '',
               ]"
             ></DropdownSelect>
           </div>
-          <div class="select-wrap" v-if="props.inputData3">
-            <span v-html="props.inputData3.cate"></span>
+          <div class="select-wrap" v-if="props.applicationData">
+            <span v-html="props.applicationData.cate"></span>
             <DropdownSelect
-              :select-list="props.inputData3.listData"
-              :default-select="props.inputData3.defaultSelect"
+              :select-list="props.applicationData.listData"
+              :default-select="props.applicationData.defaultSelect"
               :class="[
-                props.inputData5
+                props.fileTypeData
                   ? '!min-w-[auto] !w-[9.5rem] drop-width-120'
                   : '!min-w-[auto] !w-[10.7rem]',
                 props.checkBoxList ? '!w-[9rem]' : '',
               ]"
             ></DropdownSelect>
           </div>
-          <div class="select-wrap" v-if="props.inputData4">
-            <span v-html="props.inputData4.cate"></span>
+          <div class="select-wrap" v-if="props.serviceData">
+            <span v-html="props.serviceData.cate"></span>
             <DropdownSelect
-              :select-list="props.inputData4.listData"
-              :default-select="props.inputData4.defaultSelect"
+              :select-list="props.serviceData.listData"
+              :default-select="props.serviceData.defaultSelect"
               :class="[
-                props.inputData5
+                props.fileTypeData
                   ? '!min-w-[auto] !w-[9.5rem] drop-width-120'
                   : '!min-w-[auto] !w-[10.7rem]',
                 props.checkBoxList ? '!w-[9rem]' : '',
               ]"
             ></DropdownSelect>
           </div>
-          <div class="select-wrap" v-if="props.inputData5">
-            <span v-html="props.inputData5.cate"></span>
+          <div class="select-wrap" v-if="props.fileTypeData">
+            <span v-html="props.fileTypeData.cate"></span>
             <DropdownSelect
-              :select-list="props.inputData5.listData"
-              :default-select="props.inputData5.defaultSelect"
+              :select-list="props.fileTypeData.listData"
+              :default-select="props.fileTypeData.defaultSelect"
               :class-bind="
-                props.inputData5
+                props.fileTypeData
                   ? '!min-w-[auto] !w-[9.5rem] drop-width-120'
                   : '!min-w-[auto] !w-[10.7rem]'
               "
@@ -202,23 +200,23 @@ const props = defineProps({
     type: Array,
     default: () => [],
   },
-  inputData1: {
+  registeredDate: {
     type: Object,
     default: null,
   },
-  inputData2: {
+  visibilityData: {
     type: Object,
     default: null,
   },
-  inputData3: {
+  applicationData: {
     type: Object,
     default: null,
   },
-  inputData4: {
+  serviceData: {
     type: Object,
     default: null,
   },
-  inputData5: {
+  fileTypeData: {
     type: Object,
     default: null,
   },

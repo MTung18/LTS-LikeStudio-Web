@@ -30,6 +30,7 @@ module.exports = {
     "vue/multi-word-component-names": "off",
     "import/no-unresolved": "error",
     "no-console": "off",
+    "import/no-extraneous-dependencies": "off"
   },
   settings: {
     ...createAliasSetting({

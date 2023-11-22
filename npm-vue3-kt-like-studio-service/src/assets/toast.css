@@ -2,11 +2,20 @@
     bottom: 16.6rem;
 }
 
+.Toastify__toast-container--bottom-center.custom-toast-bottom {
+    bottom: 2rem;
+}
+
+.Toastify__toast-container {
+    width: auto;
+}
+
 .Toastify__toast {
     justify-content: center;
     min-width: 31.5rem;
     height: 5.6rem;
     min-height: auto;
+    padding: 0 5.6rem;
     margin-bottom: 0;
     box-shadow: none;
     border-radius: 5.6rem;

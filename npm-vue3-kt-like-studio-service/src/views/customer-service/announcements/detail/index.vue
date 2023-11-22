@@ -12,8 +12,8 @@
     </template>
     <template #foot>
       <div class="text-center">
-        <Button component="a" href="/customer-service/announcements" color-type="standard" size="large"
-          class-bind="!min-w-[14rem]">목록</Button>
+        <UIButton component="a" href="/customer-service/announcements" color-type="standard" size="large"
+          class-bind="!min-w-[14rem]">목록</UIButton>
       </div>
     </template>
   </TemplateDetail>
@@ -22,7 +22,7 @@
 <script setup>
 import { onMounted, ref } from 'vue';
 
-import Button from '@/components/Button/Button.vue';
+import UIButton from '@/components/UIButton/UIButton.vue';
 import TemplateDetailBody from '@/components/TemplateDetailBody/TemplateDetailBody.vue';
 import TemplateDetailHead from '@/components/TemplateDetailHead/TemplateDetailHead.vue';
 import TemplateDetail from '@/components/TemplateDetailWrap/TemplateDetail.vue';
