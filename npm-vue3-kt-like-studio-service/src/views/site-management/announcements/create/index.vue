@@ -18,8 +18,8 @@
         <Switch :toggle="showValue" @someEvent="changeShow" />
       </TemplateEditTextFields>
       <TemplateEditTextFields label="내용" required v-model="inputRef">
-        <textarea class="h-[31.6rem] px-[1.6rem] py-[1.3rem] rounded-[0.6rem] border-[1px] border-gray-gray-ddd w-full"
-          id="message" name="message" rows="4" cols="50" v-model="noticeBoarDetail.content"></textarea>
+        <TextArea v-bind="$attrs" :textarea-id="textareaId" v-model="noticeBoarDetail.content" placeholder="내용 입력"
+          class-bind="w-full" />
       </TemplateEditTextFields>
       <TemplateEditTextFields label="첨부파일" class-bind="pt-[3.2rem] border-t-[1px] border-t-gray-gray-ddd">
         <TemplateEditFileFields @file-upload="handleFileUpload" @file-remove="handleFileRemove" :files="listFile"
@@ -34,12 +34,10 @@
 
     <template #foot>
       <div class="flex mt-[6rem] justify-center gap-x-[1rem]">
-        <Button component="button" color-type="standard" size="large" class-bind="!min-w-[14rem]"
-          @click="handleEditDelete">삭제</Button>
-        <Button component="button" color-type="outlined" size="large" class-bind="!min-w-[14rem] !ml-auto"
-          @click="handleEditToList">목록</Button>
-        <Button component="button" color-type="primary" size="large" class-bind="!min-w-[14rem]"
-          @click="handleEdit">수정</Button>
+        <UIButton component="button" color-type="outlined" size="large" class-bind="!min-w-[14rem]"
+          @click="handleCreateCancel">취소</UIButton>
+        <UIButton component="button" color-type="primary" size="large" class-bind="!min-w-[14rem]"
+          @click="handleCreateSubmit">등록</UIButton>
       </div>
     </template>
   </TemplateEdit>
@@ -49,12 +47,13 @@
 import { onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
-import Button from '@/components/Button/Button.vue';
+import UIButton from '@/components/UIButton/UIButton.vue';
 import Switch from '@/components/Switch/Switch.vue';
 import TemplateEdit from '@/components/TemplateEdit/TemplateEdit.vue';
 import TemplateEditFileFields from '@/components/TemplateEditFileFields/TemplateEditFileFields.vue';
 import TemplateEditTextFields from '@/components/TemplateEditTextFields/TemplateEditTextFields.vue';
 import TextFields from '@/components/TextFields/TextFields.vue';
+import TextArea from '@/components/TextArea/TextArea.vue';
 import customToast from '@/untils/custom_toast';
 import utils from '@/untils/utils';
 
@@ -65,7 +64,7 @@ import { storeToRefs } from 'pinia';
 const store = noticeBoardStore();
 const fileStore = fileManagerStore();
 const { responseAddNotice } = storeToRefs(store);
-const { response } = storeToRefs(fileStore);
+const { responseUploadFile } = storeToRefs(fileStore);
 const router = useRouter();
 
 const inputRef = ref('');
@@ -77,10 +76,9 @@ const ARCHIVE_FILES = ['zip', '7z', 'alz', 'egg', 'xls', 'xlsx', 'ppt', 'pptx', 
 const maxSizeFile = 50;
 
 const gimValue = ref();
-const showValue = ref();
+const showValue = ref(0);
 const popupValue = ref();
 const listFileSave = ref([]);
-const res = ref();
 
 const handleFileUpload = async (file) => {
   const sizeInMB = file.size / (1024 * 1024);
@@ -108,15 +106,8 @@ const handleFileUpload = async (file) => {
 const handleFileRemove = async (index) => {
   listFile.value.splice(index, 1)
 };
-const handleEditDelete = async () => {
-  if (window.confirm('Are you sure you want to delete?')) {
-    // await store.deleteNotice(noticeId.value)
-    router.push(`/site-management/announcements`)
-    customToast.success('Successfully delete notice')
-  }
-};
-const handleEditToList = () => {
-  router.push('/site-management/announcements');
+const handleCreateCancel = async () => {
+  router.push(`/site-management/announcements`)
 };
 
 function changeGim(status) {
@@ -132,7 +123,7 @@ function changeShow(status) {
 }
 
 const noticeBoardData = ref({});
-const handleEdit = async () => {
+const handleCreateSubmit = async () => {
   try {
     if (listFileSave.value.length) {
       const formData = new FormData();
@@ -140,12 +131,11 @@ const handleEdit = async () => {
         formData.append('files', listFileSave.value[i])
       }
       await fileStore.uploadFile(formData)
-      const responseData = response.value
-      if (responseData.statusCode !== 1) {
+      if (responseUploadFile.value.statusCode !== 1) {
         customToast.error('Error upload file.')
         return
       }
-      const filePaths = responseData.data.map(item => item.uniqFileName);
+      const filePaths = responseUploadFile.value.data.map(item => item.uniqFileName);
 
       listFile.value.forEach(item => {
         if (item.uniqFileName !== null) {
@@ -153,33 +143,34 @@ const handleEdit = async () => {
         }
       });
 
-      updatedFileManagerList.value = listFile.value.map((file, index) => ({
-        oriFileName: file.oriFileName,
-        createUser: 1,
-        uniqFileName: filePaths[index],
-      }));
+      noticeBoardData.value = {
+        noticeBoard: {
+          title: noticeBoarDetail.value.title,
+          content: noticeBoarDetail.value.content,
+          createUser: 1,
+          gim: gimValue.value,
+          show: showValue.value,
+          popup: popupValue.value,
+        },
+        fileManagerList: listFile.value,
+      }
     } else {
-      updatedFileManagerList.value = [];
-    }
-
-    noticeBoardData.value = {
-      noticeBoard: {
-        title: noticeBoarDetail.value.title,
-        content: noticeBoarDetail.value.content,
-        views: 0,
-        create_user: 1,
-        edit_use: 1,
-        gim: gimValue.value,
-        show: showValue.value,
-        popup: popupValue.value,
-      },
-      fileManagerList: updatedFileManagerList,
+      noticeBoardData.value = {
+        noticeBoard: {
+          title: noticeBoarDetail.value.title,
+          content: noticeBoarDetail.value.content,
+          createUser: 1,
+          gim: gimValue.value,
+          show: showValue.value,
+          popup: popupValue.value,
+        },
+        fileManagerList: [],
+      }
     }
 
     await store.addNotice(noticeBoardData.value);
-    res.value = responseAddNotice.value
 
-    if (res.value.statusCode === 1) {
+    if (responseAddNotice.value.statusCode === 1) {
       customToast.success('Successful create Notice.')
       router.push(`/site-management/announcements`)
     } else {
@@ -187,8 +178,8 @@ const handleEdit = async () => {
     }
 
   } catch (error) {
-    console.error('Error during update:', error);
-    customToast.error('An error occurred during update.');
+    console.error('Error during create:', error);
+    customToast.error('An error occurred during create.');
   }
 };
 

@@ -14,7 +14,7 @@
               icon-color="var(--color-neutrals-white-100)"
             />
           </button>
-          <div class="popup__content">
+          <div class="popup__content" v-bind="$attrs">
             <slot />
           </div>
         </div>
@@ -24,6 +24,7 @@
 </template>
 
 <script setup>
+import { disableBodyScroll, enableBodyScroll } from 'body-scroll-lock';
 import { onBeforeUnmount, onMounted, watch } from 'vue';
 
 import Icons from '@/components/Icons/Icons.vue';
@@ -45,9 +46,9 @@ watch(
   () => props.isOpen,
   (newValue) => {
     if (newValue) {
-      document.body.classList.add('is-scrollFixed');
+      disableBodyScroll(document.body);
     } else {
-      document.body.classList.remove('is-scrollFixed');
+      enableBodyScroll(document.body);
     }
   },
 );
@@ -57,12 +58,12 @@ function closePopup() {
 }
 onMounted(() => {
   if (props.isOpen) {
-    document.body.classList.add('is-scrollFixed');
+    disableBodyScroll(document.body);
   }
 });
 
 onBeforeUnmount(() => {
-  document.body.classList.remove('is-scrollFixed');
+  enableBodyScroll(document.body);
 });
 </script>
 <style scoped>
@@ -91,6 +92,7 @@ onBeforeUnmount(() => {
   flex-direction: column;
   justify-content: center;
   margin: 11.1rem auto 15.6rem auto;
+  padding: 0 24px;
 }
 
 .popup.large .popup__area {
@@ -98,7 +100,6 @@ onBeforeUnmount(() => {
 }
 
 .popup__content {
-  padding: 3.2rem 4rem;
   border-radius: 2.4rem;
   background-color: var(--color-neutrals-white-100);
 }

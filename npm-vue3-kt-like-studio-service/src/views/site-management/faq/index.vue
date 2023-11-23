@@ -11,7 +11,7 @@
             {{ category.value }}</Tabs>
         </li>
       </ul>
-      <RoundButton component="button" color-type="filed" size="medium">등록</RoundButton>
+        <RoundButton  href="/site-management/faq/create" component="a" color-type="filed" size="medium">등록</RoundButton>
     </div>
     <div class="manage_list-wrap">
       <div class="manage_table-wrap">
@@ -34,13 +34,13 @@
               <td class="num">{{ item.rowNumber }}</td>
               <td>{{ item.categoryValue }}</td>
               <td class="title !text-left">
-                <RouterLink to="/site-management/faq/edit">{{
+                <RouterLink :to="`/site-management/faq/${item.id}/edit`">{{
                   item.title
                 }}</RouterLink>
               </td>
 
               <td>{{ item.show == 1 ? "Y" : "N" }}</td>
-              <td>{{ item.userName }}</td>
+              <td>{{ item.createUserName }}</td>
               <td class="date">{{ moment(item.createDate).format("YYYY.MM.DD HH:mm") }}</td>
               <!--              <td :class="item.answer ? 'complete' : 'waiting'">-->
               <!--                {{ item.answer ? '답변완료' : '답변대기' }}-->
@@ -93,18 +93,17 @@ async function getListCategory(functionType) {
   await storeOfCategory.getListCategory(functionType)
   categories.value = listCategory.value;
   categories.value.unshift({
-    id: 0,
+    id: "",
     value: "Default",
     functionType: 1,
     key: ""
   });
 }
 
-async function searchNotice(dummyInput, category, fromDate, toDate) {
+async function searchNotice(dummyInput, fromDate, toDate) {
   dummyInputValue.value = dummyInput;
   fromDateValue.value = fromDate;
   toDateValue.value = toDate;
-  currentCategory.value = category;
   await getListForAdmin(dummyInputValue.value, currentCategory.value, fromDateValue.value, toDateValue.value, 1);
 }
 

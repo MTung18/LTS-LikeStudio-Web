@@ -18,10 +18,10 @@
     </template>
     <template #foot>
       <div class="flex gap-x-[1rem] justify-center">
-        <Button v-if="state === 'answered'" component="button" color-type="outlined" size="large"
-          class-bind="!min-w-[14rem]" @click="onDeleteButton">삭제</Button>
-        <Button component="a" href="/customer-service/inquiries" color-type="standard" size="large"
-          class-bind="!min-w-[14rem]">목록</Button>
+        <UIButton v-if="state === 'answered'" component="button" color-type="outlined" size="large"
+          class-bind="!min-w-[14rem]" @click="onDeleteButton">삭제</UIButton>
+        <UIButton component="a" href="/customer-service/inquiries" color-type="standard" size="large"
+          class-bind="!min-w-[14rem]">목록</UIButton>
       </div>
     </template>
   </TemplateDetail>
@@ -39,6 +39,7 @@ import TemplateDetailBody from '@/components/TemplateDetailBody/TemplateDetailBo
 import TemplateDetailHead from '@/components/TemplateDetailHead/TemplateDetailHead.vue';
 import TemplateDetail from '@/components/TemplateDetailWrap/TemplateDetail.vue';
 import TemplateEditInfo from '@/components/TemplateEditInfo/TemplateEditInfo.vue';
+import UIButton from '@/components/UIButton/UIButton.vue';
 import DetailAnswer from '@/containers/customer-service/inquiries/DetailAnswer.vue';
 
 import { lsSupportManagerStore } from '@/stores/lsSupportManagerStore';

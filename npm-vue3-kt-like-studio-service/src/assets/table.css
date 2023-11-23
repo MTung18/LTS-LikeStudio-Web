@@ -1,12 +1,11 @@
 .manage_list-wrap {
-    margin-bottom: 4.2rem;
+    margin-bottom: 6rem;
     width: 100%;
     overflow: auto;
 }
 .manage_table-wrap {
     overflow-x:auto;
     width: 100%;
-    border-top: 1px solid var(--color-neutrals-black);
 }
 
 .manage_list-wrap table {
@@ -40,7 +39,8 @@
 .manage_list-wrap table tbody td.num {
    color: var(--color-gray-777);
 }
-.manage_list-wrap table tbody td.title a {
+.manage_list-wrap table tbody td.title a,
+.manage_list-wrap table tbody td.title button {
     border-bottom: 1px solid var(--color-gray-ddd);
     display: inline-block;
     white-space: nowrap;
@@ -50,10 +50,7 @@
     padding-top: 0.3rem;
     vertical-align: middle;
 }
-.manage_list-wrap table tbody td.thumb {
-    padding: 0 1.4rem;
-    box-sizing: border-box;
-}
+
 .manage_list-wrap table tbody td.thumb .img-area {
     width: 7.2rem;
     height: 7.2rem;

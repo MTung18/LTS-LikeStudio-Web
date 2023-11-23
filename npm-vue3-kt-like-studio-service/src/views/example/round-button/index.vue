@@ -1,6 +1,6 @@
 <template>
   <div class="article">
-    <h2 class="article__title">Button</h2>
+    <h2 class="article__title">UIButton</h2>
     <div class="article__group">
       <div class="article__button-item">
         <p class="article__button-desc">filled, medium, enabled</p>

@@ -15,6 +15,5 @@
 
 .detail-wrap__foot {
   padding-top: 6rem;
-  border-top: 1px solid var(--color-neutrals-black);
 }
 </style>

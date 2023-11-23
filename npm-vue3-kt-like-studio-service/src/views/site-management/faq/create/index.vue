@@ -2,81 +2,40 @@
   <TemplateEdit title="FAQ 관리">
     <template #body>
       <div class="flex gap-x-[8rem]">
-        <TemplateEditTextFields
-          label="카테고리"
-          required
-          class-bind="relative before:absolute before:right-[-4rem] before:w-[1px] before:h-[4.6rem] before:bg-gray-gray-ddd before:content-['']"
-        >
-          <DropdownSelect :select-list="dummySelect" :default-select="'선택'" />
+        <TemplateEditTextFields label="카테고리" required
+          class-bind="relative before:absolute before:right-[-4rem] before:w-[1px] before:h-[4.6rem] before:bg-gray-gray-ddd before:content-['']">
+          <DropdownSelect :selectList="categories" :dselectefault="optionList.defaultSelect" @select="handleSelect">
+          </DropdownSelect>
         </TemplateEditTextFields>
-        <TemplateEditTextFields
-          label="노출"
-          출
-          required
-          class-bind="items-center leading-none !border-b-0"
-        >
-          <Switch />
+        <TemplateEditTextFields label="노출" 출 required class-bind="items-center leading-none !border-b-0">
+          <Switch @someEvent="changeShow" />
         </TemplateEditTextFields>
       </div>
-      <TemplateEditTextFields
-        :fields-id="inputId"
-        label="제목"
-        required
-        v-model="inputRef"
-      >
-        <TextFields
-          v-bind="$attrs"
-          :input-id="inputId"
-          v-model="inputRef"
-          size="medium"
-          placeholder="제목 입력"
-          class-bind="w-full"
-        />
+      <TemplateEditTextFields :fields-id="inputId" label="제목" required v-model="inputRef">
+        <TextFields v-bind="$attrs" :input-id="inputId" v-model="faqDetail.title" size="medium" placeholder="제목 입력"
+          class-bind="w-full" />
       </TemplateEditTextFields>
       <TemplateEditTextFields label="내용" required v-model="inputRef">
-        <div
-          class="h-[31.6rem] px-[1.6rem] py-[1.3rem] rounded-[0.6rem] border-[1px] border-gray-gray-ddd"
-        >
-          에디터 플러그인 들어갈 자리
-        </div>
+        <TextArea v-bind="$attrs" :textarea-id="textareaId" v-model="faqDetail.content" placeholder="내용 입력"
+          class-bind="w-full" />
       </TemplateEditTextFields>
-      <TemplateEditTextFields
-        label="첨부파일"
-        class-bind="pt-[3.2rem] border-t-[1px] border-t-gray-gray-ddd"
-      >
-        <TemplateEditFileFields
-          @file-upload="handleFileUpload"
-          @file-remove="handleFileRemove"
-          :files="dummyfiles"
-          file-caption-title="첨부파일은 최대 10개, 1개 파일당 50MB 이하의 아래 확장자만 업로드 가능합니다."
-          :file-format="[
+      <TemplateEditTextFields label="첨부파일" class-bind="pt-[3.2rem] border-t-[1px] border-t-gray-gray-ddd">
+        <TemplateEditFileFields @file-upload="handleFileUpload" @file-remove="handleFileRemove" :files="listFile"
+          file-caption-title="첨부파일은 최대 10개, 1개 파일당 50MB 이하의 아래 확장자만 업로드 가능합니다." file-max-length="10" :file-format="[
             '압축 파일 : zip, 7z, alz, egg',
             '문서 파일 : xls, xlsx, ppt, pptx, doc, docx, pdf',
             '이미지 파일 : jpg , jpeg , png , gif',
             '영상 파일 : mp4, wmv, asf , flv, mov, mpeg',
-          ]"
-        />
+          ]" />
       </TemplateEditTextFields>
     </template>
 
     <template #foot>
       <div class="flex mt-[6rem] justify-center gap-x-[1rem]">
-        <Button
-          component="button"
-          color-type="outlined"
-          size="large"
-          class-bind="!min-w-[14rem]"
-          @click="handleCreateCancel"
-          >취소</Button
-        >
-        <Button
-          component="button"
-          color-type="primary"
-          size="large"
-          class-bind="!min-w-[14rem]"
-          @click="handleCreateSubmit"
-          >등록</Button
-        >
+        <UIButton component="button" color-type="outlined" size="large" class-bind="!min-w-[14rem]"
+          @click="handleCreateCancel">취소</UIButton>
+        <UIButton component="button" color-type="primary" size="large" class-bind="!min-w-[14rem]"
+          @click="handleCreateSubmit">등록</UIButton>
       </div>
     </template>
   </TemplateEdit>
@@ -84,71 +43,158 @@
 
 <script setup>
 import { v4 as uuid } from 'uuid';
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
+import { useRouter } from 'vue-router';
 
-import Button from '@/components/Button/Button.vue';
 import DropdownSelect from '@/components/DropdownSelect/DropdownSelect.vue';
 import Switch from '@/components/Switch/Switch.vue';
 import TemplateEdit from '@/components/TemplateEdit/TemplateEdit.vue';
 import TemplateEditFileFields from '@/components/TemplateEditFileFields/TemplateEditFileFields.vue';
 import TemplateEditTextFields from '@/components/TemplateEditTextFields/TemplateEditTextFields.vue';
 import TextFields from '@/components/TextFields/TextFields.vue';
+import TextArea from '@/components/TextArea/TextArea.vue';
+import UIButton from '@/components/UIButton/UIButton.vue';
 import customToast from '@/untils/custom_toast';
 
+import { categoryStore } from '../../../../stores/categoryStore';
+import { faqStore } from '../../../../stores/faqStore';
+import { fileManagerStore } from '@/stores/fileManagerStore';
+import { storeToRefs } from 'pinia';
+import utils from '@/untils/utils';
+
+const store = faqStore();
+const cateStore = categoryStore();
+const fileStore = fileManagerStore();
+const { responseAddFaq } = storeToRefs(store);
+const { listCategory } = storeToRefs(cateStore);
+const { responseUploadFile } = storeToRefs(fileStore);
 const inputId = uuid();
 const inputRef = ref('');
 
-const dummyfiles = [
-  {
-    id: 0,
-    filename: 'screenshot_5907111102.png',
-  },
-  {
-    id: 0,
-    filename: 'screenshot_02352786929249.png',
-  },
-];
+const router = useRouter();
 
-const dummySelect = [
-  {
-    id: 0,
-    listName: '로그인',
-  },
-  {
-    id: 1,
-    listName: '사용법',
-  },
-  {
-    id: 2,
-    listName: '저작권',
-  },
-  {
-    id: 3,
-    listName: '팀룸',
-  },
-  {
-    id: 4,
-    listName: '서비스 오류',
-  },
-];
+const categories = ref([]);
+const categoryId = ref();
+const faqDetail = ref({});
+const showValue = ref(0);
+const functionType = 1;
+const listFile = ref([]);
+const listFileSave = ref([]);
 
-const handleFileUpload = async (file) => {
-  await console.log('file upload', file);
+const ARCHIVE_FILES = ['zip', '7z', 'alz', 'egg', 'xls', 'xlsx', 'ppt', 'pptx', 'doc', 'docx', 'pdf', 'jpg', 'jpeg', 'png', 'gif', 'mp4', 'wmv', 'asf', 'flv', 'mov', 'mpeg'];
+const maxSizeFile = 50;
+
+const optionList = {
+  defaultSelect: '전체',
 };
 
-const handleFileRemove = async (file) => {
-  await console.log('file remove', file);
+const handleSelect = async (selectedOption) => {
+  categoryId.value = selectedOption.id
+};
+
+function changeShow(status) {
+  showValue.value = status ? 1 : 0
+}
+
+const getListCategory = async () => {
+  await cateStore.getListCategory(functionType)
+  categories.value = listCategory.value;
+}
+
+const handleFileUpload = async (file) => {
+  const sizeInMB = file.size / (1024 * 1024);
+  const typeFile = utils.getFileType(file.name);
+
+  if (sizeInMB > maxSizeFile) {
+    customToast.error('File size should not exceed 50MB');
+    return;
+  }
+  if (!ARCHIVE_FILES.includes(typeFile)) {
+    customToast.error('This file type is not allowed for upload');
+    return;
+  }
+  if (listFile.value.size == 10) {
+    customToast.error('Maximum of 10 files');
+    return;
+  }
+  listFile.value.push({
+    oriFileName: file.name,
+    uniqFileName: null,
+  });
+  listFileSave.value.push(file)
+};
+
+const handleFileRemove = async (index) => {
+  listFile.value.splice(index, 1)
 };
 
 const handleCreateCancel = () => {
   console.log('취소');
+  router.push(`/site-management/faq`)
 };
 
-const handleCreateSubmit = () => {
-  console.log('등록');
-  customToast.success('글을 등록했습니다.');
-  // customToast.error('에러 메세지');
+const faqData = ref({});
+const handleCreateSubmit = async () => {
+  try {
+    if (listFileSave.value.length) {
+      const formData = new FormData();
+      for (let i = 0; i < listFileSave.value.length; i++) {
+        formData.append('files', listFileSave.value[i])
+      }
+      await fileStore.uploadFile(formData)
+      if (responseUploadFile.value.statusCode !== 1) {
+        customToast.error('Error upload file.')
+        return
+      }
+      const filePaths = responseUploadFile.value.data.map(item => item.uniqFileName);
+
+      listFile.value.forEach(item => {
+        if (item.uniqFileName !== null) {
+          filePaths.push(item.uniqFileName)
+        }
+      });
+
+      faqData.value = {
+        faq: {
+          category: categoryId.value,
+          title: faqDetail.value.title,
+          content: faqDetail.value.content,
+          createUser: 1,
+          show: showValue.value,
+        },
+        fileManagerList: listFile.value,
+      }
+    } else {
+      faqData.value = {
+        faq: {
+          category: categoryId.value,
+          title: faqDetail.value.title,
+          content: faqDetail.value.content,
+          createUser: 1,
+          show: showValue.value,
+        },
+        fileManagerList: [],
+      }
+    }
+
+    await store.addFaq(faqData.value);
+
+    if (responseAddFaq.value.statusCode === 1) {
+      customToast.success('Successful create Faq.')
+      router.push(`/site-management/faq`)
+    } else {
+      customToast.error('Error create Faq.');
+    }
+
+  } catch (error) {
+    console.error('Error during create:', error);
+    customToast.error('An error occurred during create.');
+  }
 };
+
+onMounted(async () => {
+  await getListCategory()
+})
 </script>
 
 <style scoped>

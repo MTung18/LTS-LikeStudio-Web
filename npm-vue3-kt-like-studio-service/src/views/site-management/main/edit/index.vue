@@ -74,7 +74,7 @@
             :check-list="'새창'"
             :id="'no'"
             :shape-type="'square'"
-            :name="'choise'"
+            :name="'choice'"
           ></CheckBox>
         </div>
       </TemplateEditTextFields>
@@ -106,21 +106,29 @@
 
     <template #foot>
       <div class="flex mt-[6rem] justify-center gap-x-[1rem]">
-        <Button
+        <UIButton
+          component="button"
+          color-type="standard"
+          size="large"
+          class-bind="!min-w-[14rem]"
+          @click="handleEditDelete"
+          >삭제</UIButton
+        >
+        <UIButton
           component="button"
           color-type="outlined"
           size="large"
-          class-bind="!min-w-[14rem]"
-          @click="handleCreateCancel"
-          >취소</Button
+          class-bind="!min-w-[14rem] !ml-auto"
+          @click="handleEditToList"
+          >목록</UIButton
         >
-        <Button
+        <UIButton
           component="button"
           color-type="primary"
           size="large"
           class-bind="!min-w-[14rem]"
-          @click="handleCreateSubmit"
-          >등록</Button
+          @click="handleEdit"
+          >수정</UIButton
         >
       </div>
     </template>
@@ -130,8 +138,8 @@
 <script setup>
 import { v4 as uuid } from 'uuid';
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 
-import Button from '@/components/Button/Button.vue';
 import CalenderGroup from '@/components/CalenderGroup/CalenderGroup.vue';
 import CheckBox from '@/components/CheckBox/CheckBox.vue';
 import RoundTabs from '@/components/RoundTabs/RoundTabs.vue';
@@ -141,8 +149,10 @@ import TemplateEditFileFields from '@/components/TemplateEditFileFields/Template
 import TemplateEditInfo from '@/components/TemplateEditInfo/TemplateEditInfo.vue';
 import TemplateEditTextFields from '@/components/TemplateEditTextFields/TemplateEditTextFields.vue';
 import TextFields from '@/components/TextFields/TextFields.vue';
+import UIButton from '@/components/UIButton/UIButton.vue';
 import customToast from '@/untils/custom_toast';
 
+const router = useRouter();
 const inputId = uuid();
 const inputRef = ref('');
 
@@ -191,14 +201,16 @@ const handleFileRemove = async (file) => {
   await console.log('file remove', file);
 };
 
-const handleCreateCancel = () => {
-  console.log('취소');
+const handleEditDelete = () => {
+  console.log('삭제');
 };
-
-const handleCreateSubmit = () => {
-  console.log('등록');
-  customToast.success('글을 등록했습니다.');
-  // customToast.error('에러 메세지');
+const handleEditToList = () => {
+  console.log('목록');
+  router.push('/site-management/main');
+};
+const handleEdit = () => {
+  console.log('수정');
+  customToast.success('글을 수정했습니다.');
 };
 </script>
 

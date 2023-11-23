@@ -1,13 +1,40 @@
+<!--
+  231109 : 사용자 등록 팝업에 테이블 마크업이나 로직이 변경 될 수 있음
+-->
 <template>
   <TemplateBoardWrap title="관리자 권한">
-    <ManageHeadForm :only-search="true" :no-calender="true" />
+    <div class="search-filter">
+      <div class="search-filter__bottom">
+        <SearchInput
+          placeholder="검색어를 입력해주세요"
+          size="medium"
+          style-type="square"
+          color-type="gray"
+          class="flex-1 mr-[1.4rem]"
+        />
+        <RoundButton
+          component="button"
+          color-type="filed"
+          size="medium"
+          class="mr-[1.4rem]"
+          >검색</RoundButton
+        >
+        <RoundButton component="button" color-type="outlined" size="medium"
+          >초기화</RoundButton
+        >
+      </div>
+    </div>
 
     <div class="select-wrap flex justify-end">
-      <RoundButton component="button" color-type="filed" size="medium"
+      <RoundButton
+        component="button"
+        color-type="filed"
+        size="medium"
+        @click="popupUserSelectIsOpen = true"
         >등록</RoundButton
       >
     </div>
-    <div class="manage_list-wrap">
+    <div v-if="tableData && tableData.length > 0" class="manage_list-wrap">
       <div class="manage_table-wrap">
         <table>
           <thead>
@@ -21,14 +48,12 @@
               <th width="134px">삭제</th>
             </tr>
           </thead>
-          <tbody v-if="tableData && tableData.length > 0">
+          <tbody>
             <tr v-for="item in tableData" :key="item.id">
               <td class="num">{{ item.no }}</td>
               <td>{{ item.fileNumber }}</td>
               <td class="title">
-                <RouterLink to="/site-management/vmd/create">{{
-                  item.author
-                }}</RouterLink>
+                {{ item.author }}
               </td>
               <td>{{ item.position }}</td>
               <td>
@@ -58,9 +83,9 @@
           </tbody>
         </table>
       </div>
-      <div v-if="tableData && tableData.length <= 0">
-        <TemplateDataNone />
-      </div>
+    </div>
+    <div v-if="tableData && tableData.length <= 0">
+      <TemplateDataNone />
     </div>
     <Pagination v-if="tableData && tableData.length > 0" />
   </TemplateBoardWrap>
@@ -75,14 +100,14 @@ import { ref } from 'vue';
 
 import DropdownSelect from '@/components/DropdownSelect/DropdownSelect.vue';
 import Icons from '@/components/Icons/Icons.vue';
-import ManageHeadForm from '@/components/ManageHeadForm/ManageHeadForm.vue';
 import Pagination from '@/components/Pagination/Pagination.vue';
 import RoundButton from '@/components/RoundButton/RoundButton.vue';
+import SearchInput from '@/components/SearchInput/SearchInput.vue';
 import TemplateBoardWrap from '@/components/TemplateBoardWrap/TemplateBoardWrap.vue';
 import TemplateDataNone from '@/components/TemplateDataNone/TemplateDataNone.vue';
 import PopupAdminUserSelect from '@/containers/site-management/admin/PopupAdminUserSelect/PopupAdminUserSelect.vue';
 
-const popupUserSelectIsOpen = ref(true);
+const popupUserSelectIsOpen = ref(false);
 
 const tableData = [
   {
@@ -385,13 +410,34 @@ const tableData = [
   font-weight: 400;
 }
 .select-wrap {
-  margin-bottom: 2.4rem;
+  padding-bottom: 2.4rem;
+  border-bottom: 1px solid var(--color-neutrals-black);
 }
 .manage_list-wrap {
-  overflow: auto;
+  overflow: visible;
 }
+
+.manage_table-wrap {
+  overflow: visible;
+}
+
 .manage_list-wrap table tbody td.title a {
   border-bottom: 0;
   line-height: 1;
+}
+
+.search-filter {
+  max-width: 1200px;
+  padding: 2.6rem;
+  margin: 7.2rem auto 7.2rem;
+  background-color: #f6f6f6;
+}
+
+.search-filter__bottom {
+  display: flex;
+}
+
+.search-filter__top + .search-filter__bottom {
+  margin-top: 2.6rem;
 }
 </style>
