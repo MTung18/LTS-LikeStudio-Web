@@ -1,7 +1,7 @@
 <template>
   <TemplateEdit title="공지사항 관리">
     <template #body>
-      <TemplateEditTextFields :fields-id="noticeId" label="제목" required v-model="inputRef">
+      <TemplateEditTextFields :fields-id="noticeId" label="제목" required>
         <TextFields v-bind="$attrs" :input-id="noticeId" v-model="noticeBoarDetail.title" size="medium"
           placeholder="제목 입력" class-bind="w-full" />
       </TemplateEditTextFields>
@@ -17,9 +17,9 @@
       <TemplateEditTextFields label="노출" required class-bind="items-center leading-none !border-b-0">
         <Switch :toggle="showValue" @someEvent="changeShow" />
       </TemplateEditTextFields>
-      <TemplateEditTextFields label="내용" required v-model="inputRef">
-        <textarea class="h-[31.6rem] px-[1.6rem] py-[1.3rem] rounded-[0.6rem] border-[1px] border-gray-gray-ddd w-full"
-          id="message" name="message" rows="4" cols="50" v-model="noticeBoarDetail.content"></textarea>
+      <TemplateEditTextFields label="내용" required>
+        <TextArea v-bind="$attrs" :textarea-id="textareaId" v-model="noticeBoarDetail.content" placeholder="내용 입력"
+          class-bind="w-full" />
       </TemplateEditTextFields>
       <TemplateEditTextFields label="첨부파일" class-bind="pt-[3.2rem] border-t-[1px] border-t-gray-gray-ddd">
         <TemplateEditFileFields @file-upload="handleFileUpload" @file-remove="handleFileRemove" :files="listFile"
@@ -38,8 +38,8 @@
           @click="handleEditDelete">삭제</UIButton>
         <UIButton component="button" color-type="outlined" size="large" class-bind="!min-w-[14rem] !ml-auto"
           @click="handleEditToList">목록</UIButton>
-        <UIButton component="button" color-type="primary" size="large" class-bind="!min-w-[14rem]"
-          @click="handleEdit">수정</UIButton>
+        <UIButton component="button" color-type="primary" size="large" class-bind="!min-w-[14rem]" @click="handleEdit">수정
+        </UIButton>
       </div>
     </template>
   </TemplateEdit>
@@ -47,8 +47,7 @@
 
 <script setup>
 import { onMounted, ref } from 'vue';
-import { useRouter } from 'vue-router';
-import { useRoute } from "vue-router";
+import { useRouter, useRoute } from 'vue-router';
 
 import UIButton from '@/components/UIButton/UIButton.vue';
 import Switch from '@/components/Switch/Switch.vue';
@@ -56,6 +55,7 @@ import TemplateEdit from '@/components/TemplateEdit/TemplateEdit.vue';
 import TemplateEditFileFields from '@/components/TemplateEditFileFields/TemplateEditFileFields.vue';
 import TemplateEditTextFields from '@/components/TemplateEditTextFields/TemplateEditTextFields.vue';
 import TextFields from '@/components/TextFields/TextFields.vue';
+import TextArea from '@/components/TextArea/TextArea.vue';
 import customToast from '@/untils/custom_toast';
 import utils from '@/untils/utils';
 
@@ -66,11 +66,9 @@ import { storeToRefs } from 'pinia';
 const store = noticeBoardStore();
 const fileStore = fileManagerStore();
 const { noticeBoard, responseEditNotice } = storeToRefs(store);
-const { listOfFile, response } = storeToRefs(fileStore);
+const { listOfFile, responseUploadFile } = storeToRefs(fileStore);
 const router = useRouter();
 const route = useRoute();
-
-const inputRef = ref('');
 
 const noticeId = ref();
 const noticeBoarDetail = ref({});
@@ -84,22 +82,21 @@ const gimValue = ref();
 const showValue = ref();
 const popupValue = ref();
 const listFileSave = ref([]);
-const res = ref();
 
 const handleFileUpload = async (file) => {
   const sizeInMB = file.size / (1024 * 1024);
   const typeFile = utils.getFileType(file.name);
 
   if (sizeInMB > maxSizeFile) {
-    customToast.error('File size should not exceed 50MB');
+    customToast.error('File size must be no more than 50MB.');
     return;
   }
   if (!ARCHIVE_FILES.includes(typeFile)) {
-    customToast.error('This file type is not allowed for upload');
+    customToast.error('This file type is not allowed for upload.');
     return;
   }
   if (listFile.value.size == 10) {
-    customToast.error('Maximum of 10 files');
+    customToast.error('Maximum of 10 files.');
     return;
   }
   listFile.value.push({
@@ -145,12 +142,11 @@ const handleEdit = async () => {
         formData.append('files', listFileSave.value[i])
       }
       await fileStore.uploadFile(formData)
-      const responseData = response.value
-      if (responseData.statusCode !== 1) {
+      if (responseUploadFile.value.statusCode !== 1) {
         customToast.error('Error upload file.')
         return
       }
-      const filePaths = responseData.data.map(item => item.uniqFileName);
+      const filePaths = responseUploadFile.value.data.map(item => item.uniqFileName);
 
       listFile.value.forEach(item => {
         if (item.uniqFileName !== null) {
@@ -160,11 +156,11 @@ const handleEdit = async () => {
 
       updatedFileManagerList.value = listFile.value.map((file, index) => ({
         oriFileName: file.oriFileName,
-        createUser: 1,
+        createUser: 2,
         uniqFileName: filePaths[index],
       }));
     } else {
-      updatedFileManagerList.value  = [];
+      updatedFileManagerList.value = [];
     }
 
     noticeBoardData.value = {
@@ -172,9 +168,8 @@ const handleEdit = async () => {
         id: noticeId.value,
         title: noticeBoarDetail.value.title,
         content: noticeBoarDetail.value.content,
-        views: 0,
-        create_user: 1,
-        edit_use: 1,
+        createUser: noticeBoarDetail.value.createUser,
+        editUse: 2,
         gim: gimValue.value,
         show: showValue.value,
         popup: popupValue.value,
@@ -183,16 +178,14 @@ const handleEdit = async () => {
     }
 
     await store.updateNotice(noticeBoardData.value);
-    res.value = responseEditNotice.value
 
-    if (res.value.statusCode === 1) {
+    if (responseEditNotice.value.statusCode === 1) {
       customToast.success('Successful update Notice.')
       router.push(`/site-management/announcements`)
     } else {
       customToast.error('Error update Notice.');
     }
   } catch (error) {
-    console.error('Error during update:', error);
     customToast.error('An error occurred during update.');
   }
 };

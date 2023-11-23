@@ -74,11 +74,11 @@ const optionList = {
   listData: [
     {
       id: 0,
-      listName: '로그인1',
+      value: '로그인1',
     },
     {
       id: 1,
-      listName: '로그인2',
+      value: '로그인2',
     }
   ],
 };

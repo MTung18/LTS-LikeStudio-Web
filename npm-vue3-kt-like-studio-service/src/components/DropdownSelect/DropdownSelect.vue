@@ -3,16 +3,16 @@
     <select v-model="selectedValue" @change="handleChange" class="w-full h-20 border-solid border-2 border-black rounded-xl text-2xl cursor-pointer">
       <option :value="null" disabled selected hidden>전체</option>
       <option v-for="option in selectList" :key="option.id" :value="option.id" class="text-2xl cursor-pointer">
-        {{ option.listName }}
+        {{ option.value }}
       </option>
     </select>
   </div>
 </template>
 
 <script setup>
-import { ref, defineProps, defineEmits, onMounted } from 'vue';
+import { ref, defineProps, defineEmits, watch } from 'vue';
 
-const props = defineProps(['selectList', 'defaultSelect']);
+const props = defineProps(['selectList', 'defaultSelect', 'firstOption']);
 const emit = defineEmits();
 
 const selectedValue = ref(null);
@@ -23,13 +23,19 @@ const handleChange = (event) => {
   emit('select', selectedOption);
 };
 
-onMounted(() => {
-  // Set the default selected value when the component is mounted
-  if (props.defaultSelect) {
-    const defaultOption = props.selectList.find(option => option.listName === props.defaultSelect);
+watch(() => props.firstOption, (newVal) => {
+  if (newVal !== undefined && newVal !== null) {
+    selectedValue.value = newVal;
+    const selectedOption = props.selectList.find(option => option.id === newVal);
+    if (selectedOption) {
+      emit('select', selectedOption);
+    }
+  } else if (props.defaultSelect) {
+    const defaultOption = props.selectList.find(option => option.id === props.defaultSelect);
     if (defaultOption) {
       selectedValue.value = defaultOption.id;
+      emit('select', defaultOption);
     }
   }
-});
+})
 </script>

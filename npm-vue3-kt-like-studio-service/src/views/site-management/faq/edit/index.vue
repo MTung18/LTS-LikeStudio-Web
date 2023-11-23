@@ -4,24 +4,23 @@
       <div class="flex gap-x-[8rem]">
         <TemplateEditTextFields label="카테고리" required
           class-bind="relative before:absolute before:right-[-4rem] before:w-[1px] before:h-[4.6rem] before:bg-gray-gray-ddd before:content-['']">
-          <DropdownSelect :selectList="optionList.listData" :dselectefault-="optionList.defaultSelect"
-            @select="handleSelect"></DropdownSelect>
+          <DropdownSelect :selectList="categories" :dselectefault="optionList.defaultSelect" @select="handleSelect"
+            :firstOption="faqDetail.category"></DropdownSelect>
         </TemplateEditTextFields>
         <TemplateEditTextFields label="노출" required class-bind="items-center leading-none !border-b-0">
-          <Switch />
+          <Switch :toggle="showValue" @someEvent="changeShow" />
         </TemplateEditTextFields>
       </div>
-      <TemplateEditTextFields :fields-id="inputId" label="제목" required v-model="inputRef">
-        <TextFields v-bind="$attrs" :input-id="inputId" v-model="inputRef" size="medium" placeholder="제목 입력"
+      <TemplateEditTextFields :fields-id="inputId" label="제목" required>
+        <TextFields v-bind="$attrs" :input-id="inputId" v-model="faqDetail.title" size="medium" placeholder="제목 입력"
           class-bind="w-full" />
       </TemplateEditTextFields>
-      <TemplateEditTextFields label="내용" required v-model="inputRef">
-        <div class="h-[31.6rem] px-[1.6rem] py-[1.3rem] rounded-[0.6rem] border-[1px] border-gray-gray-ddd">
-          에디터 플러그인 들어갈 자리
-        </div>
+      <TemplateEditTextFields label="내용" required>
+        <TextArea v-bind="$attrs" :textarea-id="textareaId" v-model="faqDetail.content" placeholder="내용 입력"
+          class-bind="w-full" />
       </TemplateEditTextFields>
       <TemplateEditTextFields label="첨부파일" class-bind="pt-[3.2rem] border-t-[1px] border-t-gray-gray-ddd">
-        <TemplateEditFileFields @file-upload="handleFileUpload" @file-remove="handleFileRemove" :files="dummyfiles"
+        <TemplateEditFileFields @file-upload="handleFileUpload" @file-remove="handleFileRemove" :files="listFile"
           file-caption-title="첨부파일은 최대 10개, 1개 파일당 50MB 이하의 아래 확장자만 업로드 가능합니다." file-max-length="10" :file-format="[
             '압축 파일 : zip, 7z, alz, egg',
             '문서 파일 : xls, xlsx, ppt, pptx, doc, docx, pdf',
@@ -29,11 +28,11 @@
             '영상 파일 : mp4, wmv, asf , flv, mov, mpeg',
           ]" />
       </TemplateEditTextFields>
-      <div class=""></div>
 
-      <TemplateEditInfo :hits="dummyInfo.hits" :last-modified-date="dummyInfo.lastModifiedDate"
-        :modifier="dummyInfo.modifier" :modifier-position="dummyInfo.modifierPosition"
-        :created-date="dummyInfo.createdDate" :writer="dummyInfo.writer" :writer-position="dummyInfo.writerPosition" />
+      <TemplateEditInfo :hits="faqDetail.views" :last-modified-date="faqDetail.editDate"
+        :modifier="faqDetail.editUserName" :modifier-position="faqDetail.editorPosition"
+        :created-date="faqDetail.createDate" :writer="faqDetail.createUserName"
+        :writer-position="faqDetail.createrPosition" />
     </template>
 
     <template #foot>
@@ -51,8 +50,8 @@
 
 <script setup>
 import { v4 as uuid } from 'uuid';
-import { ref } from 'vue';
-import { useRouter } from 'vue-router';
+import { onMounted, ref } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
 
 import DropdownSelect from '@/components/DropdownSelect/DropdownSelect.vue';
 import Switch from '@/components/Switch/Switch.vue';
@@ -61,68 +60,170 @@ import TemplateEditFileFields from '@/components/TemplateEditFileFields/Template
 import TemplateEditInfo from '@/components/TemplateEditInfo/TemplateEditInfo.vue';
 import TemplateEditTextFields from '@/components/TemplateEditTextFields/TemplateEditTextFields.vue';
 import TextFields from '@/components/TextFields/TextFields.vue';
+import TextArea from '@/components/TextArea/TextArea.vue';
 import UIButton from '@/components/UIButton/UIButton.vue';
 import customToast from '@/untils/custom_toast';
 
-const router = useRouter();
+import { categoryStore } from '../../../../stores/categoryStore';
+import { faqStore } from '../../../../stores/faqStore';
+import { fileManagerStore } from '@/stores/fileManagerStore';
+import { storeToRefs } from 'pinia';
+import utils from '@/untils/utils';
 
+const store = faqStore();
+const cateStore = categoryStore();
+const fileStore = fileManagerStore();
+const { faq, responseEditFaq } = storeToRefs(store);
+const { listCategory } = storeToRefs(cateStore);
+const { listOfFile, responseUploadFile } = storeToRefs(fileStore);
+
+
+const router = useRouter();
+const route = useRoute();
 const inputId = uuid();
-const inputRef = ref('');
+
+const categories = ref([]);
+const categoryId = ref();
+const faqId = ref();
+const faqDetail = ref({});
+const functionType = 1;
+const ARCHIVE_FILES = ['zip', '7z', 'alz', 'egg', 'xls', 'xlsx', 'ppt', 'pptx', 'doc', 'docx', 'pdf', 'jpg', 'jpeg', 'png', 'gif', 'mp4', 'wmv', 'asf', 'flv', 'mov', 'mpeg'];
+const maxSizeFile = 50;
+const listFile = ref([]);
+
+const showValue = ref()
+const listFileSave = ref([])
 
 const optionList = {
   defaultSelect: '전체',
-  listData: [
-    {
-      id: 0,
-      listName: '로그인1',
-    },
-    {
-      id: 1,
-      listName: '로그인2',
-    }
-  ],
 };
 
-const dummyfiles = [
-  {
-    id: 0,
-    filename: 'screenshot_5907111102.png',
-  },
-  {
-    id: 0,
-    filename: 'screenshot_02352786929249.png',
-  },
-];
-
-const dummyInfo = {
-  hits: 6300,
-  lastModifiedDate: '2023.02.12 15:34',
-  modifier: '박미래',
-  modifierPosition: '판매역량강화팀',
-  createdDate: '2023.02.11 10:16',
-  writer: '박미래',
-  writerPosition: '판매역량강화팀',
+const handleSelect = async (selectedOption) => {
+  categoryId.value = selectedOption.id
 };
 
-const handleFileUpload = async (file) => {
-  await console.log('file upload', file);
+const getListCategory = async () => {
+  await cateStore.getListCategory(functionType)
+  categories.value = listCategory.value;
+}
+
+async function gitListFile(functionType, titleId) {
+  await fileStore.getListFile(functionType, titleId)
+  listFile.value = listOfFile.value;
+}
+
+const handleFileUpload = (file) => {
+  const sizeInMB = file.size / (1024 * 1024);
+  const typeFile = utils.getFileType(file.name);
+
+  if (sizeInMB > maxSizeFile) {
+    customToast.error('File size must be no more than 50MB.');
+    return;
+  }
+  if (!ARCHIVE_FILES.includes(typeFile)) {
+    customToast.error('This file type is not allowed for upload.');
+    return;
+  }
+  if (listFile.value.size == 10) {
+    customToast.error('Maximum of 10 files.');
+    return;
+  }
+  listFile.value.push({
+    oriFileName: file.name,
+    uniqFileName: null,
+  });
+  listFileSave.value.push(file)
 };
 
-const handleFileRemove = async (file) => {
-  await console.log('file remove', file);
+const handleFileRemove = async (index) => {
+  listFile.value.splice(index, 1)
 };
 
-const handleEditDelete = () => {
-  console.log('삭제');
+const handleEditDelete = async () => {
+  if (window.confirm('Are you sure you want to delete?')) {
+    await store.deleteFaq(faqId.value)
+    router.push(`/site-management/faq`)
+    customToast.success('Successfully delete Faq')
+  }
 };
+
 const handleEditToList = () => {
   console.log('목록');
   router.push('/site-management/faq');
 };
-const handleEdit = () => {
-  console.log('수정');
-  customToast.success('글을 수정했습니다.');
+
+const faqData = ref({})
+const updatedFileManagerList = ref([])
+const handleEdit = async () => {
+  try {
+    if (listFileSave.value.length) {
+      const formData = new FormData();
+      for (let i = 0; i < listFileSave.value.length; i++) {
+        formData.append('files', listFileSave.value[i])
+      }
+      await fileStore.uploadFile(formData)
+      if (responseUploadFile.value.statusCode !== 1) {
+        customToast.error('Error upload file.')
+        return
+      }
+      const filePaths = responseUploadFile.value.data.map(item => item.uniqFileName);
+
+      listFile.value.forEach(item => {
+        if (item.uniqFileName !== null) {
+          filePaths.push(item.uniqFileName)
+        }
+      });
+
+      updatedFileManagerList.value = listFile.value.map((file, index) => ({
+        oriFileName: file.oriFileName,
+        createUser: 2,
+        uniqFileName: filePaths[index],
+      }));
+    } else {
+      updatedFileManagerList.value = [];
+    }
+    faqData.value = {
+      faq: {
+        id: faqId.value,
+        category: categoryId.value || faqDetail.value.category,
+        title: faqDetail.value.title,
+        content: faqDetail.value.content,
+        createUser: faqDetail.value.createUser,
+        editUse: 2,
+        show: showValue.value,
+      },
+      fileManagerList: updatedFileManagerList.value,
+    }
+
+    await store.updateFaq(faqData.value);
+
+    if (responseEditFaq.value.statusCode === 1) {
+      customToast.success('Successful update Notice.')
+      router.push(`/site-management/faq`)
+    } else {
+      customToast.error('Error update Faq.');
+    }
+  } catch (error) {
+    customToast.error('An error occurred during update.');
+  }
 };
+
+function changeShow(status) {
+  showValue.value = status ? 1 : 0
+}
+
+async function getFaqId(faqId) {
+  await store.getFaqById(faqId)
+  faqDetail.value = faq.value
+  showValue.value = faqDetail.value.show
+}
+
+onMounted(async () => {
+  faqId.value = route.params.id
+  await getListCategory()
+  await getFaqId(faqId.value)
+  await gitListFile(functionType, faqId.value)
+})
 </script>
 
 <style scoped>
