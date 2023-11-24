@@ -136,11 +136,13 @@ const noticeBoardData = ref({});
 const updatedFileManagerList = ref([])
 const handleEdit = async () => {
   try {
+    debugger
     if (listFileSave.value.length) {
       const formData = new FormData();
       for (let i = 0; i < listFileSave.value.length; i++) {
         formData.append('files', listFileSave.value[i])
       }
+      console.log('formDataaaa: ' + formData.value);
       await fileStore.uploadFile(formData)
       if (responseUploadFile.value.statusCode !== 1) {
         customToast.error('Error upload file.')
