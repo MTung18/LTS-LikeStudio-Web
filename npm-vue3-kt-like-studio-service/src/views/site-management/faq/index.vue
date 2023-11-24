@@ -92,6 +92,7 @@ async function setCurrentCategory(param) {
 async function getListCategory(functionType) {
   await storeOfCategory.getListCategory(functionType)
   categories.value = listCategory.value;
+  console.log(listCategory.value);
   categories.value.unshift({
     id: "0",
     value: "Default",
