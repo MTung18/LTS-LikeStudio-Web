@@ -78,9 +78,52 @@ const LsSupportManagerApi = {
       throw error;
     }
   },
+  async add(param) {
+    try {
+      const response = await axios.post(`${baseUrl}/add`,param);
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      throw error;
+    }
+  },
+  async deleteLsSupportManagerForAdmin(answerId, questionId) {
+    try {
+      const response = await axios.delete(`${baseUrl}/deleteForAdmin`, {
+        params: {idAnswer: answerId, idQuestion: questionId}
+      });
+
+      console.log('axios delete');
+      if(response.status === 200) return true
+      else throw new Error("Failed to delete"); 
+
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      throw error;
+    }
+  },
   async getLsSupportManagerCategoryList() {
     try {
       const response = await axios.get(categoryListUrl);
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      throw error;
+    }
+  },
+  async answer(param) {
+    try {
+      const response = await axios.post(`${baseUrl}/answer`,param);
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      throw error;
+    }
+  },
+  async update(param) {
+    console.log('param api: ',param);
+    try {
+      const response = await axios.put(`${baseUrl}/update`,param);
       return response.data;
     } catch (error) {
       console.error('Error fetching data:', error);
