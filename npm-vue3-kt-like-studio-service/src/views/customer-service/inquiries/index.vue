@@ -1,5 +1,4 @@
 <template>
-  {{ listData }}
   <TemplateBoardWrap title="1:1 문의">
     <template v-if="!firstVisit">
       <div class="mt-[4rem] text-center">
@@ -16,7 +15,7 @@
         <div class="search__button-group">
           <RoundButton component="button" color-type="filed" size="medium" @click="search()">검색</RoundButton>
 
-          <RoundButton component="button" color-type="outlined" size="medium">초기화</RoundButton>
+          <RoundButton component="button" color-type="outlined" size="medium" @click="reset()">초기화</RoundButton>
         </div>
       </CustomerSearchWrap>
 
@@ -79,6 +78,13 @@ const userId = 1
 onMounted(async () => {
   await updatePage('', userId, '', '', '')
 });
+
+async function reset() {
+  await lsSupportManagerStore().getLsSupportManagerListForUser('', userId, '', '', '')
+  listData.value = lsSupportManagerListForUser.value;
+  currentPage.value = listData.value.data.currentPage;
+  totalPages.value = listData.value.data.totalPages;
+}
 async function navigate(newPage) {
   await updatePage(inputValue.value, userId, '', '', newPage)
 }

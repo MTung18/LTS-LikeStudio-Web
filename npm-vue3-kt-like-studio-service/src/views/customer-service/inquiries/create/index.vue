@@ -1,10 +1,8 @@
 <template>
-  <div class="text-5xl" @click="c">check</div>
   <TemplateEdit title="1:1 문의하기">
     <template #body>
       <TemplateEditTextFields label="카테고리" required>
-        <DropdownSelect :select-list="lsSupportManagerCategoryListData" :default-select="'login'"
-          @select="setCurrentCategory" />
+        <DropdownSelect :select-list="lsSupportManagerCategoryListData" @select="setCurrentCategory" />
       </TemplateEditTextFields>
       <TemplateEditTextFields :fields-id="titleId" label="제목" required v-model="title">
         <TextFields v-bind="$attrs" :input-id="titleId" v-model="title" size="medium" placeholder="제목 입력"
@@ -27,10 +25,10 @@
 
     <template #foot>
       <div class="flex mt-[6rem] justify-center gap-x-[1rem]">
-        <RouterLink to="/customer-service/inquiries"> 
-        <UIButton component="button" color-type="outlined" size="large" class-bind="!min-w-[14rem]"
-          @click="handleCreateCancel">취소</UIButton>
-</RouterLink>
+        <RouterLink to="/customer-service/inquiries">
+          <UIButton component="button" color-type="outlined" size="large" class-bind="!min-w-[14rem]"
+            @click="handleCreateCancel">취소</UIButton>
+        </RouterLink>
         <UIButton component="button" color-type="primary" size="large" class-bind="!min-w-[14rem]"
           @click="handleCreateSubmit">등록</UIButton>
       </div>
@@ -72,17 +70,13 @@ const currentCategory = ref('');
 const loginUserId = 1
 
 
-function c() {
-  console.log('title', title.value);
-  console.log('content', content.value);
-}
-
 onMounted(async () => {
   await lsSupportManagerStore().getLsSupportManagerCategoryList()
   lsSupportManagerCategoryListData.value = lsSupportManagerCategoryList.value
 
   firstSelect.value = lsSupportManagerCategoryListData.value[0].value
   console.log(lsSupportManagerCategoryListData.value[0].value);
+  currentCategory.value = lsSupportManagerCategoryListData.value[0].id
 })
 async function uploadFiles() {
   if (files.value != '') {
@@ -123,9 +117,15 @@ async function handleCreateSubmit() {
     },
     fileManagerList: showFiles.value
   }
+  if (title.value == '') customToast.error('title cannot be empty')
+  if (content.value == '') customToast.error('content cannot be empty')
   await lsSupportManagerStore().add(param)
-  console.log('add res: ', addRes.value);
-  customToast.success('글을 등록했습니다.');
+  if (addRes.value.statusCode == 1) {
+    router.push('/customer-service/inquiries')
+    setTimeout(function () {
+      customToast.success('글을 등록했습니다.');
+    }, 500)
+  }
 };
 // const dummyfiles = [
 //   {
