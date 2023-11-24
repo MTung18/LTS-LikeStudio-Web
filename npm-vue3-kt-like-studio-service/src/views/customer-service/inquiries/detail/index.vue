@@ -41,6 +41,7 @@ import TemplateDetail from '@/components/TemplateDetailWrap/TemplateDetail.vue';
 import TemplateEditInfo from '@/components/TemplateEditInfo/TemplateEditInfo.vue';
 import UIButton from '@/components/UIButton/UIButton.vue';
 import DetailAnswer from '@/containers/customer-service/inquiries/DetailAnswer.vue';
+import customToast from '@/untils/custom_toast';
 
 import { lsSupportManagerStore } from '@/stores/lsSupportManagerStore';
 
@@ -60,7 +61,7 @@ onMounted(async () => {
   await lsSupportManagerStore().getLsSupportManagerById(route.params.id)
   lsSupportManagerByIdData.value = lsSupportManagerById.value
 
-  await lsSupportManagerStore().getAllLsSupportManager()
+  await lsSupportManagerStore().getAllLsSupportManager(userId)
   allLsSupportManagerData.value = allLsSupportManager.value
 
   getPreNextLsSupportManagerId()
@@ -73,7 +74,7 @@ onMounted(async () => {
 });
 
 function getPreNextLsSupportManagerId() {
-  const ls = allLsSupportManagerData.value.filter(e => e.createUser == userId && e.questionId == 0)
+  const ls = allLsSupportManagerData.value
   const currentId = lsSupportManagerByIdData.value.id
 
   for (let i = 0; i < ls.length; i++) {
@@ -91,7 +92,9 @@ async function onDeleteButton() {
   if (window.confirm("confirm to delete")) {
     await lsSupportManagerStore().deleteLsSupportManagerForUser(lsSupportManagerByIdData.value.id)
     router.push('/customer-service/inquiries')
-    console.log('delete', lsSupportManagerByIdData.value.id);
+    setTimeout(function() {
+    customToast.success('successful delete');
+    }, 500)
   }
 };
 const props = defineProps({
