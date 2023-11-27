@@ -3,44 +3,40 @@
     <div class="sidebar__wrap">
       <div class="sidebar__category">
         <div class="sidebar__category-list">
-          <div
-            v-for="category in props.data"
-            :key="category.id"
-            :class="[category.isSelected && 'is-selected']"
-            class="sidebar__category-item"
-          >
-            <button type="button">{{ category.name }}</button>
+          <div v-if="props.data" v-for="vmdData in props.data" :key="vmdData.id" :class="[vmdData.isSelected && 'is-selected']"
+            class="sidebar__category-item">
+            <button type="button" @click="getTitle(vmdData.id)">
+              <Tabs v-if="!vmdId" type="withIcon" :is-selected="vmdData.id == props.data[0].id ? true : false">
+                {{ vmdData.title }}
+              </Tabs>
+              <Tabs v-else type="withIcon" :is-selected="vmdData.id == vmdId ? true : false">
+                {{ vmdData.title }}
+              </Tabs>
+            </button>
           </div>
         </div>
-        <div class="pagination">
-          <button type="button" class="pagination__action action--first">
+        <div class="pagination" v-if="props.data">
+          <button :disabled="isDisabledPrevButton" type="button" class="pagination__action action--first"
+            @click="firstPage()">
             <Icons icon-name="double_chevron_l" :width="1.4" :height="1.4" />
           </button>
-          <button type="button" class="pagination__action action--prev">
+          <button :disabled="isDisabledPrevButton" type="button" class="pagination__action action--prev"
+            @click="prevPage()">
             <Icons icon-name="chevron_l" :width="1.4" :height="1.4" />
           </button>
           <ul class="pagination__list">
-            <li class="pagination__item is-selected">
-              <button type="button" class="pagination__item-btn">1</button>
-            </li>
-            <li class="pagination__item">
-              <button type="button" class="pagination__item-btn">2</button>
-            </li>
-            <li class="pagination__item">
-              <button type="button" class="pagination__item-btn">3</button>
-            </li>
-            <li class="pagination__item">
-              <button type="button" class="pagination__item-btn">4</button>
-            </li>
-            <li class="pagination__item">
-              <button type="button" class="pagination__item-btn">5</button>
+            <li v-for="item in props.pageNumber" :key="item" class="pagination__item"
+              :class="currentPage === item && 'is-selected'">
+              <button type="button" @click="navigate(item)">{{ item }}</button>
             </li>
           </ul>
-          <button type="button" class="pagination__action action--next">
+          <button :disabled="isDisabledNextButton" type="button" class="pagination__action action--next"
+            @click="nextPage()">
             <Icons icon-name="chevron_r" :width="1.4" :height="1.4" />
           </button>
           <button type="button" class="pagination__action action--last">
-            <Icons icon-name="double_chevron_r" :width="1.4" :height="1.4" />
+            <Icons :disabled="isDisabledNextButton" icon-name="double_chevron_r" :width="1.4" :height="1.4"
+              @click="lastPage()" />
           </button>
         </div>
       </div>
@@ -50,12 +46,77 @@
 
 <script setup>
 import Icons from '@/components/Icons/Icons.vue';
+import Tabs from '@/components/Tabs/Tabs.vue';
+import { onMounted, ref, watch } from 'vue';
 
+const isDisabledPrevButton = ref(false);
+const isDisabledNextButton = ref(false);
+const vmdId = ref();
 const props = defineProps({
   data: {
     type: Array,
     default: null,
   },
+  currentPage: {
+    type: Number,
+    default: 1,
+  },
+  pageNumber: {
+    type: Number,
+    default: 5,
+  },
+});
+
+const emit = defineEmits(['numberPage']);
+
+function navigate(newPage) {
+  emit('numberPage', newPage);
+  if(!vmdId.value) {
+    vmdId.value = props.data[0].id;
+  }
+}
+
+function prevPage() {
+  emit('numberPage', props.currentPage - 1);
+  if(!vmdId.value) {
+    vmdId.value = props.data[0].id;
+  }
+}
+
+function firstPage() {
+  emit('numberPage', 1);
+  if(!vmdId.value) {
+    vmdId.value = props.data[0].id;
+  }
+}
+
+function nextPage() {
+  emit('numberPage', props.currentPage + 1);
+  if(!vmdId.value) {
+    vmdId.value = props.data[0].id;
+  }
+}
+
+function lastPage() {
+  emit('numberPage', props.pageNumber);
+  if(!vmdId.value) {
+    vmdId.value = props.data[0].id;
+  }
+}
+
+const getTitle = (id) => {
+  vmdId.value = id;
+  emit('vmdId', vmdId.value)
+}
+
+watch(() => props.currentPage, (newValue, oldValue) => {
+  isDisabledPrevButton.value = newValue === 1;
+  isDisabledNextButton.value = newValue === props.pageNumber;
+});
+
+onMounted(() => {
+  isDisabledPrevButton.value = props.currentPage === 1;
+  isDisabledNextButton.value = props.currentPage === props.pageNumber;
 });
 </script>
 
@@ -88,7 +149,7 @@ const props = defineProps({
   color: var(--color-primary);
 }
 
-.sidebar__category-item + .sidebar__category-item {
+.sidebar__category-item+.sidebar__category-item {
   margin-top: 1.1rem;
 }
 
@@ -143,5 +204,13 @@ const props = defineProps({
 
 .action--next {
   margin-right: 0.2rem;
+}
+
+.pagination__item.is-selected {
+  color: var(--color-primary);
+}
+
+.pagination__item.is-selected::before {
+  display: block;
 }
 </style>

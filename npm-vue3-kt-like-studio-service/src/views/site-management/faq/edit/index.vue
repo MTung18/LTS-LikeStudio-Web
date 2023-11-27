@@ -182,6 +182,7 @@ const handleEdit = async () => {
     } else {
       updatedFileManagerList.value = [];
     }
+    debugger
     faqData.value = {
       faq: {
         id: faqId.value,

@@ -90,7 +90,6 @@ const showDropdown = ref(Array(listDataQuestion.value.length).fill(false));
 
 const toggleDropdown = async (index) => {
   showDropdown.value[index] = !showDropdown.value[index];
-  await gitListFile(functionType, index);
 };
 
 const closeToggleDropdown = (index) => {

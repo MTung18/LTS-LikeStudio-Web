@@ -72,6 +72,7 @@ import { ref } from 'vue';
 import IconButton from '@/components/IconButton/IconButton.vue';
 import Icons from '@/components/Icons/Icons.vue';
 import RoundButton from '@/components/RoundButton/RoundButton.vue';
+import customToast from '@/untils/custom_toast';
 
 const props = defineProps({
   styleType: {
