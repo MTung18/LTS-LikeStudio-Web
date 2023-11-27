@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { ClientSide } from "../../public/appsettings.json"
 
-const baseUrl = ClientSide.LikeStudioAPI + "/api/vmd";
+const baseUrl = ClientSide.LikeStudioAPI + "/api/vmd" ;
 const VmdApi = {
     async getAllVmdForUser(category, keyword, page) {
      try {
@@ -92,4 +92,22 @@ const VmdApi = {
     }
    }
    
+  // async getVmdById(id){
+  //  try {
+  //   const response = await axios.get(`${baseUrl}/getVmdDetail`, {
+  //    params: { id: id },
+  //   });
+
+  //   return response.data.data;
+  //  } catch (error) {
+  //   console.error('Error fetching data:', error);
+  //   throw error;
+  //  }
+  // }
+
    export default VmdApi;
+
+ 
+
+
+ 

@@ -1,5 +1,10 @@
 import { createRouter, createWebHistory } from 'vue-router';
 
+import Error403 from '@/components/403/403.vue';
+import Error404 from '@/components/404/404.vue';
+import Error503 from '@/components/503/503.vue';
+import Error503Inspection from '@/components/503Inspection/503Inspection.vue';
+import CIBI from '@/views/ci-bl/index.vue';
 import CustomerAnnouncementsDetail from '@/views/customer-service/announcements/detail/index.vue';
 import CustomerAnnouncementsList from '@/views/customer-service/announcements/index.vue';
 import CustomerAnnouncementsNoData from '@/views/customer-service/announcements/nodata.vue';
@@ -19,7 +24,11 @@ import Example from '@/views/example/index.vue';
 import ExampleRoundButton from '@/views/example/round-button/index.vue';
 import ExampleSwitch from '@/views/example/switch/index.vue';
 import ExampleTabs from '@/views/example/tabs/index.vue';
+import Gallery from '@/views/gallery/index.vue';
+import GalleryNodata from '@/views/gallery/nodata.vue';
 import Home from '@/views/home.vue';
+import MyStudio from '@/views/my-studio/index.vue';
+import Policy from '@/views/policy/index.vue';
 import ManagementAdminList from '@/views/site-management/admin/index.vue';
 import ManagementAdminNodata from '@/views/site-management/admin/nodata.vue';
 import ManagementAnnouncementsCreate from '@/views/site-management/announcements/create/index.vue';
@@ -51,6 +60,11 @@ import ManagementVmdCreate from '@/views/site-management/vmd/create/index.vue';
 import ManagementVmdEdit from '@/views/site-management/vmd/edit/index.vue';
 import ManagementVmdList from '@/views/site-management/vmd/index.vue';
 import ManagementVmdNodata from '@/views/site-management/vmd/nodata.vue';
+import Template from '@/views/template/index.vue';
+import TemplateNodata from '@/views/template/nodata.vue';
+import Terms from '@/views/terms/index.vue';
+import Vmd from '@/views/vmd/index.vue';
+import VmdNodata from '@/views/vmd/nodata.vue';
 
 /** *
  *
@@ -61,9 +75,76 @@ import ManagementVmdNodata from '@/views/site-management/vmd/nodata.vue';
  */
 export const Routes = [
   {
+    path: '/:pathMatch(.*)*',
+    name: 'error404',
+    component: Error404,
+    meta: {
+      layout: 'NoHeaderFooterLayout',
+    },
+  },
+  {
+    path: '/error/403',
+    name: 'error403',
+    component: Error403,
+    meta: {
+      layout: 'NoHeaderFooterLayout',
+    },
+  },
+  {
+    path: '/error/503',
+    name: 'error503',
+    component: Error503,
+    meta: {
+      layout: 'NoHeaderFooterLayout',
+    },
+  },
+  {
+    path: '/error/503-inspection',
+    name: 'error503Inspection',
+    component: Error503Inspection,
+    meta: {
+      layout: 'NoHeaderFooterLayout',
+    },
+  },
+  {
     path: '/',
     name: 'home',
     component: Home,
+  },
+  {
+    path: '/terms',
+    name: 'terms',
+    component: Terms,
+  },
+  {
+    path: '/policy',
+    name: 'policy',
+    component: Policy,
+  },
+  {
+    path: '/ci-bi',
+    name: 'ciBi',
+    component: CIBI,
+  },
+  {
+    path: '/template',
+    name: 'template',
+    component: Template,
+  },
+  {
+    path: '/gallery',
+    name: 'gallery',
+    component: Gallery,
+  },
+  {
+    path: '/vmd',
+    name: 'vmd',
+    component: Vmd,
+  },
+  {
+    path: '/my-studio',
+    name: 'myStudio',
+    component: MyStudio,
   },
   {
     path: '/customer-service/announcements',
@@ -274,6 +355,21 @@ export const Routes = [
     component: ExampleSwitch,
   },
   /** *************** preview 확일 은 위한 라우팅 ******************** */
+  {
+    path: '/template-nodata',
+    name: 'templateNodata',
+    component: TemplateNodata,
+  },
+  {
+    path: '/gallery-nodata',
+    name: 'galleryNodata',
+    component: GalleryNodata,
+  },
+  {
+    path: '/vmd-nodata',
+    name: 'vmdNodata',
+    component: VmdNodata,
+  },
   {
     path: '/customer-service/announcements/nodata',
     name: 'customerAnnouncementsNoData',

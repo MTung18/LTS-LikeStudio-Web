@@ -33,7 +33,7 @@
               <td class="num">{{ item.rowNumber }}</td>
               <td>{{ item.category }}</td>
               <td class="title !text-left">
-                <RouterLink to="/site-management/inquiries/create">{{
+                <RouterLink :to="`/site-management/inquiries/${item.id}/${item.status == 1 ? 'answered': 'unanswered'}`">{{
                   item.title
                 }}</RouterLink>
               </td>
@@ -65,8 +65,7 @@ import { storeToRefs } from 'pinia';
 import { lsSupportManagerStore } from '@/stores/lsSupportManagerStore';
 import moment from 'moment';
 
-const { lsSupportManagerListForAdmin } = storeToRefs(lsSupportManagerStore())
-const { lsSupportManagerCategoryList } = storeToRefs(lsSupportManagerStore())
+const { lsSupportManagerListForAdmin, lsSupportManagerCategoryList } = storeToRefs(lsSupportManagerStore())
 const lsSupportManagerListForAdminData = ref([])
 const lsSupportManagerCategoryListData = ref([])
 const currentPage = ref()
@@ -78,7 +77,7 @@ const toDateValue = ref()
 const currentStatus = ref('')
 
 onMounted(async () => {
-  await updatePage(2)
+  await updatePage('')
 
   await lsSupportManagerStore().getLsSupportManagerCategoryList()
   lsSupportManagerCategoryListData.value = [
@@ -89,11 +88,14 @@ onMounted(async () => {
   ]
 })
 function changeStatus() {
-  updatePage('', currentCategory.value, currentStatus.value, '', '', '')
+  updatePage('')
 }
-function reset() {
-  updatePage('', '', '', '', '', '')
+async function reset() {
+  await lsSupportManagerStore().getLsSupportManagerListForAdmin('','','','','','')
   currentCategory.value = 0
+  lsSupportManagerListForAdminData.value = lsSupportManagerListForAdmin.value
+  currentPage.value = lsSupportManagerListForAdminData.value.data.currentPage
+  totalPages.value = lsSupportManagerListForAdminData.value.data.totalPages
 }
 function setCurrentCategory(category) {
   currentCategory.value = category
@@ -116,7 +118,6 @@ async function updatePage(page) {
   let endDate = toDateValue.value ? toDateValue.value : ''
   await lsSupportManagerStore().getLsSupportManagerListForAdmin(keyword, category, status, startDate, endDate, page)
   lsSupportManagerListForAdminData.value = lsSupportManagerListForAdmin.value
-
   currentPage.value = lsSupportManagerListForAdminData.value.data.currentPage
   totalPages.value = lsSupportManagerListForAdminData.value.data.totalPages
 }

@@ -18,7 +18,7 @@
       <div v-if="modifier" class="template-edit-info__row-inner">
         <div class="template-edit-info__label">수정일시/수정자</div>
         <div class="template-edit-info__desc">
-          <span class="desc__date">{{ props.lastModifiedDate }}</span>
+          <span class="desc__date">{{ moment(props.lastModifiedDate).format("YYYY.MM.DD HH:mm") }}</span>
           <span class="desc_between"></span>
           <span>{{ props.modifier }} ({{ props.modifierPosition }})</span>
         </div>
@@ -26,7 +26,7 @@
       <div v-if="writer" class="template-edit-info__row-inner">
         <div class="template-edit-info__label">작성일시/작성자</div>
         <div class="template-edit-info__desc">
-          <span class="desc__date">{{ props.createdDate }}</span>
+          <span class="desc__date">{{ moment(props.createdDate).format("YYYY.MM.DD HH:mm") }}</span>
           <span class="desc_between"></span>
           <span>{{ props.writer }} ({{ props.writerPosition }})</span>
         </div>
@@ -36,6 +36,7 @@
 </template>
 
 <script setup>
+import moment from 'moment';
 const props = defineProps({
   hits: {
     type: Number,

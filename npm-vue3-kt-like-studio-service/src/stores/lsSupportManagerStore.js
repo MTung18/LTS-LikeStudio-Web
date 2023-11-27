@@ -9,6 +9,9 @@ export const lsSupportManagerStore = defineStore("lsSupportManager", () => {
     const lsSupportManagerById = ref([]);
     const allLsSupportManager = ref([]);
     const lsSupportManagerCategoryList = ref([])
+    const answerRes = ref()
+    const updateRes = ref()
+    const addRes = ref()
 
     async function getLsSupportManagerListForUser(keyword,userId,startDate,endDate,page) {
         lsSupportManagerListForUser.value = await LsSupportManagerApi.getLsSupportManagerListForUser(keyword,userId,startDate,endDate,page);
@@ -25,8 +28,20 @@ export const lsSupportManagerStore = defineStore("lsSupportManager", () => {
     async function deleteLsSupportManagerForUser(id) {
         await LsSupportManagerApi.deleteLsSupportManagerForUser(id);
     }
+    async function add(param) {
+        addRes.value = await LsSupportManagerApi.add(param);
+    }
+    async function deleteLsSupportManagerForAdmin(answerId,questionId) {
+        await LsSupportManagerApi.deleteLsSupportManagerForAdmin(answerId,questionId);
+    }
     async function getLsSupportManagerCategoryList() {
         lsSupportManagerCategoryList.value = await LsSupportManagerApi.getLsSupportManagerCategoryList();
+    }
+    async function answer(param) {
+        answerRes.value = await LsSupportManagerApi.answer(param);
+    }
+    async function update(param) {
+        updateRes.value = await LsSupportManagerApi.update(param);
     }
     return {
         lsSupportManagerListForUser,
@@ -34,12 +49,19 @@ export const lsSupportManagerStore = defineStore("lsSupportManager", () => {
         lsSupportManagerById,
         allLsSupportManager,
         lsSupportManagerCategoryList,
+        answerRes,
+        updateRes,
+        addRes,
         getLsSupportManagerListForUser,
         getLsSupportManagerListForAdmin,
         getLsSupportManagerById,
         getAllLsSupportManager,
         deleteLsSupportManagerForUser,
-        getLsSupportManagerCategoryList
+        add,
+        deleteLsSupportManagerForAdmin,
+        getLsSupportManagerCategoryList,
+        answer,
+        update
     };
 })
 
