@@ -22,8 +22,8 @@ export const lsSupportManagerStore = defineStore("lsSupportManager", () => {
     async function getLsSupportManagerById(id) {
         lsSupportManagerById.value = await LsSupportManagerApi.getLsSupportManagerById(id);
     }
-    async function getAllLsSupportManager() {
-        allLsSupportManager.value = await LsSupportManagerApi.getAllLsSupportManager();
+    async function getAllLsSupportManager(userId) {
+        allLsSupportManager.value = await LsSupportManagerApi.getAllLsSupportManager(userId);
     }
     async function deleteLsSupportManagerForUser(id) {
         await LsSupportManagerApi.deleteLsSupportManagerForUser(id);

@@ -141,6 +141,7 @@ const handleCreateSubmit = async () => {
       for (let i = 0; i < listFileSave.value.length; i++) {
         formData.append('files', listFileSave.value[i])
       }
+      debugger
       await fileStore.uploadFile(formData)
       if (responseUploadFile.value.statusCode !== 1) {
         customToast.error('Error upload file.')
@@ -153,6 +154,12 @@ const handleCreateSubmit = async () => {
           filePaths.push(item.uniqFileName)
         }
       });
+
+      listFile.value = listFile.value.map((file, index) => ({
+        oriFileName: file.oriFileName,
+        createUser: 2,
+        uniqFileName: filePaths[index],
+      }));
 
       faqData.value = {
         faq: {

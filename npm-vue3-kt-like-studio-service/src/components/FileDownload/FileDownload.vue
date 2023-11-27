@@ -2,12 +2,8 @@
   <div :class="props.classBind" class="download__file-wrap">
     <p class="download__title">첨부파일</p>
     <ul class="download__file-list">
-      <li
-        v-for="item in props.files"
-        :key="item.id"
-        class="download__file-item"
-      >
-        <button type="button" class="file-item__area">
+      <li v-for="item in props.files" :key="item.id" class="download__file-item">
+        <button type="button" class="file-item__area" @click="downloadFile(item.filePath, item.filename)">
           <span class="file-icon">
             <Icons icon-name="download" :width="1.4" :height="1.4" />
           </span>
@@ -80,7 +76,7 @@ const downloadFile = async (filePath, filename) => {
   font-weight: 700;
 }
 
-.download__file-item + .download__file-item {
+.download__file-item+.download__file-item {
   margin-top: 1.4rem;
 }
 
@@ -106,7 +102,8 @@ const downloadFile = async (filePath, filename) => {
   white-space: normal;
   overflow: hidden;
   text-overflow: ellipsis;
-  -webkit-line-clamp: 1; /* 텍스트를 자를 때 원하는 단위 ex) 3줄 */
+  -webkit-line-clamp: 1;
+  /* 텍스트를 자를 때 원하는 단위 ex) 3줄 */
   -webkit-box-orient: vertical;
 }
 </style>
