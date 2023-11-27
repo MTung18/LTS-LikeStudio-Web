@@ -2,7 +2,7 @@
   <TemplateDetail>
     <template #body>
       <TemplateDetailHead :title="lsSupportManagerByIdData.title"
-        :category="lsSupportManagerByIdData.category ? lsSupportManagerByIdData.category : 'not found category'"
+        :category="lsSupportManagerByIdData.valueCate"
         :date="lsSupportManagerByIdData.createDate" />
       <TemplateDetailBody :content="lsSupportManagerByIdData.content"
         :files="lsSupportManagerByIdData.fileManagerListQuestion" :prev-post="preLsSupportManagerByIdData"
@@ -66,11 +66,19 @@ onMounted(async () => {
 
   getPreNextLsSupportManagerId()
 
-  await lsSupportManagerStore().getLsSupportManagerById(preLsSupportManagerId)
-  preLsSupportManagerByIdData.value = lsSupportManagerById.value
+  if (preLsSupportManagerId == undefined) {
+    preLsSupportManagerByIdData.value = ''
+  } else {
+    await lsSupportManagerStore().getLsSupportManagerById(preLsSupportManagerId)
+    preLsSupportManagerByIdData.value = lsSupportManagerById.value
+  }
 
-  await lsSupportManagerStore().getLsSupportManagerById(nextLsSupportManagerId)
-  nextLsSupportManagerByIdData.value = lsSupportManagerById.value
+  if (nextLsSupportManagerId == undefined) {
+    nextLsSupportManagerByIdData.value = ''
+  } else {
+    await lsSupportManagerStore().getLsSupportManagerById(nextLsSupportManagerId)
+    nextLsSupportManagerByIdData.value = lsSupportManagerById.value
+  }
 });
 
 function getPreNextLsSupportManagerId() {
@@ -92,8 +100,8 @@ async function onDeleteButton() {
   if (window.confirm("confirm to delete")) {
     await lsSupportManagerStore().deleteLsSupportManagerForUser(lsSupportManagerByIdData.value.id)
     router.push('/customer-service/inquiries')
-    setTimeout(function() {
-    customToast.success('successful delete');
+    setTimeout(function () {
+      customToast.success('successful delete');
     }, 500)
   }
 };

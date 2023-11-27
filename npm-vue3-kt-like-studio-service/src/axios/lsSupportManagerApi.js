@@ -124,9 +124,19 @@ const LsSupportManagerApi = {
     }
   },
   async update(param) {
-    console.log('param api: ',param);
     try {
       const response = await axios.put(`${baseUrl}/update`,param);
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      throw error;
+    }
+  },
+  async checkFirstVisit(userId) {
+    try {
+      const response = await axios.get(`${baseUrl}/checkFirstVisit`,{
+        params: {userId: userId}
+      });
       return response.data;
     } catch (error) {
       console.error('Error fetching data:', error);

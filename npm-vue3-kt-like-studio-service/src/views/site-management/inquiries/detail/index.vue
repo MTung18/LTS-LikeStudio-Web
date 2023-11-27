@@ -1,12 +1,12 @@
 <template>
-  {{ lsSupportManagerByIdData }}
   <TemplateDetail>
     <template #body>
       <TemplateDetailHead :title="lsSupportManagerByIdData.title" :category="lsSupportManagerByIdData.valueCate"
         :writer="lsSupportManagerByIdData.username" :writer-position="lsSupportManagerByIdData.roleName"
         :date="lsSupportManagerByIdData.createDate" />
-      <TemplateDetailBody :content="lsSupportManagerByIdData.content" :files="lsSupportManagerByIdData.files"
-        :prev-post="preLsSupportManagerByIdData" :next-post="nextLsSupportManagerByIdData" @someEvent="callback"
+      <TemplateDetailBody :content="lsSupportManagerByIdData.content"
+        :files="lsSupportManagerByIdData.fileManagerListQuestion" :prev-post="preLsSupportManagerByIdData"
+        :next-post="nextLsSupportManagerByIdData" @someEvent="callback"
         class="pb-[6rem] border-gray-gray-ddd border-b-[1px]" />
       <TemplateEditTextFields v-if="props.state === 'unanswered' || state === 'edit'" label="답변"
         class-bind="relative pt-[2.8rem] after:absolute after:bottom-[-1px] after:left-0 after:content-[''] after:w-full after:h-[1px] after:bg-neutrals-black">
@@ -26,11 +26,10 @@
           :files="[
             { id: item.id, filename: item.oriFileName, filePath: item.uniqFileName },
           ]" />
-        <TemplateEditInfo :hits="''" :last-modified-date="formatDate(lsSupportManagerByIdData.editAnswerDate)"
-          :modifier="lsSupportManagerByIdData.usernameAnswer"
+        <TemplateEditInfo :hits="''" :last-modified-date="lsSupportManagerByIdData.editAnswerDate"
+          :modifier="lsSupportManagerByIdData.answerEditUser"
           :modifier-position="lsSupportManagerByIdData.departmentEditAnswer"
-          :created-date="formatDate(lsSupportManagerByIdData.dateAnswer)"
-          :writer="lsSupportManagerByIdData.answerEditUser"
+          :created-date="lsSupportManagerByIdData.dateAnswer" :writer="lsSupportManagerByIdData.usernameAnswer"
           :writer-position="lsSupportManagerByIdData.departmentNameAnswer" class-bind="after:!hidden !pt-[4rem] !pb-0" />
       </DetailAnswer>
     </template>
@@ -84,6 +83,8 @@ import { storeToRefs } from 'pinia';
 import { lsSupportManagerStore } from '@/stores/lsSupportManagerStore';
 import { fileManagerStore } from '@/stores/fileManagerStore';
 import moment from 'moment';
+import utils from '@/untils/utils';
+import userId from '@/untils/loginUserId';
 
 
 const props = defineProps({
@@ -99,11 +100,11 @@ const props = defineProps({
 
 const { lsSupportManagerById, allLsSupportManager, answerRes, updateRes } = storeToRefs(lsSupportManagerStore());
 const { responseUploadFile } = storeToRefs(fileManagerStore());
+const  responseUploadFileData  = ref([]);
 const lsSupportManagerByIdData = ref([])
 const allLsSupportManagerData = ref([])
 const preLsSupportManagerByIdData = ref([])
 const nextLsSupportManagerByIdData = ref([])
-const userId = 1
 const files = ref([])
 const showFiles = ref([])
 const preLsSupportManagerId = ref()
@@ -112,7 +113,8 @@ const route = useRoute()
 const router = useRouter();
 const textareaId = uuid();
 const textareaRef = ref('');
-const loginUserId = 1
+const ARCHIVE_FILES = ['zip', '7z', 'alz', 'egg', 'xls', 'xlsx', 'ppt', 'pptx', 'doc', 'docx', 'pdf', 'jpg', 'jpeg', 'png', 'gif', 'mp4', 'wmv', 'asf', 'flv', 'mov', 'mpeg'];
+const maxSizeFile = 50;
 
 onMounted(async () => {
   await lsSupportManagerStore().getLsSupportManagerById(route.params.id)
@@ -123,19 +125,38 @@ onMounted(async () => {
 
   await getPreNextLsSupportManagerId()
 
-  await lsSupportManagerStore().getLsSupportManagerById(preLsSupportManagerId.value)
-  preLsSupportManagerByIdData.value = lsSupportManagerById.value
+  if (preLsSupportManagerId.value == undefined) {
+    preLsSupportManagerByIdData.value = ''
+  } else {
+    await lsSupportManagerStore().getLsSupportManagerById(preLsSupportManagerId.value)
+    preLsSupportManagerByIdData.value = lsSupportManagerById.value
+  }
 
-  await lsSupportManagerStore().getLsSupportManagerById(nextLsSupportManagerId.value)
-  nextLsSupportManagerByIdData.value = lsSupportManagerById.value
+  if (nextLsSupportManagerId.value == undefined) {
+    nextLsSupportManagerByIdData.value = ''
+  } else {
+    await lsSupportManagerStore().getLsSupportManagerById(nextLsSupportManagerId.value)
+    nextLsSupportManagerByIdData.value = lsSupportManagerById.value
+  }
 
   lsSupportManagerByIdData.value.fileManagerListAnswer.forEach(e => {
-    showFiles.value.push({ oriFileName: e.oriFileName, uniqFileName: e.uniqFileName, createUser: loginUserId })
+    showFiles.value.push({ oriFileName: e.oriFileName, uniqFileName: e.uniqFileName, createUser: userId })
   })
 
+  // lsSupportManagerByIdData.value.fileManagerListAnswer.forEach(e => {
+  //   files.value.push(new File({
+  //     lastModified : 1700740222151,
+  //     lastModifiedDate : 'Thu Nov 23 2023 18: 50: 22 GMT +0700(Indochina Time) {}',
+  //     name : e.oriFileName,
+  //     size : 39612,
+  //     type : "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+  //     webkitRelativePath: ''
+  //   }))
+  // })
+  // files.value = lsSupportManagerByIdData.value.fileManagerListAnswer
+
+
   textareaRef.value = lsSupportManagerByIdData.value.contentAnswer
-  console.log('onmounte');
-  console.log(textareaRef.value);
 });
 
 function getPreNextLsSupportManagerId() {
@@ -168,7 +189,7 @@ async function answer() {
     lsSupportManagerQuestionId: lsSupportManagerByIdData.value.id,
     lsSupportManagerAnswer: {
       content: textareaRef.value,
-      createUser: loginUserId,
+      createUser: userId,
       category: lsSupportManagerByIdData.value.category
     }, fileManagerList: showFiles.value
   }
@@ -190,7 +211,7 @@ async function update() {
     lsSupportManager: {
       id: lsSupportManagerByIdData.value.idAnswer,
       content: textareaRef.value,
-      editUser: loginUserId
+      editUser: userId
     },
     fileManagerList: showFiles.value
   }
@@ -211,20 +232,37 @@ async function uploadFiles() {
 
     files.value.forEach(e => uploadFileParam.append('files', e))
     await fileManagerStore().uploadFile(uploadFileParam)
+    responseUploadFileData.value = responseUploadFile.value
 
     let answerListLength = lsSupportManagerByIdData.value.fileManagerListAnswer.length
-    responseUploadFile.value.data.forEach((e, i) => showFiles.value[i + answerListLength].uniqFileName = e.uniqFileName)
+    responseUploadFileData.value.data.forEach((e, i) => showFiles.value[i + answerListLength].uniqFileName = e.uniqFileName)
   }
 }
 
 async function handleFileUpload(file) {
-  showFiles.value.push({ oriFileName: file.name, uniqFileName: '', createUser: loginUserId })
+  const sizeInMB = file.size / (1024 * 1024);
+  const typeFile = utils.getFileType(file.name);
+
+  if (sizeInMB > maxSizeFile) {
+    customToast.error('File size must be no more than 50MB.');
+    return;
+  }
+  if (!ARCHIVE_FILES.includes(typeFile)) {
+    customToast.error('This file type is not allowed for upload.');
+    return;
+  }
+  if (showFiles.value.size == 10) {
+    customToast.error('Maximum of 10 files.');
+    return;
+  }
+  showFiles.value.push({ oriFileName: file.name, uniqFileName: '', createUser: userId })
   files.value.push(file)
+
 };
 
 async function handleFileRemove(file) {
   showFiles.value.splice(file, 1)
-  files.value.splice(file, 1)
+  lsSupportManagerByIdData.value.fileManagerListAnswer.splice(file, 1)
 };
 // const dummyData = {
 //   title: '갤러리로 보내기 할 때 오류가 발생합니다',

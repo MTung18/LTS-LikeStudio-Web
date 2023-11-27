@@ -12,6 +12,7 @@ export const lsSupportManagerStore = defineStore("lsSupportManager", () => {
     const answerRes = ref()
     const updateRes = ref()
     const addRes = ref()
+    const isFirst = ref()
 
     async function getLsSupportManagerListForUser(keyword,userId,startDate,endDate,page) {
         lsSupportManagerListForUser.value = await LsSupportManagerApi.getLsSupportManagerListForUser(keyword,userId,startDate,endDate,page);
@@ -43,6 +44,9 @@ export const lsSupportManagerStore = defineStore("lsSupportManager", () => {
     async function update(param) {
         updateRes.value = await LsSupportManagerApi.update(param);
     }
+    async function checkFirstVisit(userId) {
+        isFirst.value = await LsSupportManagerApi.checkFirstVisit(userId);
+    }
     return {
         lsSupportManagerListForUser,
         lsSupportManagerListForAdmin,
@@ -52,6 +56,7 @@ export const lsSupportManagerStore = defineStore("lsSupportManager", () => {
         answerRes,
         updateRes,
         addRes,
+        isFirst,
         getLsSupportManagerListForUser,
         getLsSupportManagerListForAdmin,
         getLsSupportManagerById,
@@ -61,7 +66,8 @@ export const lsSupportManagerStore = defineStore("lsSupportManager", () => {
         deleteLsSupportManagerForAdmin,
         getLsSupportManagerCategoryList,
         answer,
-        update
+        update,
+        checkFirstVisit
     };
 })
 

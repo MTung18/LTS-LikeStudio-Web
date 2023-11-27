@@ -1,5 +1,5 @@
 <template>
-  <div class="wrap">
+  <div class="wrap my-[20%]">
     <div class="wrap__img-area">
       <div class="wrap__img-inner">
         <figure class="wrap__img">
@@ -12,6 +12,7 @@
       라이크 스튜디오를 이용해 주셔서 감사합니다. <br />
       문의 사항을 남겨주시면 빠르고 친절한 답변 드리겠습니다.
     </p>
+    <RouterLink to="/customer-service/inquiries/create">
     <UIButton
       component="button"
       color-type="primary"
@@ -24,7 +25,7 @@
         icon-name="arrow_next_bold"
         icon-color="var(--color-neutrals-white-100)"
       />
-    </UIButton>
+    </UIButton></RouterLink>
   </div>
 </template>
 
