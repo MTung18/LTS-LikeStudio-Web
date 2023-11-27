@@ -192,12 +192,17 @@ const handleCreateSubmit = async () => {
         return
       }
       const filePaths = responseUploadFile.value.data.map(item => item.uniqFileName);
-debugger
       listFile.value.forEach(item => {
         if (item.uniqFileName !== null) {
           filePaths.push(item.uniqFileName)
         }
       });
+
+      listFile.value = listFile.value.map((file, index) => ({
+        oriFileName: file.oriFileName,
+        createUser: 2,
+        uniqFileName: filePaths[index],
+      }));
 
       vmdData.value = {
         vmd: {
@@ -222,12 +227,16 @@ debugger
       }
     }
     await store.addVmd(vmdData.value);
-
     if (responseAddVmd.value.statusCode === 1) {
       customToast.success('Successful create Vmd.')
       router.push(`/site-management/vmd`)
     } else {
-      customToast.error('Error create Vmd.');
+      if(responseAddVmd.value.errorMessages !== '' && !responseAddVmd.value.errorMessages !== null){
+        customToast.error(responseAddVmd.value.errorMessages);
+      }else{
+        customToast.error('Error create Vmd.');
+      }
+
     }
 
   } catch (error) {
