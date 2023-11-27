@@ -1,4 +1,5 @@
 <template>
+  {{ lsSupportManagerByIdData }}
   <TemplateDetail>
     <template #body>
       <TemplateDetailHead :title="lsSupportManagerByIdData.title" :category="lsSupportManagerByIdData.valueCate"
@@ -96,7 +97,7 @@ const props = defineProps({
   },
 });
 
-const { lsSupportManagerById, allLsSupportManager } = storeToRefs(lsSupportManagerStore());
+const { lsSupportManagerById, allLsSupportManager, answerRes, updateRes } = storeToRefs(lsSupportManagerStore());
 const { responseUploadFile } = storeToRefs(fileManagerStore());
 const lsSupportManagerByIdData = ref([])
 const allLsSupportManagerData = ref([])
@@ -105,7 +106,8 @@ const nextLsSupportManagerByIdData = ref([])
 const userId = 1
 const files = ref([])
 const showFiles = ref([])
-let preLsSupportManagerId, nextLsSupportManagerId
+const preLsSupportManagerId = ref()
+const nextLsSupportManagerId = ref()
 const route = useRoute()
 const router = useRouter();
 const textareaId = uuid();
@@ -116,33 +118,37 @@ onMounted(async () => {
   await lsSupportManagerStore().getLsSupportManagerById(route.params.id)
   lsSupportManagerByIdData.value = lsSupportManagerById.value
 
-  await lsSupportManagerStore().getAllLsSupportManager()
+  await lsSupportManagerStore().getAllLsSupportManager('')
   allLsSupportManagerData.value = allLsSupportManager.value
 
-  getPreNextLsSupportManagerId()
+  await getPreNextLsSupportManagerId()
 
-  await lsSupportManagerStore().getLsSupportManagerById(preLsSupportManagerId)
+  await lsSupportManagerStore().getLsSupportManagerById(preLsSupportManagerId.value)
   preLsSupportManagerByIdData.value = lsSupportManagerById.value
 
-  await lsSupportManagerStore().getLsSupportManagerById(nextLsSupportManagerId)
+  await lsSupportManagerStore().getLsSupportManagerById(nextLsSupportManagerId.value)
   nextLsSupportManagerByIdData.value = lsSupportManagerById.value
 
   lsSupportManagerByIdData.value.fileManagerListAnswer.forEach(e => {
     showFiles.value.push({ oriFileName: e.oriFileName, uniqFileName: e.uniqFileName, createUser: loginUserId })
   })
+
+  textareaRef.value = lsSupportManagerByIdData.value.contentAnswer
+  console.log('onmounte');
+  console.log(textareaRef.value);
 });
 
 function getPreNextLsSupportManagerId() {
-  const ls = allLsSupportManagerData.value.filter(e => e.createUser == userId && e.questionId == 0)
+  const ls = allLsSupportManagerData.value
   const currentId = lsSupportManagerByIdData.value.id
 
   for (let i = 0; i < ls.length; i++) {
-    if (i < ls.length - 1 && ls[i + 1].id == currentId) preLsSupportManagerId = ls[i].id
-    if (i > 0 && ls[i - 1].id == currentId) nextLsSupportManagerId = ls[i].id
+    if (i < ls.length - 1 && ls[i + 1].id == currentId) preLsSupportManagerId.value = ls[i].id
+    if (i > 0 && ls[i - 1].id == currentId) nextLsSupportManagerId.value = ls[i].id
   }
 }
 function callback(postId) {
-  window.location.href = `/customer-service/inquiries/${postId}/${nextLsSupportManagerByIdData.value.status == 1 ? 'answered' : 'unanswered'}`;
+  window.location.href = `/site-management/inquiries/${postId}/${nextLsSupportManagerByIdData.value.status == 1 ? 'answered' : 'unanswered'}`;
 }
 function formatDate(str) {
   return moment(str).format("YYYY.MM.DD HH:mm")
@@ -162,11 +168,21 @@ async function answer() {
     lsSupportManagerQuestionId: lsSupportManagerByIdData.value.id,
     lsSupportManagerAnswer: {
       content: textareaRef.value,
-      createUser: loginUserId
+      createUser: loginUserId,
+      category: lsSupportManagerByIdData.value.category
     }, fileManagerList: showFiles.value
   }
 
+
+  if (textareaRef.value == '') customToast.error('content cannot be empty')
+
   await lsSupportManagerStore().answer(param)
+  if (answerRes.value.statusCode == 1) {
+    router.push('/site-management/inquiries')
+    setTimeout(function () {
+      customToast.success('successful answer')
+    }, 500)
+  }
 };
 async function update() {
   await uploadFiles()
@@ -179,7 +195,14 @@ async function update() {
     fileManagerList: showFiles.value
   }
 
+  if (textareaRef.value == '') customToast.error('content cannot be empty')
   await lsSupportManagerStore().update(param)
+  if (updateRes.value.statusCode == 1) {
+    router.push('/site-management/inquiries')
+    setTimeout(function () {
+      customToast.success('successful edit the answer')
+    }, 500);
+  }
 };
 
 async function uploadFiles() {

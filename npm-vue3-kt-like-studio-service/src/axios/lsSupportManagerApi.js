@@ -53,9 +53,12 @@ const LsSupportManagerApi = {
       throw error;
     }
   },
-  async getAllLsSupportManager() {
+  async getAllLsSupportManager(userId) {
     try {
       const response = await axios.get(`${baseUrl}/all`, {
+        params: {
+          userId: userId
+        },
       });
       return response.data;
     } catch (error) {
