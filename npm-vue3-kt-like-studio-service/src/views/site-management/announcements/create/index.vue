@@ -143,6 +143,12 @@ const handleCreateSubmit = async () => {
         }
       });
 
+      listFile.value = listFile.value.map((file, index) => ({
+        oriFileName: file.oriFileName,
+        createUser: 2,
+        uniqFileName: filePaths[index],
+      }));
+
       noticeBoardData.value = {
         noticeBoard: {
           title: noticeBoarDetail.value.title,

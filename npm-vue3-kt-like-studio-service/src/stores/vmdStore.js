@@ -14,7 +14,7 @@ export const vmdStore = defineStore("vmd", () => {
  //  listOfFaqAdmin.value = await FaqApi.getListFaqForAdmin(keyword, category, startDate, endDate, page);
  // }
 
- async function getListVmdForUser(keyword, category, page) {
+ async function getListVmdForUser(category, keyword, page) {
   listOfVmdUser.value = await VmdApi.getListVmdForUser(category, keyword, page);
  }
 

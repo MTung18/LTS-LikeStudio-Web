@@ -3,12 +3,19 @@
     <div class="sidebar__wrap">
       <div class="sidebar__category">
         <div class="sidebar__category-list">
-          <div v-for="vmdData in props.data" :key="vmdData.id" :class="[vmdData.isSelected && 'is-selected']"
+          <div v-if="props.data" v-for="vmdData in props.data" :key="vmdData.id" :class="[vmdData.isSelected && 'is-selected']"
             class="sidebar__category-item">
-            <button type="button" @click="getTitle(vmdData.id)" :is-selected="vmdData.id == vmdId ? true : false">{{ vmdData.title }}</button>
+            <button type="button" @click="getTitle(vmdData.id)">
+              <Tabs v-if="!vmdId" type="withIcon" :is-selected="vmdData.id == props.data[0].id ? true : false">
+                {{ vmdData.title }}
+              </Tabs>
+              <Tabs v-else type="withIcon" :is-selected="vmdData.id == vmdId ? true : false">
+                {{ vmdData.title }}
+              </Tabs>
+            </button>
           </div>
         </div>
-        <div class="pagination">
+        <div class="pagination" v-if="props.data">
           <button :disabled="isDisabledPrevButton" type="button" class="pagination__action action--first"
             @click="firstPage()">
             <Icons icon-name="double_chevron_l" :width="1.4" :height="1.4" />
@@ -39,6 +46,7 @@
 
 <script setup>
 import Icons from '@/components/Icons/Icons.vue';
+import Tabs from '@/components/Tabs/Tabs.vue';
 import { onMounted, ref, watch } from 'vue';
 
 const isDisabledPrevButton = ref(false);
@@ -63,22 +71,37 @@ const emit = defineEmits(['numberPage']);
 
 function navigate(newPage) {
   emit('numberPage', newPage);
+  if(!vmdId.value) {
+    vmdId.value = props.data[0].id;
+  }
 }
 
 function prevPage() {
   emit('numberPage', props.currentPage - 1);
+  if(!vmdId.value) {
+    vmdId.value = props.data[0].id;
+  }
 }
 
 function firstPage() {
   emit('numberPage', 1);
+  if(!vmdId.value) {
+    vmdId.value = props.data[0].id;
+  }
 }
 
 function nextPage() {
   emit('numberPage', props.currentPage + 1);
+  if(!vmdId.value) {
+    vmdId.value = props.data[0].id;
+  }
 }
 
 function lastPage() {
   emit('numberPage', props.pageNumber);
+  if(!vmdId.value) {
+    vmdId.value = props.data[0].id;
+  }
 }
 
 const getTitle = (id) => {
@@ -92,7 +115,6 @@ watch(() => props.currentPage, (newValue, oldValue) => {
 });
 
 onMounted(() => {
-  // console.log(props.data);
   isDisabledPrevButton.value = props.currentPage === 1;
   isDisabledNextButton.value = props.currentPage === props.pageNumber;
 });
@@ -182,5 +204,13 @@ onMounted(() => {
 
 .action--next {
   margin-right: 0.2rem;
+}
+
+.pagination__item.is-selected {
+  color: var(--color-primary);
+}
+
+.pagination__item.is-selected::before {
+  display: block;
 }
 </style>

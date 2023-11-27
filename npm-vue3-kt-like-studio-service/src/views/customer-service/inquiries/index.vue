@@ -1,5 +1,4 @@
 <template>
-  {{ listData }}
   <TemplateBoardWrap title="1:1 문의">
     <template v-if="!firstVisit">
       <div class="mt-[4rem] text-center">

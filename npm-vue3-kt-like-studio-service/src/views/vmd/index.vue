@@ -4,134 +4,55 @@
 <template>
   <TemplateBoardWrap title="매장 VMD" container-size="full">
     <ul class="category__list">
-      <li
-        v-for="category in categories"
-        :key="category.id"
-        class="category__item"
-      >
-        <Tabs
-          type="underbar"
-          :is-selected="category.isSelected"
-          @tab-selected="updateSelectedCategory(category.id)"
-        >
-          {{ category.category }}
-          <span v-show="category.dummyLength && category.dummyLength > 0">
-            {{ category.dummyLength }}
-          </span>
+      <li v-for="category in categoryList" :key="category.id" class="category__item">
+        <Tabs type="withIcon" use-icon :is-selected="category.id == currentCategory ? true : false"
+          @click="setCurrentCategory(category.id)">
+          {{ category.value }}
         </Tabs>
       </li>
     </ul>
     <div class="search-wrap">
-      <SearchInput
-        v-model="dummyInputValue"
-        placeholder="검색어를 입력해주세요"
-        size="large"
-        style-type="rounded"
-        color-type="black"
-      />
+      <SearchInput v-model="dummyInputValue" placeholder="검색어를 입력해주세요" size="large" style-type="rounded"
+        color-type="black" @keydown.enter="handleSearch" />
     </div>
     <div class="template__body">
-      <CategoryPaginationSideBar :data="sideCategories" />
+      <CategoryPaginationSideBar :data="listVmd.list" :currentPage="currentPage" :pageNumber="totalPages"
+        @numberPage="navigate" @vmdId="idOfVMD" />
       <div class="content">
         <div class="content__head">
-          <h3 class="content__head-title">2023년 10월</h3>
+          <h3 class="content__head-title" v-if="vmdDetail">{{ vmdDetail.title }}</h3>
           <div class="content__head__action">
-            <CheckBox
-              :check-list="'전체 선택'"
-              :id="'no'"
-              :shape-type="'square'"
-              :name="'all'"
-              v-model="allCheck"
-              @change="handleAllCheck"
-            ></CheckBox>
-            <RoundButton component="button" color-type="filed" size="medium"
-              >다운로드</RoundButton
-            >
+            <CheckBox :check-list="'전체 선택'" :id="'no'" :shape-type="'square'" :name="'all'" v-model="allCheck"
+              @change="handleAllCheck(vmdDetail.vmdFileList)"></CheckBox>
+            <RoundButton component="button" color-type="filed" size="medium" @click="downloadFiles">다운로드</RoundButton>
           </div>
         </div>
-        <div class="content__list">
-          <div v-for="item in dummyContent" :key="item" class="content__item">
-            <CheckBox
-              :id="`no${item.id}`"
-              :shape-type="'square'"
-              :name="'content'"
-              :model-value="item.isChecked"
-              class="content__check-box"
-            ></CheckBox>
+        <div class="content__list" v-if="listVmd.list">
+          <div v-if="vmdDetail" v-for="item in vmdDetail.vmdFileList" :key="item" class="content__item">
+            <CheckBox :id="`no${item.id}`" :shape-type="'square'" :name="'content'" :model-value="item.selected" v-model="checkOne"
+              class="content__check-box" @change="handleCheck(item)"></CheckBox>
             <figure class="content__item-img">
-              <img
-                v-if="item.thumbnail"
-                :src="getImageUrl(item.thumbnail)"
-                alt="예시 이미지"
-              />
-              <Icons
-                v-else-if="item.fileType === 'psd'"
-                icon-name="psd"
-                icon-color="transparent"
-                :width="7.4"
-                :height="7.4"
-                class="content__item-icon"
-              />
-              <Icons
-                v-else-if="item.fileType === 'ai'"
-                icon-name="ai"
-                icon-color="transparent"
-                :width="7.4"
-                :height="7.4"
-                class="content__item-icon"
-              />
-              <Icons
-                v-else-if="item.fileType === 'pdf'"
-                icon-name="pdf"
-                icon-color="transparent"
-                :width="7.4"
-                :height="7.4"
-                class="content__item-icon"
-              />
-              <Icons
-                v-else-if="item.fileType === 'pptx'"
-                icon-name="etc"
-                icon-color="transparent"
-                :width="7.4"
-                :height="7.4"
-                class="content__item-icon"
-              />
-              <Icons
-                v-else-if="item.fileType === 'zip'"
-                icon-name="zip"
-                icon-color="transparent"
-                :width="7.4"
-                :height="7.4"
-                class="content__item-icon"
-              />
-              <Icons
-                v-else-if="item.fileType === 'xls'"
-                icon-name="text"
-                icon-color="transparent"
-                :width="7.4"
-                :height="7.4"
-                class="content__item-icon"
-              />
-              <Icons
-                v-else-if="item.fileType === 'mp4' || item.fileType === 'mp3'"
-                icon-name="audio"
-                icon-color="transparent"
-                :width="7.4"
-                :height="7.4"
-                class="content__item-icon"
-              />
-              <Icons
-                v-else-if="item.fileType === 'video'"
-                icon-name="video"
-                icon-color="transparent"
-                :width="7.4"
-                :height="7.4"
-                class="content__item-icon"
-              />
+              <img v-if="item.thumbnail" :src="getImageUrl(item.thumbnail)" alt="예시 이미지" />
+              <Icons v-else-if="item.fileType === 'xls'" icon-name="psd" icon-color="transparent" :width="7.4"
+                :height="7.4" class="content__item-icon" />
+              <Icons v-else-if="item.fileType === 'ai'" icon-name="ai" icon-color="transparent" :width="7.4" :height="7.4"
+                class="content__item-icon" />
+              <Icons v-else-if="item.fileType === 'pdf'" icon-name="pdf" icon-color="transparent" :width="7.4"
+                :height="7.4" class="content__item-icon" />
+              <Icons v-else-if="item.fileType === 'pptx'" icon-name="etc" icon-color="transparent" :width="7.4"
+                :height="7.4" class="content__item-icon" />
+              <Icons v-else-if="item.fileType === 'zip'" icon-name="zip" icon-color="transparent" :width="7.4"
+                :height="7.4" class="content__item-icon" />
+              <Icons v-else-if="item.fileType === 'xlsx'" icon-name="text" icon-color="transparent" :width="7.4"
+                :height="7.4" class="content__item-icon" />
+              <Icons v-else-if="item.fileType === 'mp4' || item.fileType === 'mp3'" icon-name="audio"
+                icon-color="transparent" :width="7.4" :height="7.4" class="content__item-icon" />
+              <Icons v-else-if="item.fileType === 'video'" icon-name="video" icon-color="transparent" :width="7.4"
+                :height="7.4" class="content__item-icon" />
             </figure>
             <div class="content__item-text-box">
-              <p class="content__item-file-name">{{ item.fileName }}</p>
-              <span class="content__item-date">{{ item.date }}</span>
+              <p class="content__item-file-name">{{ item.oriFileName }}</p>
+              <span class="content__item-date">{{ moment(item.createDate).format("YYYY.MM.DD") }}</span>
             </div>
           </div>
         </div>
@@ -141,7 +62,8 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
+import moment from 'moment';
 
 import CategoryPaginationSideBar from '@/components/CategoryPaginationSideBar/CategoryPaginationSideBar.vue';
 import CheckBox from '@/components/CheckBox/CheckBox.vue';
@@ -150,233 +72,124 @@ import RoundButton from '@/components/RoundButton/RoundButton.vue';
 import SearchInput from '@/components/SearchInput/SearchInput.vue';
 import Tabs from '@/components/Tabs/Tabs.vue';
 import TemplateBoardWrap from '@/components/TemplateBoardWrap/TemplateBoardWrap.vue';
+import { categoryStore } from '../../stores/categoryStore';
+import { storeToRefs } from 'pinia';
+import { vmdStore } from '../../stores/vmdStore';
+import utils from '@/untils/utils';
+import customToast from '@/untils/custom_toast';
 
-const allCheck = ref(false);
+const store = vmdStore();
+const cateStore = categoryStore();
+const { listOfVmdUser, vmd } = storeToRefs(store);
+const { listCategory } = storeToRefs(cateStore);
+
+const categoryList = ref([]);
+const currentCategory = ref(14);
+const functionType = 3;
 const dummyInputValue = ref('');
-const categories = ref([
-  {
-    id: 0,
-    category: '공식 VMD',
-    isSelected: true,
-  },
-  {
-    id: 1,
-    category: '세일즈 VMD',
-    isSelected: false,
-  },
-  {
-    id: 2,
-    category: '가이드북',
-    isSelected: false,
-  },
-  {
-    id: 3,
-    category: '카테고리04',
-    isSelected: false,
-  },
-  {
-    id: 4,
-    category: '카테고리05',
-    isSelected: false,
-  },
-  {
-    id: 5,
-    category: '카테고리06',
-    isSelected: false,
-  },
-]);
-const sideCategories = ref([
-  {
-    id: 1,
-    name: '2023년 10월',
-    isSelected: true,
-  },
-  {
-    id: 2,
-    name: '2023년 9월',
-    isSelected: false,
-  },
-  {
-    id: 3,
-    name: '2023년 8월',
-    isSelected: false,
-  },
-  {
-    id: 4,
-    name: '2023년 7월',
-    isSelected: false,
-  },
-  {
-    id: 5,
-    name: '2023년 6월',
-    isSelected: false,
-  },
-  {
-    id: 6,
-    name: '2023년 5월',
-    isSelected: false,
-  },
-  {
-    id: 7,
-    name: '2023년 4월',
-    isSelected: false,
-  },
-  {
-    id: 8,
-    name: '2023년 3월',
-    isSelected: false,
-  },
-  {
-    id: 9,
-    name: '2023년 2월',
-    isSelected: false,
-  },
-  {
-    id: 10,
-    name: '2023년 1월',
-    isSelected: false,
-  },
-]);
-const dummyContent = ref([
-  {
-    id: 1,
-    fileName: 'Infographic 2023.zip',
-    date: '2023.08.14',
-    isChecked: true,
-    thumbnail: false,
-    fileType: 'zip',
-  },
-  {
-    id: 2,
-    fileName: 'img_selflounge20210322142256696642.png',
-    date: '2023.08.14',
-    isChecked: false,
-    thumbnail: 'thumnail_1',
-    fileType: 'png',
-  },
-  {
-    id: 3,
-    fileName: 'Infographic 2023.xls',
-    date: '2023.08.14',
-    isChecked: false,
-    thumbnail: false,
-    fileType: 'xls',
-  },
-  {
-    id: 4,
-    fileName: 'Infographic 2023.pdf',
-    date: '2023.08.14',
-    isChecked: false,
-    thumbnail: false,
-    fileType: 'pdf',
-  },
-  {
-    id: 5,
-    fileName: 'likestudio.ai',
-    date: '2023.08.14',
-    isChecked: false,
-    thumbnail: false,
-    fileType: 'ai',
-  },
-  {
-    id: 6,
-    fileName: 'likestudio.psd',
-    date: '2023.08.14',
-    isChecked: false,
-    thumbnail: false,
-    fileType: 'psd',
-  },
-  {
-    id: 7,
-    fileName: 'Infographic 2023.mp4',
-    date: '2023.08.14',
-    isChecked: false,
-    thumbnail: false,
-    fileType: 'mp4',
-  },
-  {
-    id: 8,
-    fileName: 'Infographic 2023.mp3',
-    date: '2023.08.14',
-    isChecked: false,
-    thumbnail: false,
-    fileType: 'mp3',
-  },
-  {
-    id: 9,
-    fileName: 'img_selflounge20210322142256696642.jpeg',
-    date: '2023.08.14',
-    isChecked: false,
-    thumbnail: 'thumnail_2',
-    fileType: 'jpeg',
-  },
-  {
-    id: 10,
-    fileName: 'Infographic 2023.pptx',
-    date: '2023.08.14',
-    isChecked: false,
-    thumbnail: false,
-    fileType: 'pptx',
-  },
-  {
-    id: 11,
-    fileName: 'likestudio.psd',
-    date: '2023.08.14',
-    isChecked: false,
-    thumbnail: false,
-    fileType: 'psd',
-  },
-  {
-    id: 12,
-    fileName: 'Infographic 2023.xls',
-    date: '2023.08.14',
-    isChecked: false,
-    thumbnail: false,
-    fileType: 'xls',
-  },
-  {
-    id: 13,
-    fileName: 'flagship_be034d3ae50a46ca9c9ee1a75563623483957.png',
-    date: '2023.08.14',
-    isChecked: false,
-    thumbnail: 'thumnail_3',
-    fileType: 'png',
-  },
-  {
-    id: 14,
-    fileName: 'flagship_be034d3ae50a46ca9c9ee1a755636071.gif',
-    date: '2023.08.14',
-    isChecked: false,
-    thumbnail: 'thumnail_4',
-    fileType: 'gif',
-  },
-  {
-    id: 15,
-    fileName: 'likestudio.ai',
-    date: '2023.08.14',
-    isChecked: false,
-    thumbnail: false,
-    fileType: 'ai',
-  },
-]);
+const listVmd = ref([]);
+const vmdDetail = ref();
+const currentPage = ref();
+const totalPages = ref();
+const fileType = ref();
+const allCheck = ref(false);
+const checkOne = ref(false);
+const filePaths = ref([]);
 
-const handleAllCheck = () => {
-  dummyContent.value = dummyContent.value.map((content) => ({
-    ...content,
-    isChecked: allCheck.value,
-  }));
+async function navigate(newPage) {
+  await getListVmd(currentCategory.value, dummyInputValue.value, newPage);
+}
+
+async function idOfVMD(id) {
+  await getVmdById(id)
+}
+const getListCategory = async () => {
+  await cateStore.getListCategory(functionType)
+  categoryList.value = listCategory.value;
+}
+
+async function setCurrentCategory(param) {
+  currentCategory.value = param
+  await getListVmd(currentCategory.value, dummyInputValue.value, 1)
+}
+
+const handleAllCheck = (listFile) => {
+  vmdDetail.value.vmdFileList = listFile.map(item => ({ ...item, selected: allCheck.value }));
+  console.log("vmdDetail.value.vmdFileList: ", vmdDetail.value.vmdFileList);
+  checkOne.value = allCheck.value
 };
 
-const updateSelectedCategory = (selectedId) => {
-  categories.value = categories.value.map((category) => ({
-    ...category,
-    isSelected: category.id === selectedId,
-  }));
+const handleCheck = (file) => {
+  console.log("file: ", file.id);
+  console.log("checkOne.value: ", checkOne.value);
+  file.selected = checkOne.value
+  console.log("file: ", file.selected);
+};
+
+const downloadFiles = () => {
+  const selectedFiles = vmdDetail.value.vmdFileList.filter(file => file.selected);
+  console.log("selectedFiles: ", selectedFiles);
+  // selectedFiles.forEach(file => {
+  //   const convertedPath = file.uniqFileName.replace(/\\/g, '/');
+  //   const finalPath = convertedPath.split('public')[1];
+  //   const finalString = finalPath.replace(/\/+/g, '/');
+  //   filePaths.value.push(finalString)
+  // });
+
+  // console.log("filePaths: ", filePaths);
+
+  // try { 
+  //   filePaths.value.forEach(filePath => {
+  //     const link = document.createElement('a');
+  //     link.href = filePath;
+  //     link.target = '_blank';
+  //     document.body.appendChild(link);
+  //     link.click();
+  //     link.remove();
+  //   });
+  //   customToast.success('Successfully downloaded file');
+  // } catch (error) {
+  //   console.error('Error while downloading file', error);
+  //   customToast.error('Error while downloading file');
+  // }
+};
+
+const handleSearch = async () => {
+  await getListVmd(currentCategory.value, dummyInputValue.value, 1);
 };
 
 const getImageUrl = (name) => {
   return new URL(`./img/${name}.png`, import.meta.url).href;
 };
+
+async function getListVmd(category, keyword, page) {
+  await store.getListVmdForUser(category, keyword, page)
+  if (listOfVmdUser.value) {
+    listVmd.value = listOfVmdUser.value.data;
+    currentPage.value = listOfVmdUser.value.data.currentPage;
+    totalPages.value = listOfVmdUser.value.data.totalPages;
+  } else {
+    listVmd.value = null;
+  }
+}
+
+async function getVmdById(id) {
+  await store.getVmdById(id)
+  vmdDetail.value = vmd.value;
+  const fileTypes = await Promise.all(vmdDetail.value.vmdFileList.map(item => utils.getFileType(item.oriFileName)));
+  fileType.value = fileTypes;
+  vmdDetail.value.vmdFileList = vmdDetail.value.vmdFileList.map((detail, index) => ({
+    ...detail,
+    fileType: fileTypes[index]
+  }));
+}
+
+onMounted(async () => {
+  await getListCategory()
+  await getListVmd(currentCategory.value, "", 1);
+  await getVmdById(listVmd.value.list[0].id)
+
+});
 </script>
 
 <style scoped>
@@ -441,7 +254,7 @@ const getImageUrl = (name) => {
   overflow: hidden;
 }
 
-.content__item-img > img {
+.content__item-img>img {
   position: absolute;
   left: 50%;
   top: 50%;
