@@ -52,6 +52,8 @@ import customToast from '@/untils/custom_toast';
 import { storeToRefs } from 'pinia';
 import { lsSupportManagerStore } from '@/stores/lsSupportManagerStore';
 import { fileManagerStore } from '@/stores/fileManagerStore';
+import utils from '@/untils/utils';
+import userId from '@/untils/loginUserId';
 
 const router = useRouter();
 const { addRes, lsSupportManagerCategoryList } = storeToRefs(lsSupportManagerStore());
@@ -62,12 +64,12 @@ const title = ref('');
 const contentId = uuid();
 const content = ref('');
 const textareaId = uuid();
-const textareaRef = ref('');
 const firstSelect = ref('');
 const files = ref([])
 const showFiles = ref([])
 const currentCategory = ref('');
-const loginUserId = 1
+const ARCHIVE_FILES = ['zip', '7z', 'alz', 'egg', 'xls', 'xlsx', 'ppt', 'pptx', 'doc', 'docx', 'pdf', 'jpg', 'jpeg', 'png', 'gif', 'mp4', 'wmv', 'asf', 'flv', 'mov', 'mpeg'];
+const maxSizeFile = 50;
 
 
 onMounted(async () => {
@@ -75,7 +77,6 @@ onMounted(async () => {
   lsSupportManagerCategoryListData.value = lsSupportManagerCategoryList.value
 
   firstSelect.value = lsSupportManagerCategoryListData.value[0].value
-  console.log(lsSupportManagerCategoryListData.value[0].value);
   currentCategory.value = lsSupportManagerCategoryListData.value[0].id
 })
 async function uploadFiles() {
@@ -89,11 +90,25 @@ async function uploadFiles() {
   }
 }
 function setCurrentCategory(param) {
-  console.log('param:', param);
   currentCategory.value = param.id
 }
 const handleFileUpload = async (file) => {
-  showFiles.value.push({ oriFileName: file.name, uniqFileName: '', createUser: loginUserId })
+  const sizeInMB = file.size / (1024 * 1024);
+  const typeFile = utils.getFileType(file.name);
+
+  if (sizeInMB > maxSizeFile) {
+    customToast.error('File size must be no more than 50MB.');
+    return;
+  }
+  if (!ARCHIVE_FILES.includes(typeFile)) {
+    customToast.error('This file type is not allowed for upload.');
+    return;
+  }
+  if (showFiles.value.size == 10) {
+    customToast.error('Maximum of 10 files.');
+    return;
+  }
+  showFiles.value.push({ oriFileName: file.name, uniqFileName: '', createUser: userId })
   files.value.push(file)
 };
 
@@ -113,7 +128,7 @@ async function handleCreateSubmit() {
       title: title.value,
       category: currentCategory.value,
       content: content.value,
-      createUser: loginUserId
+      createUser: userId
     },
     fileManagerList: showFiles.value
   }

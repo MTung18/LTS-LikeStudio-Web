@@ -1,6 +1,9 @@
 <template>
   <TemplateBoardWrap title="1:1 문의">
-    <template v-if="!firstVisit">
+    <template v-if="firstVisit">
+      <FirstVisit />
+    </template>
+    <template v-else>
       <div class="mt-[4rem] text-center">
         <UIButton class-bind="!min-w-[18rem]" component="a" href="/customer-service/inquiries/create" color-type="primary"
           size="big" isIcon>
@@ -37,14 +40,10 @@
           </RouterLink>
         </div>
         <Pagination :currentPage="currentPage" :pageNumber="totalPages" @numberPage="navigate" />
-        <!-- dev: 1:1 문의를 한적이 없을 때 -->
       </template>
       <template v-else>
         <TemplateDataNone />
       </template>
-    </template>
-    <template v-else>
-      <FirstVisit />
     </template>
   </TemplateBoardWrap>
 </template>
@@ -63,8 +62,9 @@ import TemplateBoardWrap from '@/components/TemplateBoardWrap/TemplateBoardWrap.
 import TemplateDataNone from '@/components/TemplateDataNone/TemplateDataNone.vue';
 import { storeToRefs } from 'pinia';
 import { lsSupportManagerStore } from '@/stores/lsSupportManagerStore';
+import userId from '@/untils/loginUserId';
 
-const { lsSupportManagerListForUser } = storeToRefs(lsSupportManagerStore());
+const { lsSupportManagerListForUser,isFirst } = storeToRefs(lsSupportManagerStore());
 const listData = ref([])
 const inputValue = ref('')
 const currentPage = ref();
@@ -73,10 +73,10 @@ const fromDateValue = ref()
 const toDateValue = ref()
 const firstVisit = ref(false);
 
-const userId = 1
-
 onMounted(async () => {
-  await updatePage('', userId, '', '', '')
+  await lsSupportManagerStore().checkFirstVisit(userId)
+  firstVisit.value = isFirst.value
+  if(!firstVisit.value) await updatePage('', userId, '', '', '')
 });
 
 async function reset() {
@@ -92,7 +92,6 @@ async function search() {
   let startDate = fromDateValue.value ? fromDateValue.value : ''
   let endDate = toDateValue.value ? toDateValue.value : ''
   await updatePage(inputValue.value, userId, startDate, endDate, '')
-  // console.log('data ',listData.data);
 }
 async function updatePage(keyword, userId, startDate, endDate, page) {
   await lsSupportManagerStore().getLsSupportManagerListForUser(keyword, userId, startDate, endDate, page);
