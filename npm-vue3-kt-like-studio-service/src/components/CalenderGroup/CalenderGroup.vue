@@ -5,9 +5,9 @@
       @update:modelValue="updateStartDate"
       :isDisabled="isDisabled"
     /> -->
-    <CalendarInput @date="fromDate" />
+    <CalendarInput :inputValue="fromDateValue" v-model="fromDateValue" @date="fromDate" />
     <span class="calendar__between">~</span>
-    <CalendarInput @date="toDate" />
+    <CalendarInput :inputValue="toDateValue" v-model="toDateValue" @date="toDate" />
     <!-- <CalendarInput
       :model-value="props.endDate"
       @update:modelValue="updateEndDate"
@@ -41,21 +41,24 @@ watch(toDateValue, (newValue) => {
   emit('toDate', newValue);
 });
 
-// const props = defineProps({
-//   startDate: {
-//     type: String,
-//     default: null,
-//   },
-//   endDate: {
-//     type: String,
-//     default: null,
-//   },
-//   isDisabled: {
-//     type: Boolean,
-//     default: false,
-//   },
-// });
+const props = defineProps({
+  startDate: {
+    type: String,
+    default: null,
+  },
+  endDate: {
+    type: String,
+    default: null,
+  }
+});
 
+watch(() => props.startDate, (newStartDate) => {
+  fromDateValue.value = newStartDate;
+});
+
+watch(() => props.endDate, (newEndDate) => {
+  toDateValue.value = newEndDate;
+});
 // const emit = defineEmits(['update:startDate', 'update:endDate']);
 
 // const updateStartDate = (newValue) => {

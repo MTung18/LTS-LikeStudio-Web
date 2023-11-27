@@ -1,43 +1,59 @@
 import { defineStore } from "pinia";
-import VmdApi from "../axios/vmdApi.js";
+import VmdApi from "../axios/vmdApi";
 import { ref } from "vue";
 
 export const vmdStore = defineStore("vmd", () => {
- // const listOfFaqAdmin = ref([]);
  const listOfVmdUser = ref([]);
- const vmd = ref();
- // const responseEditFaq = ref();
- // const responseAddFaq = ref();
- // const responseDeleteFaq = ref();
+ const listOfVmdAdmin = ref([]);
+//  const listNotice = ref([]);
+//  const noticeBoard = ref();
+ const responseEditVmd = ref();
+ const responseAddVmd = ref();
+ const responseDeleteVmd = ref();
 
- // async function getListFaqForAdmin(keyword, category, startDate, endDate, page) {
- //  listOfFaqAdmin.value = await FaqApi.getListFaqForAdmin(keyword, category, startDate, endDate, page);
- // }
-
- async function getListVmdForUser(category, keyword, page) {
-  listOfVmdUser.value = await VmdApi.getListVmdForUser(category, keyword, page);
+ async function getAllVmdForUser(category, keyword, page) {
+  listOfVmdUser.value = await VmdApi.getAllVmdForUser(category, keyword, page)
  }
 
- async function getVmdById(id) {
-  vmd.value = await VmdApi.getVmdById(id)
+ async function getAllVmdForAdmin(category, keyword, dateParamStart, dateParamEnd, page) {
+  listOfVmdAdmin.value = await VmdApi.getAllVmdForAdmin(category, keyword, dateParamStart, dateParamEnd, page)
  }
 
- // async function updateFaq(faq) {
- //  responseEditFaq.value = await FaqApi.updateFaq(faq);
- // }
+//  async function findAllNoitce() {
+//   listNotice.value = await NoticeBoardApi.findAllNoitce()
+//  }
 
- // async function addFaq(faq) {
- //  responseAddFaq.value = await FaqApi.addNotice(faq);
- // }
+//  async function getNoticeById(id) {
+//   noticeBoard.value = await NoticeBoardApi.getNoticeById(id)
+//  }
 
- // async function deleteFaq(id) {
- //  responseDeleteFaq.value = await FaqApi.deleteDataById(id);
- // }
+ async function deleteVmd(id) {
+  responseDeleteVmd.value = await VmdApi.deleteDataById(id);
+ }
+
+ async function updateVmd(vmd) {
+  responseEditVmd.value = await VmdApi.updateVmd(vmd);
+ }
+
+ async function addVmd(vmd) {
+  responseAddVmd.value = await VmdApi.addVmd(vmd);
+ }
+
 
  return {
   listOfVmdUser,
-  vmd,
-  getListVmdForUser,
-  getVmdById
+  listOfVmdAdmin,
+//   noticeBoard,
+//   listNotice,
+  responseAddVmd,
+  responseEditVmd,
+  responseDeleteVmd,
+  getAllVmdForUser,
+  getAllVmdForAdmin,
+//   getNoticeById,
+//   findAllNoitce,
+  deleteVmd,
+  updateVmd,
+  addVmd
  };
 })
