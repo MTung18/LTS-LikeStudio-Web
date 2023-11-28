@@ -92,9 +92,11 @@ onMounted(async () => {
   await categoryStore().getListCategory(3)
   categoriesData.value = listCategory.value
 
-  vmdByIdData.value.data.vmdFileList.forEach(e => {
-    showFiles.value.push({ oriFileName: e.oriFileName, uniqFileName: e.uniqFileName, createUser: userId })
-  })
+  if (vmdByIdData.value.data.vmdFileList !== null) {
+    vmdByIdData.value.data.vmdFileList.forEach(e => {
+      showFiles.value.push({ oriFileName: e.oriFileName, uniqFileName: e.uniqFileName, createUser: userId })
+    })
+  }
 
   title.value = vmdByIdData.value.data.title
   show.value = vmdByIdData.value.data.show == 1 ? true : false
