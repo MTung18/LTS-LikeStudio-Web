@@ -1,7 +1,7 @@
 <template>
   <TemplateBoardWrap title="공지사항 관리">
     <ManageHeadForm :input-data1="inputData1" :input-data2="inputData2" :input-data3="inputData3"
-      :input-data4="inputData4" :only-search="true" @search="searchNotice" />
+      :input-data4="inputData4" :only-search="true" @search="searchNotice" @reset="reset"/>
 
     <div class="select-wrap flex justify-between">
       <div class="flex gap-[0.8rem] items-center">
@@ -123,6 +123,10 @@ const handleSelect = async (selectedOption) => {
 onMounted(async () => {
   await getListNotice("", "", "", "", 1);
 });
+
+async function reset() {
+  await getListNotice("", "", "", "", 1);
+}
 </script>
 
 <style scoped>

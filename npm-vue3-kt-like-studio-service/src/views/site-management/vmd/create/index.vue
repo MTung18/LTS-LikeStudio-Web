@@ -7,7 +7,7 @@
           required
           class-bind="relative before:absolute before:right-[-4rem] before:w-[1px] before:h-[4.6rem] before:bg-gray-gray-ddd before:content-['']"
         >
-          <DropdownSelect :selectList="categories" :dselectefault="optionList.defaultSelect" @select="handleSelect"  />
+          <DropdownSelect :selectList="categories" :selected="optionList.defaultSelect" @select="handleSelect"  />
         </TemplateEditTextFields>
         <TemplateEditTextFields
           label="노출"
@@ -90,14 +90,14 @@ import TemplateEditTextFields from '@/components/TemplateEditTextFields/Template
 import TextFields from '@/components/TextFields/TextFields.vue';
 import UIButton from '@/components/UIButton/UIButton.vue';
 import customToast from '@/untils/custom_toast';
-
-const inputId = uuid();
-const inputRef = ref('');
 import { categoryStore } from '../../../../stores/categoryStore';
 import { vmdStore } from '../../../../stores/vmdStore';
 import { vmdFileStore } from '@/stores/vmdFileStore';
 import { storeToRefs } from 'pinia';
 import utils from '@/untils/utils';
+
+const inputId = uuid();
+const inputRef = ref('');
 
 const store = vmdStore();
 const cateStore = categoryStore();

@@ -49,7 +49,6 @@ const props = defineProps({
 
 watch(() => props.inputValue, (newInputValue) => {
   date.value = newInputValue;
-  console.log(date.value )
 });
 
 // const props = defineProps({
