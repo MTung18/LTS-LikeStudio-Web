@@ -37,30 +37,6 @@ const VmdApi = {
      }
     },
    
-    // async findAllNoitce() {
-    //  try {
-    //   const response = await axios.get(`${baseUrl}/searchNotice`);
-   
-    //   return response.data;
-    //  } catch (error) {
-    //   console.error('Error fetching data:', error);
-    //   throw error;
-    //  }
-    // },
-   
-    // async getNoticeById(id) {
-    //  try {
-    //   const response = await axios.get(`${baseUrl}/getNoticeById`, {
-    //    params: { id: id },
-    //   });
-   
-    //   return response.data;
-    //  } catch (error) {
-    //   console.error('Error fetching data:', error);
-    //   throw error;
-    //  }
-    // },
-   
     async deleteDataById(id) {
      try {
       const response = await axios.delete(`${baseUrl}/delete`, {
@@ -73,15 +49,6 @@ const VmdApi = {
      }
     },
    
-    async updateNotice(vmd) {
-     try {
-      const response = await axios.post(`${baseUrl}/update`, vmd);
-      return response.data;
-     } catch (error) {
-      console.error('Failed to update vmd:', error);
-     }
-    },
-   
     async addVmd(vmd) {
      try {
       const response = await axios.post(`${baseUrl}/create`, vmd);
@@ -89,22 +56,38 @@ const VmdApi = {
      } catch (error) {
       console.error('Failed to update notice board:', error);
      }
-    }
+    },
+    async update(param) {
+     try {
+      const response = await axios.post(`${baseUrl}/update`, param);
+      return response.data;
+     } catch (error) {
+      console.error('Failed to update vmd:', error);
+     }
+    },
+    async getById(id) {
+     try {
+      const response = await axios.get(`${baseUrl}/getVmdDetail`, {
+       params: { id: id },
+      });
+      return response.data;
+     } catch (error) {
+      console.error('Delete error.', error);
+      throw error;
+     }
+    },
+    async deleteById(id) {
+     try {
+      const response = await axios.delete(`${baseUrl}/delete`, {
+       params: { id: id },
+      });
+      return response.data;
+     } catch (error) {
+      console.error('Delete error.', error);
+      throw error;
+     }
+    },
    }
-   
-  // async getVmdById(id){
-  //  try {
-  //   const response = await axios.get(`${baseUrl}/getVmdDetail`, {
-  //    params: { id: id },
-  //   });
-
-  //   return response.data.data;
-  //  } catch (error) {
-  //   console.error('Error fetching data:', error);
-  //   throw error;
-  //  }
-  // }
-
    export default VmdApi;
 
  

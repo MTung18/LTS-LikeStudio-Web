@@ -123,7 +123,6 @@ async function setCurrentCategory(id) {
 async function getListCategory(functionType) {
   await storeOfCategory.getListCategory(functionType)
   categories.value = listCategory.value;
-  console.log(listCategory.value);
   categories.value.unshift({
     id: "",
     value: "Default",
@@ -140,7 +139,6 @@ async function getListForAdmin(category, keyword, startDate, endDate, page) {
   await storeOfVmd.getAllVmdForAdmin(category, keyword,  startDate, endDate, page);
   if (listOfVmdAdmin.value) {
     tableData.value = listOfVmdAdmin.value;
-    console.log(tableData.value);
     currentPage.value = tableData.value.currentPage;
     totalPages.value = tableData.value.totalPages;
   } else {
