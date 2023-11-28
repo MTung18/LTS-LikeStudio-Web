@@ -84,7 +84,7 @@ import customToast from '@/untils/custom_toast';
 
 const store = vmdStore();
 const cateStore = categoryStore();
-const { listOfVmdUser, vmd } = storeToRefs(store);
+const { listOfVmdUser, vmdById } = storeToRefs(store);
 const { listCategory } = storeToRefs(cateStore);
 
 const categoryList = ref([]);
@@ -97,7 +97,6 @@ const currentPage = ref();
 const totalPages = ref();
 const fileType = ref();
 const allCheck = ref(false);
-const checkOne = ref(false);
 
 async function navigate(newPage) {
   await getListVmd(currentCategory.value, dummyInputValue.value, newPage);
@@ -170,19 +169,19 @@ const getImageUrl = (name) => {
 };
 
 async function getListVmd(category, keyword, page) {
-  await store.getListVmdForUser(category, keyword, page)
+  await store.getAllVmdForUser(category, keyword, page)
   if (listOfVmdUser.value) {
-    listVmd.value = listOfVmdUser.value.data;
-    currentPage.value = listOfVmdUser.value.data.currentPage;
-    totalPages.value = listOfVmdUser.value.data.totalPages;
+    listVmd.value = listOfVmdUser.value;
+    currentPage.value = listOfVmdUser.value.currentPage;
+    totalPages.value = listOfVmdUser.value.totalPages;
   } else {
     listVmd.value = null;
   }
 }
 
 async function getVmdById(id) {
-  await store.getVmdById(id)
-  vmdDetail.value = vmd.value;
+  await store.getById(id)
+  vmdDetail.value = vmdById.value.data;
   const fileTypes = await Promise.all(vmdDetail.value.vmdFileList.map(item => utils.getFileType(item.oriFileName)));
   fileType.value = fileTypes;
   vmdDetail.value.vmdFileList = vmdDetail.value.vmdFileList.map((detail, index) => ({

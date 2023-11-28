@@ -101,6 +101,8 @@ onMounted(async () => {
   title.value = vmdByIdData.value.data.title
   show.value = vmdByIdData.value.data.show == 1 ? true : false
   currentCategory.value = vmdByIdData.value.data.category
+  console.log("currentCategory: ", currentCategory.value);
+  console.log("vmdByIdData: ", vmdByIdData.value.data.categoryValue);
 })
 
 function toggleShow(param) {
