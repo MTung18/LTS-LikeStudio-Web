@@ -40,6 +40,18 @@ watch(date, (newValue) => {
   emit('date', newValue);
 });
 
+const props = defineProps({
+  inputValue: {
+    type: String,
+    default: '',
+  },
+});
+
+watch(() => props.inputValue, (newInputValue) => {
+  date.value = newInputValue;
+  console.log(date.value )
+});
+
 // const props = defineProps({
 //   modelValue: {
 //     type: String,

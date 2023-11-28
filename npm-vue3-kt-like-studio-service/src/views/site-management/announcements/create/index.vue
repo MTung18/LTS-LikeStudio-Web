@@ -130,7 +130,7 @@ const handleCreateSubmit = async () => {
       for (let i = 0; i < listFileSave.value.length; i++) {
         formData.append('files', listFileSave.value[i])
       }
-      await fileStore.uploadFile(formData)
+      await fileStore.uploadFile(formData.values)
       if (responseUploadFile.value.statusCode !== 1) {
         customToast.error('Error upload file.')
         return

@@ -1,7 +1,7 @@
 <template>
   <div class="dropdown-select w-full h-20 ">
     <select v-model="selectedValue" @change="handleChange" class="w-full h-20 border-solid border-2 border-black rounded-xl text-2xl cursor-pointer">
-      <option :value="null" disabled selected hidden>전체</option>
+      <option :value="null" disabled selected hidden>{{ selected }}</option>
       <option v-for="option in selectList" :key="option.id" :value="option.id" class="text-2xl cursor-pointer">
         {{ option.value }}
       </option>
@@ -12,7 +12,7 @@
 <script setup>
 import { ref, defineProps, defineEmits, watch } from 'vue';
 
-const props = defineProps(['selectList', 'defaultSelect', 'firstOption']);
+const props = defineProps(['selectList', 'defaultSelect', 'firstOption','selected']);
 const emit = defineEmits();
 
 const selectedValue = ref(null);
