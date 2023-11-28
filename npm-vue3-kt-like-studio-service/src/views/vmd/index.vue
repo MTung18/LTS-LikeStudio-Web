@@ -15,7 +15,7 @@
       <SearchInput v-model="dummyInputValue" placeholder="검색어를 입력해주세요" size="large" style-type="rounded"
         color-type="black" @keydown.enter="handleSearch" />
     </div>
-    <div class="template__body">
+    <div class="template__body" v-if="listVmd.list">
       <CategoryPaginationSideBar :data="listVmd.list" :currentPage="currentPage" :pageNumber="totalPages"
         @numberPage="navigate" @vmdId="idOfVMD" />
       <div class="content">
@@ -23,14 +23,14 @@
           <h3 class="content__head-title" v-if="vmdDetail">{{ vmdDetail.title }}</h3>
           <div class="content__head__action">
             <CheckBox :check-list="'전체 선택'" :id="'no'" :shape-type="'square'" :name="'all'" v-model="allCheck"
-              @change="handleAllCheck(vmdDetail.vmdFileList)"></CheckBox>
+              @change="handleAllCheck"></CheckBox>
             <RoundButton component="button" color-type="filed" size="medium" @click="downloadFiles">다운로드</RoundButton>
           </div>
         </div>
         <div class="content__list" v-if="listVmd.list">
           <div v-if="vmdDetail" v-for="item in vmdDetail.vmdFileList" :key="item" class="content__item">
-            <CheckBox :id="`no${item.id}`" :shape-type="'square'" :name="'content'" :model-value="item.selected" v-model="checkOne"
-              class="content__check-box" @change="handleCheck(item)"></CheckBox>
+            <CheckBox :id="`no${item.id}`" :shape-type="'square'" :name="'content'" :model-value="item.isChecked"
+              @click="handleCheck(item)" class="content__check-box"></CheckBox>
             <figure class="content__item-img">
               <img v-if="item.thumbnail" :src="getImageUrl(item.thumbnail)" alt="예시 이미지" />
               <Icons v-else-if="item.fileType === 'xls'" icon-name="psd" icon-color="transparent" :width="7.4"
@@ -58,6 +58,9 @@
         </div>
       </div>
     </div>
+    <template v-else>
+      <TemplateDataNone />
+    </template>
   </TemplateBoardWrap>
 </template>
 
@@ -65,6 +68,7 @@
 import { onMounted, ref } from 'vue';
 import moment from 'moment';
 
+import TemplateDataNone from '@/components/TemplateDataNone/TemplateDataNone.vue';
 import CategoryPaginationSideBar from '@/components/CategoryPaginationSideBar/CategoryPaginationSideBar.vue';
 import CheckBox from '@/components/CheckBox/CheckBox.vue';
 import Icons from '@/components/Icons/Icons.vue';
@@ -94,7 +98,6 @@ const totalPages = ref();
 const fileType = ref();
 const allCheck = ref(false);
 const checkOne = ref(false);
-const filePaths = ref([]);
 
 async function navigate(newPage) {
   await getListVmd(currentCategory.value, dummyInputValue.value, newPage);
@@ -113,45 +116,49 @@ async function setCurrentCategory(param) {
   await getListVmd(currentCategory.value, dummyInputValue.value, 1)
 }
 
-const handleAllCheck = (listFile) => {
-  vmdDetail.value.vmdFileList = listFile.map(item => ({ ...item, selected: allCheck.value }));
-  console.log("vmdDetail.value.vmdFileList: ", vmdDetail.value.vmdFileList);
-  checkOne.value = allCheck.value
+const handleAllCheck = () => {
+  vmdDetail.value.vmdFileList = vmdDetail.value.vmdFileList.map((item) => (
+    {
+      ...item,
+      isChecked: allCheck.value
+    }
+  ));
 };
 
 const handleCheck = (file) => {
-  console.log("file: ", file.id);
-  console.log("checkOne.value: ", checkOne.value);
-  file.selected = checkOne.value
-  console.log("file: ", file.selected);
-};
+  const fileVmd = vmdDetail.value.vmdFileList.find(item => item.id === file.id)
+  if (fileVmd) {
+    const checkOne = fileVmd.isChecked
+    fileVmd.isChecked = !checkOne;
+  }
+}
 
 const downloadFiles = () => {
-  const selectedFiles = vmdDetail.value.vmdFileList.filter(file => file.selected);
-  console.log("selectedFiles: ", selectedFiles);
-  // selectedFiles.forEach(file => {
-  //   const convertedPath = file.uniqFileName.replace(/\\/g, '/');
-  //   const finalPath = convertedPath.split('public')[1];
-  //   const finalString = finalPath.replace(/\/+/g, '/');
-  //   filePaths.value.push(finalString)
-  // });
+  const selectedFiles = vmdDetail.value.vmdFileList.filter(file => file.isChecked);
+  const filePaths = ref([]);
+  selectedFiles.forEach(file => {
+    const convertedPath = file.uniqFileName.replace(/\\/g, '/');
+    const finalPath = convertedPath.split('public')[1];
+    const finalString = finalPath.replace(/\/+/g, '/');
+    filePaths.value.push({ filePath: finalString, fileName: file.oriFileName })
+  });
 
-  // console.log("filePaths: ", filePaths);
-
-  // try { 
-  //   filePaths.value.forEach(filePath => {
-  //     const link = document.createElement('a');
-  //     link.href = filePath;
-  //     link.target = '_blank';
-  //     document.body.appendChild(link);
-  //     link.click();
-  //     link.remove();
-  //   });
-  //   customToast.success('Successfully downloaded file');
-  // } catch (error) {
-  //   console.error('Error while downloading file', error);
-  //   customToast.error('Error while downloading file');
-  // }
+  try {
+    filePaths.value.forEach(file => {
+      const link = document.createElement('a');
+      link.href = file.filePath;
+      link.download = file.fileName;
+      link.style.display = 'none';
+      link.target = '_blank';
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    });
+    customToast.success('Successfully downloaded file');
+  } catch (error) {
+    console.error('Error while downloading file', error);
+    customToast.error('Error while downloading file');
+  }
 };
 
 const handleSearch = async () => {
@@ -180,7 +187,8 @@ async function getVmdById(id) {
   fileType.value = fileTypes;
   vmdDetail.value.vmdFileList = vmdDetail.value.vmdFileList.map((detail, index) => ({
     ...detail,
-    fileType: fileTypes[index]
+    fileType: fileTypes[index],
+    isChecked: allCheck.value
   }));
 }
 
