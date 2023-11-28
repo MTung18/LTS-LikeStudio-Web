@@ -1,7 +1,7 @@
 <template>
   <TemplateBoardWrap title="FAQ 관리">
     <ManageHeadForm :input-data1="inputData1" :input-data2="inputData2" :input-data3="inputData3"
-      :input-data4="inputData4" :only-search="true" @search="searchNotice" />
+      :input-data4="inputData4" :only-search="true" @search="searchNotice" @reset="reset"/>
 
     <div class="select-wrap flex justify-between">
       <ul class="category__list">
@@ -126,6 +126,12 @@ onMounted(async () => {
   await getListCategory(functionType)
   await getListForAdmin("", "", "", "", 1)
 })
+
+async function reset() {
+  currentCategory.value = ''
+  dummyInputValue.value = ''
+  await getListForAdmin("", "", "", "", 1);
+}
 </script>
 
 <style scoped>
