@@ -1,88 +1,96 @@
 import axios from 'axios';
 import { ClientSide } from "../../public/appsettings.json"
 
-const baseUrl = ClientSide.LikeStudioAPI + "/api/vmd";
-
+const baseUrl = ClientSide.LikeStudioAPI + "/api/vmd" ;
 const VmdApi = {
- // async getListFaqForAdmin(keyword = null, category = null, startDate = null, endDate = null, page = null) {
- //   try {
- //     const response = await axios.get(`${baseUrl}/search`, {
- //       params: { 
- //         keyword: keyword, 
- //         category: category,
- //         startDate: startDate,
- //         endDate: endDate,
- //         page: page
- //        },
- //     });
-
- //     return response.data;
- //   } catch (error) {
- //     console.error('Error fetching data:', error);
- //     throw error;
- //   }
- // },
-
- async getListVmdForUser(category, keyword, page) {
-  try {
-   const response = await axios.get(`${baseUrl}/searchForUser`, {
-    params: {
-     category: category,
-     keyword: keyword,
-     page: page
+    async getAllVmdForUser(category, keyword, page) {
+     try {
+      const response = await axios.get(`${baseUrl}/searchForUser`, {
+       params: {
+        category : category,
+        keyword: keyword,
+        page: page
+       },
+      });
+      return response.data.data;
+     } catch (error) {
+      console.error('Error fetching data:', error);
+      throw error;
+     }
     },
-   });
-
-   return response.data;
-  } catch (error) {
-   console.error('Error fetching data:', error);
-   throw error;
-  }
- },
-
- async getVmdById(id) {
-   try {
-    const response = await axios.get(`${baseUrl}/getVmdDetail`, {
-     params: { id: id },
-    });
-
-    return response.data.data;
-   } catch (error) {
-    console.error('Error fetching data:', error);
-    throw error;
+   
+    async getAllVmdForAdmin(category, keyword, dateParamStart, dateParamEnd, page) {
+     try {
+      const response = await axios.get(`${baseUrl}/searchForAdmin`, {
+       params: {
+        category: category,
+        keyword: keyword,
+        dateParamStart: dateParamStart,
+        dateParamEnd: dateParamEnd,
+        page: page
+       },
+      });
+      return response.data.data;
+     } catch (error) {
+      console.error('Error fetching data:', error);
+      throw error;
+     }
+    },
+   
+    async deleteDataById(id) {
+     try {
+      const response = await axios.delete(`${baseUrl}/delete`, {
+       params: { id: id },
+      });
+      return response.data;
+     } catch (error) {
+      console.error('Delete error.', error);
+      throw error;
+     }
+    },
+   
+    async addVmd(vmd) {
+     try {
+      const response = await axios.post(`${baseUrl}/create`, vmd);
+      return response.data;
+     } catch (error) {
+      console.error('Failed to update notice board:', error);
+     }
+    },
+    async update(param) {
+     try {
+      const response = await axios.post(`${baseUrl}/update`, param);
+      return response.data;
+     } catch (error) {
+      console.error('Failed to update vmd:', error);
+     }
+    },
+    async getById(id) {
+     try {
+      const response = await axios.get(`${baseUrl}/getVmdDetail`, {
+       params: { id: id },
+      });
+      return response.data;
+     } catch (error) {
+      console.error('Delete error.', error);
+      throw error;
+     }
+    },
+    async deleteById(id) {
+     try {
+      const response = await axios.delete(`${baseUrl}/delete`, {
+       params: { id: id },
+      });
+      return response.data;
+     } catch (error) {
+      console.error('Delete error.', error);
+      throw error;
+     }
+    },
    }
-  },
+   export default VmdApi;
 
- // async updateFaq(faq) {
- //   try {
- //    const response = await axios.put(`${baseUrl}/edit`, faq);
- //    return response.data;
- //   } catch (error) {
- //    console.error('Failed to update FAQ:', error);
- //   }
- //  },
+ 
 
- //  async addNotice(faq) {
- //   try {
- //    const response = await axios.post(`${baseUrl}/create`, faq);
- //    return response.data;
- //   } catch (error) {
- //    console.error('Failed to update FAQ:', error);
- //   }
- //  },
 
- //  async deleteDataById(id) {
- //   try {
- //    const response = await axios.get(`${baseUrl}/delete`, {
- //     params: { id: id },
- //    });
- //    return response.data;
- //   } catch (error) {
- //    console.error('Delete error.', error);
- //    throw error;
- //   }
- //  },
-};
-
-export default VmdApi;
-
+ 

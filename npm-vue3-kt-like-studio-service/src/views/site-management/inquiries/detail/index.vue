@@ -143,19 +143,6 @@ onMounted(async () => {
     showFiles.value.push({ oriFileName: e.oriFileName, uniqFileName: e.uniqFileName, createUser: userId })
   })
 
-  // lsSupportManagerByIdData.value.fileManagerListAnswer.forEach(e => {
-  //   files.value.push(new File({
-  //     lastModified : 1700740222151,
-  //     lastModifiedDate : 'Thu Nov 23 2023 18: 50: 22 GMT +0700(Indochina Time) {}',
-  //     name : e.oriFileName,
-  //     size : 39612,
-  //     type : "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-  //     webkitRelativePath: ''
-  //   }))
-  // })
-  // files.value = lsSupportManagerByIdData.value.fileManagerListAnswer
-
-
   textareaRef.value = lsSupportManagerByIdData.value.contentAnswer
 });
 
