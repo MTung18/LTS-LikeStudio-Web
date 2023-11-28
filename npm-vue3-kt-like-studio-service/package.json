@@ -18,12 +18,15 @@
     ]
   },
   "dependencies": {
+    "@ckeditor/ckeditor5-build-classic": "^40.1.0",
+    "@ckeditor/ckeditor5-vue": "^5.1.0",
     "@popperjs/core": "^2.11.8",
+    "@tinymce/tinymce-vue": "^5.1.1",
     "@vue/eslint-config-airbnb": "^7.0.0",
+    "axios": "^1.6.0",
     "body-scroll-lock": "^4.0.0-beta.0",
     "imagesloaded": "^5.0.0",
     "masonry-layout": "^4.2.2",
-    "axios": "^1.6.0",
     "moment-timezone": "^0.5.43",
     "pinia": "^2.1.6",
     "swiper": "^10.0.0",

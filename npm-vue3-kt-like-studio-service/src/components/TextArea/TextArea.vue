@@ -1,28 +1,37 @@
 <template>
-  <label
-    class="text-area"
-    :for="textareaId"
-    :class="[
-      props.size,
-      props.classBind,
-      isDisabled && 'is-disabled',
-      isFocused && 'is-focus',
-    ]"
-  >
-    <textarea
+    <Editor
+      :init="editorConfig"
+      :api-key="apiKey"
       v-bind="$attrs"
-      :value="props.modelValue"
+      v-model="props.modelValue"
       :id="props.textareaId"
       class="text-area__input custom-scrollbar"
       @input="$emit('update:modelValue', $event.target.value)"
       @focus="handleFocus"
       @blur="handleBlur"
     />
-  </label>
 </template>
 
 <script setup>
 import { ref, useAttrs, watchEffect } from 'vue';
+import Editor from '@tinymce/tinymce-vue';
+
+const apiKey = 'cvip7u3yzz9du4e0cxntjy1zdi6y5l0uycvdjctp3n957kj9';
+
+const editorConfig = {
+  height: 500,
+  menubar: true,
+  plugins: [
+    'advlist autolink lists link image charmap print preview anchor',
+    'searchreplace visualblocks code fullscreen',
+    'insertdatetime media table paste code help wordcount'
+  ],
+  toolbar:
+    'undo redo | formatselect | ' +
+    'bold italic backcolor | alignleft aligncenter ' +
+    'alignright alignjustify | bullist numlist outdent indent | ' +
+    'removeformat | help',
+};
 
 const props = defineProps({
   textareaId: {
