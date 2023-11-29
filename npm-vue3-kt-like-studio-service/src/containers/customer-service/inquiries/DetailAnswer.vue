@@ -1,7 +1,7 @@
 <template>
   <div class="detail-answer">
     <div class="detail-answer__tag">라이크 스튜디오의 답변입니다.</div>
-    <div class="detail-answer__content">{{ props.content }}</div>
+    <div class="detail-answer__content" v-html="props.content"></div>
     <slot />
   </div>
 </template>

@@ -137,7 +137,6 @@ const noticeBoardData = ref({});
 const updatedFileManagerList = ref([])
 const handleEdit = async () => {
   try {
-    debugger
     if (listFileSave.value.length) {
       const formData = new FormData();
       for (let i = 0; i < listFileSave.value.length; i++) {
@@ -162,7 +161,17 @@ const handleEdit = async () => {
         uniqFileName: filePaths[index],
       }));
     } else {
-      updatedFileManagerList.value = [];
+      if (listFile.value.length > 0) {
+        const filePaths = listFile.value.map(item => item.uniqFileName);
+
+        updatedFileManagerList.value = listFile.value.map((file, index) => ({
+          oriFileName: file.oriFileName,
+          createUser: 2,
+          uniqFileName: filePaths[index],
+        }));
+      } else {
+        updatedFileManagerList.value = [];
+      }
     }
 
     noticeBoardData.value = {
