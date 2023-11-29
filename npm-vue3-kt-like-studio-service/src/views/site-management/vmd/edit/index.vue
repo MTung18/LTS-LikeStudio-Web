@@ -171,10 +171,16 @@ async function handleFileRemove(file) {
 async function handleEditDelete() {
   if (window.confirm('Are you sure you want to delete')) {
     await vmdStore().deleteById(vmdByIdData.value.data.id)
-    router.push('/site-management/vmd')
-    setTimeout(function () {
-      customToast.success('successfully deleted')
-    }, 500)
+    if (deleteRes.value.statusCode == 1) {
+      router.push('/site-management/vmd')
+      setTimeout(function () {
+        customToast.success('successfully deleted')
+      }, 500)
+    } else {
+      setTimeout(function () {
+        customToast.error('failed to delete')
+      }, 500)
+    }
   }
 };
 const handleEditToList = () => {

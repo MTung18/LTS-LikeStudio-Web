@@ -37,34 +37,24 @@ const VmdApi = {
      }
     },
    
-    async deleteDataById(id) {
-     try {
-      const response = await axios.delete(`${baseUrl}/delete`, {
-       params: { id: id },
-      });
-      return response.data;
-     } catch (error) {
-      console.error('Delete error.', error);
-      throw error;
-     }
-    },
-   
     async addVmd(vmd) {
      try {
       const response = await axios.post(`${baseUrl}/create`, vmd);
       return response.data;
      } catch (error) {
-      console.error('Failed to update notice board:', error);
+      console.error('Failed to create Vmd:', error);
      }
     },
+
     async update(param) {
      try {
       const response = await axios.post(`${baseUrl}/update`, param);
       return response.data;
      } catch (error) {
-      console.error('Failed to update vmd:', error);
+      console.error('Failed to update Vmd:', error);
      }
     },
+
     async getById(id) {
      try {
       const response = await axios.get(`${baseUrl}/getVmdDetail`, {
@@ -72,10 +62,11 @@ const VmdApi = {
       });
       return response.data;
      } catch (error) {
-      console.error('Delete error.', error);
+      console.error('find error.', error);
       throw error;
      }
     },
+
     async deleteById(id) {
      try {
       const response = await axios.delete(`${baseUrl}/delete`, {
@@ -89,7 +80,6 @@ const VmdApi = {
     },
    }
    export default VmdApi;
-
  
 
 
