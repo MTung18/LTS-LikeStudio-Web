@@ -80,6 +80,7 @@ onMounted(async () => {
 });
 
 async function reset() {
+  inputValue.value = ''
   await lsSupportManagerStore().getLsSupportManagerListForUser('', userId, '', '', '')
   listData.value = lsSupportManagerListForUser.value;
   currentPage.value = listData.value.data.currentPage;

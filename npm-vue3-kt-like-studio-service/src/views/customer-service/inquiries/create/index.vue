@@ -77,7 +77,6 @@ onMounted(async () => {
   lsSupportManagerCategoryListData.value = lsSupportManagerCategoryList.value
 
   firstSelect.value = lsSupportManagerCategoryListData.value[0].value
-  currentCategory.value = lsSupportManagerCategoryListData.value[0].id
 })
 async function uploadFiles() {
   if (files.value != '') {
@@ -104,8 +103,8 @@ const handleFileUpload = async (file) => {
     customToast.error('This file type is not allowed for upload.');
     return;
   }
-  if (showFiles.value.size == 10) {
-    customToast.error('Maximum of 10 files.');
+  if (showFiles.value.length == 3) {
+    customToast.error('Maximum of 3 files.');
     return;
   }
   showFiles.value.push({ oriFileName: file.name, uniqFileName: '', createUser: userId })
@@ -132,6 +131,7 @@ async function handleCreateSubmit() {
     },
     fileManagerList: showFiles.value
   }
+  if (currentCategory.value == '') customToast.error('category cannot be empty')
   if (title.value == '') customToast.error('title cannot be empty')
   if (content.value == '') customToast.error('content cannot be empty')
   await lsSupportManagerStore().add(param)
@@ -140,7 +140,7 @@ async function handleCreateSubmit() {
     setTimeout(function () {
       customToast.success('글을 등록했습니다.');
     }, 500)
-  }
+  } else customToast.error('an error occurred')
 };
 // const dummyfiles = [
 //   {
