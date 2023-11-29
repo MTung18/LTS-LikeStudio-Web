@@ -18,16 +18,16 @@
     <div class="template__body" v-if="listVmd.list">
       <CategoryPaginationSideBar :data="listVmd.list" :currentPage="currentPage" :pageNumber="totalPages"
         @numberPage="navigate" @vmdId="idOfVMD" />
-      <div class="content">
+      <div class="content" v-if="vmdDetail">
         <div class="content__head">
           <h3 class="content__head-title" v-if="vmdDetail">{{ vmdDetail.title }}</h3>
-          <div class="content__head__action">
+          <div class="content__head__action" v-if="vmdDetail.vmdFileList">
             <CheckBox :check-list="'전체 선택'" :id="'no'" :shape-type="'square'" :name="'all'" v-model="allCheck"
               @change="handleAllCheck"></CheckBox>
             <RoundButton component="button" color-type="filed" size="medium" @click="downloadFiles">다운로드</RoundButton>
           </div>
         </div>
-        <div class="content__list" v-if="listVmd.list">
+        <div class="content__list" v-if="vmdDetail.vmdFileList">
           <div v-if="vmdDetail" v-for="item in vmdDetail.vmdFileList" :key="item" class="content__item">
             <CheckBox :id="`no${item.id}`" :shape-type="'square'" :name="'content'" :model-value="item.isChecked"
               @click="handleCheck(item)" class="content__check-box"></CheckBox>
@@ -55,6 +55,9 @@
               <span class="content__item-date">{{ moment(item.createDate).format("YYYY.MM.DD") }}</span>
             </div>
           </div>
+        </div>
+        <div v-else>
+          <TemplateDataNone />
         </div>
       </div>
     </div>
@@ -182,13 +185,15 @@ async function getListVmd(category, keyword, page) {
 async function getVmdById(id) {
   await store.getById(id)
   vmdDetail.value = vmdById.value.data;
-  const fileTypes = await Promise.all(vmdDetail.value.vmdFileList.map(item => utils.getFileType(item.oriFileName)));
-  fileType.value = fileTypes;
-  vmdDetail.value.vmdFileList = vmdDetail.value.vmdFileList.map((detail, index) => ({
-    ...detail,
-    fileType: fileTypes[index],
-    isChecked: allCheck.value
-  }));
+  if (vmdDetail.value.vmdFileList) {
+    const fileTypes = await Promise.all(vmdDetail.value.vmdFileList.map(item => utils.getFileType(item.oriFileName)));
+    fileType.value = fileTypes;
+    vmdDetail.value.vmdFileList = vmdDetail.value.vmdFileList.map((detail, index) => ({
+      ...detail,
+      fileType: fileTypes[index],
+      isChecked: allCheck.value
+    }));
+  }
 }
 
 onMounted(async () => {
