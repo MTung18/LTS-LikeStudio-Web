@@ -26,9 +26,9 @@
             '음성 파일 : mp3, wma',
           ]" />
       </TemplateEditTextFields>
-      <TemplateEditInfo :hits="''" :last-modified-date="vmdByIdData.data.editDate ? vmdByIdData.data.editDate : 'null'"
-        :modifier="vmdByIdData.data.editUserName ? vmdByIdData.data.editUserName : 'null'"
-        :modifier-position="vmdByIdData.data.editorPosition ? vmdByIdData.data.editorPosition : 'null'"
+      <TemplateEditInfo :hits="''" :last-modified-date="vmdByIdData.data.editDate ? vmdByIdData.data.editDate : ''"
+        :modifier="vmdByIdData.data.editUserName ? vmdByIdData.data.editUserName : ''"
+        :modifier-position="vmdByIdData.data.editorPosition ? vmdByIdData.data.editorPosition : ''"
         :createdDate="vmdByIdData.data.createDate" :writer="vmdByIdData.data.createUserName"
         :writerPosition="vmdByIdData.data.createrPosition" />
     </template>
@@ -138,9 +138,12 @@ async function uploadFiles() {
     await fileManagerStore().uploadFile(uploadFileParam)
     responseUploadFileData.value = responseUploadFile.value
 
-    let vmdFileListLength = vmdByIdData.value.data.vmdFileList.length
-    responseUploadFileData.value.data.forEach((e, i) => showFiles.value[i + vmdFileListLength].uniqFileName = e.uniqFileName)
-
+    if (vmdByIdData.value.data.vmdFileList) {
+      let vmdFileListLength = vmdByIdData.value.data.vmdFileList.length
+      responseUploadFileData.value.data.forEach((e, i) => showFiles.value[i + vmdFileListLength].uniqFileName = e.uniqFileName)
+    } else {
+      responseUploadFileData.value.data.forEach((e, i) => showFiles.value[i].uniqFileName = e.uniqFileName)
+    }
   }
 }
 async function handleFileUpload(file) {
