@@ -267,6 +267,7 @@ function search() {
   emit('search', dummyInputValue.value, fromDateValue.value, toDateValue.value);
 }
 function reset() {
+  dummyInputValue.value = ''
   emit('reset');
 }
 </script>

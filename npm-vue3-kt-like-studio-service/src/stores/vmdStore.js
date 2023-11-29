@@ -5,9 +5,7 @@ import { ref } from "vue";
 export const vmdStore = defineStore("vmd", () => {
  const listOfVmdUser = ref([]);
  const listOfVmdAdmin = ref([]);
- const responseEditVmd = ref();
  const responseAddVmd = ref();
- const responseDeleteVmd = ref();
  const vmdById = ref()
  const updateRes = ref()
  const deleteRes = ref()
@@ -21,10 +19,6 @@ export const vmdStore = defineStore("vmd", () => {
   listOfVmdAdmin.value = await VmdApi.getAllVmdForAdmin(category, keyword, dateParamStart, dateParamEnd, page)
  }
 
- async function deleteVmd(id) {
-  responseDeleteVmd.value = await VmdApi.deleteDataById(id);
- }
-
  async function update(param) {
   updateRes.value = await VmdApi.update(param);
  }
@@ -34,10 +28,12 @@ export const vmdStore = defineStore("vmd", () => {
  }
 
  async function getById(id) {
-  vmdById.value = await VmdApi.getById(id);
+  vmdById.value = await VmdApi.getById(id)
+;
  }
  async function deleteById(id) {
-  await VmdApi.deleteById(id);
+  deleteRes.value = await VmdApi.deleteById(id)
+;
  }
 
 
@@ -47,14 +43,11 @@ export const vmdStore = defineStore("vmd", () => {
   updateRes,
   vmdById,
   responseAddVmd,
-  responseEditVmd,
-  responseDeleteVmd,
   deleteRes,
   getAllVmdForUser,
   getAllVmdForAdmin,
   update,
   getById,
-  deleteVmd,
   addVmd,
   deleteById
  };
