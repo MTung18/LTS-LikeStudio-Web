@@ -95,7 +95,7 @@ const handleFileUpload = async (file) => {
     customToast.error('This file type is not allowed for upload.');
     return;
   }
-  if (listFile.value.size == 10) {
+  if (listFile.value.length == 10) {
     customToast.error('Maximum of 10 files.');
     return;
   }

@@ -13,7 +13,7 @@
         <TextArea v-bind="$attrs" :textarea-id="textareaId" v-model="textareaRef" placeholder="내용 입력"
           class-bind="w-full mb-[2.8rem]" />
         <TemplateEditFileFields @file-upload="handleFileUpload" @file-remove="handleFileRemove" :files="showFiles"
-          file-caption-title="첨부파일은 최대 10개, 1개 파일당 50MB 이하의 아래 확장자만 업로드 가능합니다." fileMaxLength="10" :file-format="[
+          file-caption-title="첨부파일은 최대 10개, 1개 파일당 50MB 이하의 아래 확장자만 업로드 가능합니다." :file-format="[
             '압축 파일 : zip, 7z, alz, egg',
             '문서 파일 : xls, xlsx, ppt, pptx, doc, docx, pdf',
             '이미지 파일 : jpg , jpeg , png , gif',
@@ -158,9 +158,6 @@ function getPreNextLsSupportManagerId() {
 function callback(postId) {
   window.location.href = `/site-management/inquiries/${postId}/${nextLsSupportManagerByIdData.value.status == 1 ? 'answered' : 'unanswered'}`;
 }
-function formatDate(str) {
-  return moment(str).format("YYYY.MM.DD HH:mm")
-}
 async function onDeleteButton() {
   if (window.confirm("confirm to delete")) {
     await lsSupportManagerStore().deleteLsSupportManagerForAdmin(lsSupportManagerByIdData.value.idAnswer, lsSupportManagerByIdData.value.id)
@@ -238,7 +235,7 @@ async function handleFileUpload(file) {
     customToast.error('This file type is not allowed for upload.');
     return;
   }
-  if (showFiles.value.size == 10) {
+  if (showFiles.value.length == 10) {
     customToast.error('Maximum of 10 files.');
     return;
   }

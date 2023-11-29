@@ -38,7 +38,7 @@
       <div class="upload-group">
         <div>
           <RoundButton component="button" color-type="filed" size="medium" @click="onClickUploadButton">파일선택({{
-            files.length }}/50)</RoundButton>
+            files.length }}/{{ props.fileMaxLength }})</RoundButton>
         </div>
         <!-- eslint-disable-next-line vuejs-accessibility/form-control-has-label-->
         <input ref="fileRef" class="visually--hidden" type="file" readonly @change="onChangeFile" />
@@ -94,6 +94,10 @@ const props = defineProps({
     type: Array,
     default: () => [],
   },
+  fileMaxLength: {
+    type: String,
+    default: '10'
+  }
 });
 
 const fileRef = ref();
