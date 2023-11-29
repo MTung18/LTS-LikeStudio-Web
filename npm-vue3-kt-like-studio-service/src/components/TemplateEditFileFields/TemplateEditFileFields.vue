@@ -130,7 +130,7 @@ const onDownloadFile = async (file) => {
 
       const link = document.createElement('a');
       link.href = url;
-      link.download = filename;
+      link.download = file.oriFileName;
       link.style.display = 'none';
       document.body.appendChild(link);
       link.click();

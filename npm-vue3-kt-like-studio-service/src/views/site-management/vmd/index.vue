@@ -47,7 +47,7 @@
     </div>
     <div  class="manage_list-wrap">
       <div class="manage_table-wrap">
-        <template v-if="tableData == null">
+        <template v-if="tableData == null || tableData.totalItems == 0 ">
           <TemplateDataNone />
         </template>
         <table v-else>
@@ -80,7 +80,7 @@
         </table>
       </div>
     </div>
-    <Pagination v-if="tableData != null" :currentPage="currentPage" :pageNumber="totalPages" @numberPage="navigate" />
+    <Pagination v-if="tableData != null && tableData.totalItems != 0" :currentPage="currentPage" :pageNumber="totalPages" @numberPage="navigate" />
   </TemplateBoardWrap>
 </template>
 
@@ -115,9 +115,11 @@ const dummyInput2 = ref('');
 let fromDate = ref();
 let toDate = ref();
 
-async function setCurrentCategory(id) {
+async function setCurrentCategory(id)
+ {
   currentCategory.value = id
-  await getListForAdmin(id,'',  '', '', '')
+  await getListForAdmin(id, dummyInput2.value, fromDate.value, toDate.value, 1)
+  // console.log("table status", tableData);
 }
 
 async function getListCategory(functionType) {
@@ -173,162 +175,6 @@ const handleFromDate = (value) => {
     toDate.value = value;
   };
 
-
-// const categories = ref([
-
-//   {
-//     id: 0,
-//     category: '전체',
-//     dummyLength: 10,
-//     isSelected: true,
-//   },
-//   {
-//     id: 1,
-//     category: '공식 VMD',
-//     dummyLength: 0,
-//     isSelected: false,
-//   },
-//   {
-//     id: 2,
-//     category: '세일즈 VMD',
-//     dummyLength: 0,
-//     isSelected: false,
-//   },
-//   {
-//     id: 3,
-//     category: '가이드북',
-//     dummyLength: 0,
-//     isSelected: false,
-//   },
-//   {
-//     id: 4,
-//     category: '카테고리 04',
-//     dummyLength: 0,
-//     isSelected: false,
-//   },
-//   {
-//     id: 5,
-//     category: '카테고리 05',
-//     dummyLength: 0,
-//     isSelected: false,
-//   },
-//   {
-//     id: 6,
-//     category: '카테고리 06',
-//     dummyLength: 0,
-//     isSelected: false,
-//   },
-// ]);
-// const tableData = [
-  // {
-  //   id: 1,
-  //   no: 100,
-  //   cate: '공식 VMD',
-  //   title:
-  //     '2023년 10월10월10월10월10월10월10월10월10월10월10월10월10월10월10월10월10월10월10월10월10월10월10월',
-  //   fileNumber: '1234',
-  //   show: 'N',
-  //   author: '홍길동',
-  //   correctDate: '2023.09.18 15:32',
-  // },
-  // {
-  //   id: 2,
-  //   no: 99,
-  //   cate: '공식 VMD',
-  //   title: '2023년 10월',
-  //   fileNumber: '1234',
-  //   show: 'N',
-  //   author: '홍길동',
-  //   correctDate: '2023.09.18 15:32',
-  // },
-  // {
-  //   id: 3,
-  //   no: 98,
-  //   cate: '공식 VMD',
-  //   title: '2023년 10월',
-  //   fileNumber: '1234',
-  //   show: 'N',
-  //   author: '홍길동',
-  //   correctDate: '2023.09.18 15:32',
-  // },
-  // {
-  //   id: 4,
-  //   no: 97,
-  //   cate: '공식 VMD',
-  //   title: '2023년 10월',
-  //   fileNumber: '1234',
-  //   show: 'N',
-  //   author: '홍길동',
-  //   correctDate: '2023.09.18 15:32',
-  // },
-  // {
-  //   id: 5,
-  //   no: 95,
-  //   cate: '공식 VMD',
-  //   title: '2023년 10월',
-  //   fileNumber: '1234',
-  //   show: 'N',
-  //   author: '홍길동',
-  //   correctDate: '2023.09.18 15:32',
-  // },
-  // {
-  //   id: 6,
-  //   no: 94,
-  //   cate: '공식 VMD',
-  //   title: '2023년 10월',
-  //   fileNumber: '1234',
-  //   show: 'N',
-  //   author: '홍길동',
-  //   correctDate: '2023.09.18 15:32',
-  // },
-  // {
-  //   id: 7,
-  //   no: 93,
-  //   cate: '공식 VMD',
-  //   title: '2023년 10월',
-  //   fileNumber: '1234',
-  //   show: 'N',
-  //   author: '홍길동',
-  //   correctDate: '2023.09.18 15:32',
-  // },
-  // {
-  //   id: 8,
-  //   no: 92,
-  //   cate: '공식 VMD',
-  //   title: '2023년 10월',
-  //   fileNumber: '1234',
-  //   show: 'N',
-  //   author: '홍길동',
-  //   correctDate: '2023.09.18 15:32',
-  // },
-  // {
-  //   id: 9,
-  //   no: 91,
-  //   cate: '공식 VMD',
-  //   title: '2023년 10월',
-  //   fileNumber: '1234',
-  //   show: 'N',
-  //   author: '홍길동',
-  //   correctDate: '2023.09.18 15:32',
-  // },
-  // {
-  //   id: 10,
-  //   no: 90,
-  //   cate: '공식 VMD',
-  //   title: '2023년 10월',
-  //   fileNumber: '1234',
-  //   show: 'N',
-  //   author: '홍길동',
-  //   correctDate: '2023.09.18 15:32',
-  // },
-// ];
-
-function updateSelectedCategory(selectedId) {
-  categories.value = categories.value.map((category) => ({
-    ...category,
-    isSelected: category.id === selectedId,
-  }));
-}
 </script>
 
 <style scoped>

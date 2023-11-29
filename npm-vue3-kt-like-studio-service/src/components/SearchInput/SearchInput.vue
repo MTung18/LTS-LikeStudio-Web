@@ -97,7 +97,7 @@ const removeModelValue = () => {
   display: inline-flex;
   align-items: center;
   gap: 0 1.2rem;
-  width: 100%;
+  width: auto;
   border: 1px solid;
   background: var(--color-neutrals-white-100);
 }

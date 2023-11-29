@@ -1,184 +1,89 @@
 <template>
-  <!--  <div>
-    <template v-for="tab in dummyTabs" :key="tab.id">
-      <RoundTabs
-        @tabSelected="handleSelectedTab(tab.id)"
-        :is-selected="tab.isSelected"
-        >{{ tab.tabName }}</RoundTabs
-      >
-    </template>
-  </div>
-  <PopupLarge is-open useCloseButton> asd </PopupLarge>
-
-
-  const dummyTabs = ref([
-  {
-    id: 0,
-    tabName: '비주얼',
-    isSelected: true,
-  },
-  {
-    id: 1,
-    tabName: '공식 템플릿',
-    isSelected: false,
-  },
-]);
-
-function handleSelectedTab(selectedId) {
-  dummyTabs.value = dummyTabs.value.map((tab) => ({
-    ...tab,
-    isSelected: tab.id === selectedId,
-  }));
-}
-
-
---->
   <div class="manage_head-form">
     <div class="manage_setting-area">
-      <ul
-        class="manage_setting-list"
-        v-if="!props.onlySearch"
-        :class="[
-          props.fileTypeData ? '!gap-[1.2rem]' : '',
+      <ul class="manage_setting-list" v-if="!props.onlySearch" :class="[
+        props.fileTypeData ? '!gap-[1.2rem]' : '',
+        props.checkBoxList ? '!gap-[1rem]' : '',
+      ]">
+        <li class="manage_setting-node" :class="[
+          props.fileTypeData ? '!gap-[1.4rem]' : '',
           props.checkBoxList ? '!gap-[1rem]' : '',
-        ]"
-      >
-        <li
-          class="manage_setting-node"
-          :class="[
-            props.fileTypeData ? '!gap-[1.4rem]' : '',
-            props.checkBoxList ? '!gap-[1rem]' : '',
-          ]"
-        >
+        ]">
           <div class="select-wrap" v-if="props.registeredDate">
-            <DropdownSelect
-              :select-list="props.registeredDate.listData"
-              :default-select="props.registeredDate.defaultSelect"
-              :class="props.checkBoxList ? ' !w-[10rem]' : ''"
-              class-bind="!min-w-[auto] !w-[10.7rem]"
-            ></DropdownSelect>
+            <DropdownSelect :select-list="props.registeredDate.listData"
+              :default-select="props.registeredDate.defaultSelect" :class="props.checkBoxList ? ' !w-[10rem]' : ''"
+              class-bind="!min-w-[auto] !w-[10.7rem]"></DropdownSelect>
           </div>
           <div class="select-wrap">
             <CalenderGroup />
           </div>
         </li>
-        <li
-          class="manage_setting-node"
-          :class="[
-            props.fileTypeData ? '!pl-[1.2rem]' : '',
-            props.checkBoxList ? '!pl-[1rem] !gap-[0.8rem]' : '',
-          ]"
-        >
+        <li class="manage_setting-node" :class="[
+          props.fileTypeData ? '!pl-[1.2rem]' : '',
+          props.checkBoxList ? '!pl-[1rem] !gap-[0.8rem]' : '',
+        ]">
           <div class="select-wrap" v-if="props.visibilityData">
             <span v-html="props.visibilityData.cate"></span>
-            <DropdownSelect
-              :select-list="props.visibilityData.listData"
-              :default-select="props.visibilityData.defaultSelect"
-              :class="[
+            <DropdownSelect :select-list="props.visibilityData.listData"
+              :default-select="props.visibilityData.defaultSelect" :class="[
                 props.fileTypeData
                   ? '!min-w-[auto] !w-[12.1rem] '
                   : '!min-w-[auto] !w-[10.7rem]',
                 props.checkBoxList ? '!w-[9rem]' : '',
-              ]"
-            ></DropdownSelect>
+              ]"></DropdownSelect>
           </div>
           <div class="select-wrap" v-if="props.applicationData">
             <span v-html="props.applicationData.cate"></span>
-            <DropdownSelect
-              :select-list="props.applicationData.listData"
-              :default-select="props.applicationData.defaultSelect"
-              :class="[
+            <DropdownSelect :select-list="props.applicationData.listData"
+              :default-select="props.applicationData.defaultSelect" :class="[
                 props.fileTypeData
                   ? '!min-w-[auto] !w-[9.5rem] drop-width-120'
                   : '!min-w-[auto] !w-[10.7rem]',
                 props.checkBoxList ? '!w-[9rem]' : '',
-              ]"
-            ></DropdownSelect>
+              ]"></DropdownSelect>
           </div>
           <div class="select-wrap" v-if="props.serviceData">
             <span v-html="props.serviceData.cate"></span>
-            <DropdownSelect
-              :select-list="props.serviceData.listData"
-              :default-select="props.serviceData.defaultSelect"
+            <DropdownSelect :select-list="props.serviceData.listData" :default-select="props.serviceData.defaultSelect"
               :class="[
                 props.fileTypeData
                   ? '!min-w-[auto] !w-[9.5rem] drop-width-120'
                   : '!min-w-[auto] !w-[10.7rem]',
                 props.checkBoxList ? '!w-[9rem]' : '',
-              ]"
-            ></DropdownSelect>
+              ]"></DropdownSelect>
           </div>
           <div class="select-wrap" v-if="props.fileTypeData">
             <span v-html="props.fileTypeData.cate"></span>
-            <DropdownSelect
-              :select-list="props.fileTypeData.listData"
-              :default-select="props.fileTypeData.defaultSelect"
-              :class-bind="
-                props.fileTypeData
+            <DropdownSelect :select-list="props.fileTypeData.listData" :default-select="props.fileTypeData.defaultSelect"
+              :class-bind="props.fileTypeData
                   ? '!min-w-[auto] !w-[9.5rem] drop-width-120'
                   : '!min-w-[auto] !w-[10.7rem]'
-              "
-            ></DropdownSelect>
+                "></DropdownSelect>
           </div>
         </li>
-        <li
-          class="manage_setting-node !pl-[1rem] !gap-[1rem]"
-          v-show="props.checkBoxList"
-        >
+        <li class="manage_setting-node !pl-[1rem] !gap-[1rem]" v-show="props.checkBoxList">
           <div class="flex gap-[1rem]">
-            <CheckBox
-              v-for="item in props.checkBoxList"
-              :key="item.id"
-              :check-list="item.checkList"
-              :id="item.checkId"
-              :shape-type="'square'"
-              :name="item.checkId"
-              >{{ item }}</CheckBox
-            >
+            <CheckBox v-for="item in props.checkBoxList" :key="item.id" :check-list="item.checkList" :id="item.checkId"
+              :shape-type="'square'" :name="item.checkId">{{ item }}</CheckBox>
           </div>
         </li>
       </ul>
-      <div
-        class="flex gap-[1.4rem]"
-        :class="[
-          props.onlySearch ? 'gap-[2.6rem]' : '',
-          props.noReset ? '!gap-[1.4rem]' : '',
-        ]"
-      >
-        <div
-          v-if="props.onlySearch && props.onlySearch & !props.noCalender"
-          class="select-wrap"
-        >
-          <CalendarInput @date="fromDate"/>
+      <div class="flex gap-[1.4rem]" :class="[
+        props.onlySearch ? 'gap-[2.6rem]' : '',
+        props.noReset ? '!gap-[1.4rem]' : '',
+      ]">
+        <div v-if="props.onlySearch && props.onlySearch & !props.noCalender" class="select-wrap">
+          <CalendarInput @date="fromDate" />
           <span class="calendar__between">~</span>
-          <CalendarInput @date="toDate"/>
+          <CalendarInput @date="toDate" />
         </div>
-        <SearchInput
-          v-model="dummyInputValue"
-          placeholder="검색어를 입력해주세요"
-          size="medium"
-          style-type="square"
-          color-type="gray"
-          class-bind="flex-1"
-        />
+        <SearchInput v-model="dummyInputValue" placeholder="검색어를 입력해주세요" size="medium" style-type="square"
+          color-type="gray" class-bind="flex-1" />
         <div class="btn-area">
-          <RoundButton
-            class="shrink-0"
-            component="button"
-            color-type="filed"
-            size="medium"
-            @click="search()"
-            >검색</RoundButton
-          >
-          <RoundButton
-            v-if="!props.noReset"
-            class="shrink-0 !bg-transparent"
-            component="button"
-            color-type="outlined"
-            size="medium"
-            @click="reset()"
-            >초기화</RoundButton
-          >
+          <RoundButton class="shrink-0" component="button" color-type="filed" size="medium" @click="search()">검색
+          </RoundButton>
+          <RoundButton v-if="!props.noReset" class="shrink-0 !bg-transparent" component="button" color-type="outlined"
+            size="medium" @click="reset()">초기화</RoundButton>
         </div>
       </div>
     </div>
@@ -261,7 +166,7 @@ async function toDate(date) {
   toDateValue.value = moment(date).format("YYYY-MM-DD");
 }
 
-const emit = defineEmits(['search','reset']);
+const emit = defineEmits(['search', 'reset']);
 
 function search() {
   emit('search', dummyInputValue.value, fromDateValue.value, toDateValue.value);
@@ -280,7 +185,7 @@ function reset() {
   margin: 0 auto 10rem;
 }
 
-.template__title + .manage_head-form {
+.template__title+.manage_head-form {
   margin-top: 7.2rem;
 }
 
@@ -300,11 +205,11 @@ function reset() {
   position: relative;
 }
 
-.manage_setting-node + .manage_setting-node {
+.manage_setting-node+.manage_setting-node {
   padding-left: 3.2rem;
 }
 
-.manage_setting-node + .manage_setting-node:after {
+.manage_setting-node+.manage_setting-node:after {
   content: '';
   display: block;
   width: 1px;
@@ -322,11 +227,13 @@ function reset() {
   gap: 0.8rem;
   font-size: 2rem;
 }
+
 .btn-area {
   display: flex;
   gap: 1.4rem;
 }
-.manage_setting-node > .select-wrap > span {
+
+.manage_setting-node>.select-wrap>span {
   font-size: 1.4rem;
   font-weight: bold;
 }

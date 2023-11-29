@@ -84,6 +84,7 @@ const popupValue = ref();
 const listFileSave = ref([]);
 
 const handleFileUpload = async (file) => {
+  debugger
   const sizeInMB = file.size / (1024 * 1024);
   const typeFile = utils.getFileType(file.name);
 
@@ -142,7 +143,6 @@ const handleEdit = async () => {
       for (let i = 0; i < listFileSave.value.length; i++) {
         formData.append('files', listFileSave.value[i])
       }
-      console.log('formDataaaa: ' + formData.value);
       await fileStore.uploadFile(formData)
       if (responseUploadFile.value.statusCode !== 1) {
         customToast.error('Error upload file.')

@@ -1,6 +1,3 @@
-<!--
-  231109 : QA 과정에서 일부 css 수정 외에는 변경될 부분 없어 보임.
--->
 <template>
   <TemplateBoardWrap title="매장 VMD" container-size="full">
     <ul class="category__list">
@@ -105,8 +102,10 @@ async function navigate(newPage) {
   await getListVmd(currentCategory.value, dummyInputValue.value, newPage);
 }
 
-async function idOfVMD(id) {
+async function idOfVMD(id)
+ {
   await getVmdById(id)
+
 }
 const getListCategory = async () => {
   await cateStore.getListCategory(functionType)
@@ -152,7 +151,8 @@ const downloadFiles = () => {
       link.download = file.fileName;
       link.style.display = 'none';
       link.target = '_blank';
-      document.body.appendChild(link);
+      document.body.appendChild(link)
+;
       link.click();
       link.remove();
     });
@@ -182,8 +182,10 @@ async function getListVmd(category, keyword, page) {
   }
 }
 
-async function getVmdById(id) {
+async function getVmdById(id)
+ {
   await store.getById(id)
+
   vmdDetail.value = vmdById.value.data;
   if (vmdDetail.value.vmdFileList) {
     const fileTypes = await Promise.all(vmdDetail.value.vmdFileList.map(item => utils.getFileType(item.oriFileName)));
