@@ -137,7 +137,6 @@ const noticeBoardData = ref({});
 const updatedFileManagerList = ref([])
 const handleEdit = async () => {
   try {
-    debugger
     if (listFileSave.value.length) {
       const formData = new FormData();
       for (let i = 0; i < listFileSave.value.length; i++) {
@@ -181,6 +180,7 @@ const handleEdit = async () => {
 
     await store.updateNotice(noticeBoardData.value);
 
+    customToast.error(responseEditNotice.value.errorMessages)
     if (responseEditNotice.value.statusCode === 1) {
       customToast.success('Successful update Notice.')
       router.push(`/site-management/announcements`)
