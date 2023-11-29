@@ -190,6 +190,7 @@ const handleEdit = async () => {
 
     await store.updateNotice(noticeBoardData.value);
 
+    customToast.error(responseEditNotice.value.errorMessages)
     if (responseEditNotice.value.statusCode === 1) {
       customToast.success('Successful update Notice.')
       router.push(`/site-management/announcements`)
