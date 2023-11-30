@@ -211,7 +211,7 @@ const handleEdit = async () => {
       customToast.success('Successful update Notice.')
       router.push(`/site-management/faq`)
     } else {
-      customToast.error('Error update Faq.');
+      customToast.error(responseEditFaq.value.errorMessages)
     }
   } catch (error) {
     customToast.error('An error occurred during update.');
