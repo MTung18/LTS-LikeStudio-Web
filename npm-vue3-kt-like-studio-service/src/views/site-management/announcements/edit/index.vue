@@ -180,7 +180,7 @@ const handleEdit = async () => {
         title: noticeBoarDetail.value.title,
         content: noticeBoarDetail.value.content,
         createUser: noticeBoarDetail.value.createUser,
-        editUse: 2,
+        editUser: 2,
         gim: gimValue.value,
         show: showValue.value,
         popup: popupValue.value,

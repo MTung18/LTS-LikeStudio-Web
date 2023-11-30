@@ -199,7 +199,7 @@ const handleEdit = async () => {
         title: faqDetail.value.title,
         content: faqDetail.value.content,
         createUser: faqDetail.value.createUser,
-        editUse: 2,
+        editUser: 2,
         show: showValue.value,
       },
       fileManagerList: updatedFileManagerList.value,

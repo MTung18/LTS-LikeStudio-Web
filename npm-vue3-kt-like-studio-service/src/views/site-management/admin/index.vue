@@ -149,6 +149,10 @@ async function getListPermisstion(keyword, page) {
 async function getListRole() {
   await store.getListRole()
   roles.value = listRole.value
+  roles.value = roles.value.map(item => ({
+  ...item,
+  value: item.name
+}));
 }
 
 onMounted(async () => {
