@@ -18,8 +18,8 @@
         <Switch :toggle="showValue" @someEvent="changeShow" />
       </TemplateEditTextFields>
       <TemplateEditTextFields label="내용" required>
+        <ckeditor :editor="editor" v-model="noticeBoarDetail.content" :config="editorConfig"></ckeditor>
       </TemplateEditTextFields>
-      <ckeditor :editor="editor" v-model="noticeBoarDetail.content" :config="editorConfig"></ckeditor>
       <TemplateEditTextFields label="첨부파일" class-bind="pt-[3.2rem] border-t-[1px] border-t-gray-gray-ddd">
         <TemplateEditFileFields @file-upload="handleFileUpload" @file-remove="handleFileRemove" :files="listFile"
           file-caption-title="첨부파일은 최대 10개, 1개 파일당 50MB 이하의 아래 확장자만 업로드 가능합니다." :file-format="[

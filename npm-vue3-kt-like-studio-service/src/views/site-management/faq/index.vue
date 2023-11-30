@@ -1,7 +1,7 @@
 <template>
   <TemplateBoardWrap title="FAQ 관리">
     <ManageHeadForm :input-data1="inputData1" :input-data2="inputData2" :input-data3="inputData3"
-      :input-data4="inputData4" :only-search="true" @search="searchNotice" @reset="reset"/>
+      :input-data4="inputData4" :only-search="true" @search="searchNotice" @reset="reset" />
 
     <div class="select-wrap flex justify-between">
       <ul class="category__list">
@@ -11,7 +11,7 @@
             {{ category.value }}</Tabs>
         </li>
       </ul>
-        <RoundButton  href="/site-management/faq/create" component="a" color-type="filed" size="medium">등록</RoundButton>
+      <RoundButton href="/site-management/faq/create" component="a" color-type="filed" size="medium">등록</RoundButton>
     </div>
     <div class="manage_list-wrap">
       <div class="manage_table-wrap">
@@ -42,9 +42,6 @@
               <td>{{ item.show == 1 ? "Y" : "N" }}</td>
               <td>{{ item.createUserName }}</td>
               <td class="date">{{ moment(item.createDate).format("YYYY.MM.DD HH:mm") }}</td>
-              <!--              <td :class="item.answer ? 'complete' : 'waiting'">-->
-              <!--                {{ item.answer ? '답변완료' : '답변대기' }}-->
-              <!--              </td>-->
             </tr>
           </tbody>
         </table>
@@ -86,7 +83,7 @@ const toDateValue = ref('');
 
 async function setCurrentCategory(param) {
   currentCategory.value = param
-  await getListForAdmin('', currentCategory.value, '', '', '')
+  await getListForAdmin(dummyInputValue.value, currentCategory.value, fromDateValue.value, toDateValue.value, 1)
 }
 
 async function getListCategory(functionType) {
@@ -109,7 +106,7 @@ async function searchNotice(dummyInput, fromDate, toDate) {
 
 async function getListForAdmin(keyword, category, startDate, endDate, page) {
   await storeOfFaq.getListFaqForAdmin(keyword, category, startDate, endDate, page);
-  if (listOfFaqAdmin.value) {
+  if (listOfFaqAdmin.value.data) {
     tableData.value = listOfFaqAdmin.value.data;
     currentPage.value = tableData.value.currentPage;
     totalPages.value = tableData.value.totalPages;

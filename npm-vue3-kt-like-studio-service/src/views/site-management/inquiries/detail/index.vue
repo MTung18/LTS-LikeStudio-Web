@@ -10,8 +10,7 @@
         class="pb-[6rem] border-gray-gray-ddd border-b-[1px]" />
       <TemplateEditTextFields v-if="props.state === 'unanswered' || state === 'edit'" label="답변"
         class-bind="relative pt-[2.8rem] after:absolute after:bottom-[-1px] after:left-0 after:content-[''] after:w-full after:h-[1px] after:bg-neutrals-black">
-        <TextArea v-bind="$attrs" :textarea-id="textareaId" v-model="textareaRef" placeholder="내용 입력"
-          class-bind="w-full mb-[2.8rem]" />
+          <ckeditor :editor="editor" v-model="textareaRef" :config="editorConfig"></ckeditor>
         <TemplateEditFileFields @file-upload="handleFileUpload" @file-remove="handleFileRemove" :files="showFiles"
           file-caption-title="첨부파일은 최대 10개, 1개 파일당 50MB 이하의 아래 확장자만 업로드 가능합니다." :file-format="[
             '압축 파일 : zip, 7z, alz, egg',
@@ -74,19 +73,18 @@ import TemplateDetail from '@/components/TemplateDetailWrap/TemplateDetail.vue';
 import TemplateEditFileFields from '@/components/TemplateEditFileFields/TemplateEditFileFields.vue';
 import TemplateEditInfo from '@/components/TemplateEditInfo/TemplateEditInfo.vue';
 import TemplateEditTextFields from '@/components/TemplateEditTextFields/TemplateEditTextFields.vue';
-import TextArea from '@/components/TextArea/TextArea.vue';
 import UIButton from '@/components/UIButton/UIButton.vue';
 import DetailAnswer from '@/containers/customer-service/inquiries/DetailAnswer.vue';
 import customToast from '@/untils/custom_toast';
 
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { storeToRefs } from 'pinia';
 import { lsSupportManagerStore } from '@/stores/lsSupportManagerStore';
 import { fileManagerStore } from '@/stores/fileManagerStore';
-import moment from 'moment';
 import utils from '@/untils/utils';
 import userId from '@/untils/loginUserId';
 
-
+const editor = ref(ClassicEditor);
 const props = defineProps({
   id: {
     type: String,
@@ -111,7 +109,6 @@ const preLsSupportManagerId = ref()
 const nextLsSupportManagerId = ref()
 const route = useRoute()
 const router = useRouter();
-const textareaId = uuid();
 const textareaRef = ref('');
 const ARCHIVE_FILES = ['zip', '7z', 'alz', 'egg', 'xls', 'xlsx', 'ppt', 'pptx', 'doc', 'docx', 'pdf', 'jpg', 'jpeg', 'png', 'gif', 'mp4', 'wmv', 'asf', 'flv', 'mov', 'mpeg'];
 const maxSizeFile = 50;

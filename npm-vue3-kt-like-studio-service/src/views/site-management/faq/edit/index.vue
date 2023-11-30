@@ -16,8 +16,7 @@
           class-bind="w-full" />
       </TemplateEditTextFields>
       <TemplateEditTextFields label="내용" required>
-        <TextArea v-bind="$attrs" :textarea-id="textareaId" v-model="faqDetail.content" placeholder="내용 입력"
-          class-bind="w-full" />
+          <ckeditor :editor="editor" v-model="faqDetail.content" :config="editorConfig"></ckeditor>
       </TemplateEditTextFields>
       <TemplateEditTextFields label="첨부파일" class-bind="pt-[3.2rem] border-t-[1px] border-t-gray-gray-ddd">
         <TemplateEditFileFields @file-upload="handleFileUpload" @file-remove="handleFileRemove" :files="listFile"
@@ -60,10 +59,10 @@ import TemplateEditFileFields from '@/components/TemplateEditFileFields/Template
 import TemplateEditInfo from '@/components/TemplateEditInfo/TemplateEditInfo.vue';
 import TemplateEditTextFields from '@/components/TemplateEditTextFields/TemplateEditTextFields.vue';
 import TextFields from '@/components/TextFields/TextFields.vue';
-import TextArea from '@/components/TextArea/TextArea.vue';
 import UIButton from '@/components/UIButton/UIButton.vue';
 import customToast from '@/untils/custom_toast';
 
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { categoryStore } from '../../../../stores/categoryStore';
 import { faqStore } from '../../../../stores/faqStore';
 import { fileManagerStore } from '@/stores/fileManagerStore';
@@ -77,7 +76,7 @@ const { faq, responseEditFaq } = storeToRefs(store);
 const { listCategory } = storeToRefs(cateStore);
 const { listOfFile, responseUploadFile } = storeToRefs(fileStore);
 
-
+const editor = ref(ClassicEditor);
 const router = useRouter();
 const route = useRoute();
 const inputId = uuid();

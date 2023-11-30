@@ -9,7 +9,7 @@
           class-bind="w-full" />
       </TemplateEditTextFields>
       <TemplateEditTextFields :fields-id="contentIdId" label="내용" required class="!pb-[3.2rem]">
-        <TextArea v-bind="$attrs" :textarea-id="textareaId" v-model="content" placeholder="내용 입력" class-bind="w-full" />
+        <ckeditor :editor="editor" v-model="content" :config="editorConfig"></ckeditor>
       </TemplateEditTextFields>
 
       <TemplateEditTextFields label="첨부파일" class-bind="pt-[3.2rem] !pb-[3.2rem] border-t-[1px] border-t-gray-gray-ddd">
@@ -45,7 +45,6 @@ import DropdownSelect from '@/components/DropdownSelect/DropdownSelect.vue';
 import TemplateEdit from '@/components/TemplateEdit/TemplateEdit.vue';
 import TemplateEditFileFields from '@/components/TemplateEditFileFields/TemplateEditFileFields.vue';
 import TemplateEditTextFields from '@/components/TemplateEditTextFields/TemplateEditTextFields.vue';
-import TextArea from '@/components/TextArea/TextArea.vue';
 import TextFields from '@/components/TextFields/TextFields.vue';
 import UIButton from '@/components/UIButton/UIButton.vue';
 import customToast from '@/untils/custom_toast';
@@ -54,16 +53,16 @@ import { lsSupportManagerStore } from '@/stores/lsSupportManagerStore';
 import { fileManagerStore } from '@/stores/fileManagerStore';
 import utils from '@/untils/utils';
 import userId from '@/untils/loginUserId';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
+const editor = ref(ClassicEditor);
 const router = useRouter();
 const { addRes, lsSupportManagerCategoryList } = storeToRefs(lsSupportManagerStore());
 const { responseUploadFile } = storeToRefs(fileManagerStore());
 const lsSupportManagerCategoryListData = ref([])
 const titleId = uuid();
 const title = ref('');
-const contentId = uuid();
 const content = ref('');
-const textareaId = uuid();
 const firstSelect = ref('');
 const files = ref([])
 const showFiles = ref([])

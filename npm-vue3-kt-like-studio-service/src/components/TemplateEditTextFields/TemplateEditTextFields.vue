@@ -3,7 +3,7 @@
     <label :for="fieldsId" v-if="label" class="template-edit-input__label"
       >{{ props.label }}<span v-if="required" class="required">*</span></label
     >
-    <div class="template-edit-input__input-wrap">
+    <div class="w-5/6">
       <slot />
     </div>
   </div>
