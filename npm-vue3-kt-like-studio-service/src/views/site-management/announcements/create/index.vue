@@ -175,13 +175,11 @@ const handleCreateSubmit = async () => {
     }
 
     await store.addNotice(noticeBoardData.value);
-
-    customToast.error(responseAddNotice.value.errorMessages)
     if (responseAddNotice.value.statusCode === 1) {
       customToast.success('Successful create Notice.')
       router.push(`/site-management/announcements`)
     } else {
-      customToast.error('Error create Notice.');
+      customToast.error(responseAddNotice.value.errorMessages);
     }
 
   } catch (error) {
