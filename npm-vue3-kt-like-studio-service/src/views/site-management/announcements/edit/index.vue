@@ -161,7 +161,17 @@ const handleEdit = async () => {
         uniqFileName: filePaths[index],
       }));
     } else {
-      updatedFileManagerList.value = [];
+      if (listFile.value.length > 0) {
+        const filePaths = listFile.value.map(item => item.uniqFileName);
+
+        updatedFileManagerList.value = listFile.value.map((file, index) => ({
+          oriFileName: file.oriFileName,
+          createUser: 2,
+          uniqFileName: filePaths[index],
+        }));
+      } else {
+        updatedFileManagerList.value = [];
+      }
     }
 
     noticeBoardData.value = {
@@ -170,7 +180,7 @@ const handleEdit = async () => {
         title: noticeBoarDetail.value.title,
         content: noticeBoarDetail.value.content,
         createUser: noticeBoarDetail.value.createUser,
-        editUse: 2,
+        editUser: 2,
         gim: gimValue.value,
         show: showValue.value,
         popup: popupValue.value,
