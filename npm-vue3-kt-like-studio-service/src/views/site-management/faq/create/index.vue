@@ -136,6 +136,7 @@ const handleCreateCancel = () => {
 const faqData = ref({});
 const handleCreateSubmit = async () => {
   try {
+    if(!categoryId.value) customToast.error("Category cannot be empty");
     if (listFileSave.value.length) {
       const formData = new FormData();
       for (let i = 0; i < listFileSave.value.length; i++) {
@@ -189,7 +190,7 @@ const handleCreateSubmit = async () => {
       customToast.success('Successful create Faq.')
       router.push(`/site-management/faq`)
     } else {
-      customToast.error('Error create Faq.');
+      customToast.error(responseAddFaq.value.errorMessages);
     }
 
   } catch (error) {

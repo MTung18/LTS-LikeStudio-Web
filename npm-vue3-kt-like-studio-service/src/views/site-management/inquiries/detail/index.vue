@@ -180,7 +180,7 @@ async function answer() {
 
 
   if (textareaRef.value == '') customToast.error('content cannot be empty')
-
+  if (textareaRef.value && textareaRef.value.length > 3000) customToast.error('content cannot be more 3000 characters')
   await lsSupportManagerStore().answer(param)
   if (answerRes.value.statusCode == 1) {
     router.push('/site-management/inquiries')
@@ -201,6 +201,7 @@ async function update() {
   }
 
   if (textareaRef.value == '') customToast.error('content cannot be empty')
+  if (textareaRef.value && textareaRef.value.length > 3000) customToast.error('content cannot be more than 3000 characters')
   await lsSupportManagerStore().update(param)
   if (updateRes.value.statusCode == 1) {
     router.push('/site-management/inquiries')

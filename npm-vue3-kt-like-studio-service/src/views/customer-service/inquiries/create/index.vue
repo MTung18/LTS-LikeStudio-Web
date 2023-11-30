@@ -134,6 +134,8 @@ async function handleCreateSubmit() {
   if (currentCategory.value == '') customToast.error('category cannot be empty')
   if (title.value == '') customToast.error('title cannot be empty')
   if (content.value == '') customToast.error('content cannot be empty')
+  if(title.value.length && title.value.length > 100) customToast.error('title cannot be more 100 characters')
+  if(content.value.length && content.value.length > 3000) customToast.error('content cannot be more 3000 characters')
   await lsSupportManagerStore().add(param)
   if (addRes.value.statusCode == 1) {
     router.push('/customer-service/inquiries')
