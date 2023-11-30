@@ -6,7 +6,7 @@
     <div class="select-wrap flex justify-between">
       <div class="flex gap-[0.8rem] items-center">
         <p class="drop-txt">메인팝업</p>
-        <DropdownSelect :selectList="optionList.listData" :dselectefault-="optionList.defaultSelect"
+        <DropdownSelect :selectList="optionList.listData" :selected="optionList.defaultSelect"
           @select="handleSelect"></DropdownSelect>
       </div>
       <RoundButton component="a" href="/site-management/announcements/create" color-type="filed" size="medium">등록

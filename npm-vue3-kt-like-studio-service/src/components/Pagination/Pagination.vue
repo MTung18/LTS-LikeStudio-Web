@@ -63,9 +63,19 @@ function lastPage() {
   emit('numberPage', props.pageNumber);
 }
 
-watch(() => props.currentPage, (newValue, oldValue) => {
+watch(() => props.currentPage, (newValue) => {
   isDisabledPrevButton.value = newValue === 1;
   isDisabledNextButton.value = newValue === props.pageNumber;
+});
+
+watch(() => props.pageNumber, (newValue) => {
+  if (newValue == 1) {
+    isDisabledPrevButton.value = true
+    isDisabledNextButton.value = true
+  } else {
+    isDisabledPrevButton.value = false
+    isDisabledNextButton.value = false
+  }
 });
 
 onMounted(() => {
