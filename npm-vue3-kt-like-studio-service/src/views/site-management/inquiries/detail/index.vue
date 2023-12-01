@@ -107,7 +107,7 @@ const preLsSupportManagerId = ref()
 const nextLsSupportManagerId = ref()
 const route = useRoute()
 const router = useRouter();
-const textareaRef = ref('');
+const textareaRef = ref({});
 const ARCHIVE_FILES = ['zip', '7z', 'alz', 'egg', 'xls', 'xlsx', 'ppt', 'pptx', 'doc', 'docx', 'pdf', 'jpg', 'jpeg', 'png', 'gif', 'mp4', 'wmv', 'asf', 'flv', 'mov', 'mpeg'];
 const maxSizeFile = 50;
 
