@@ -90,8 +90,8 @@ const currentCategory = ref("");
 const currentPage = ref();
 const totalPages = ref();
 const dummyInput2 = ref('');
-let fromDate = ref();
-let toDate = ref();
+const fromDate = ref();
+const toDate = ref();
 
 async function setCurrentCategory(id) {
   currentCategory.value = id

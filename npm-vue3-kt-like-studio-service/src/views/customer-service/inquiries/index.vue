@@ -12,7 +12,7 @@
         </UIButton>
       </div>
       <CustomerSearchWrap>
-        <CalenderGroup @fromDate="fromDate" @toDate="toDate" />
+        <CalenderGroup :startDate=fromDateValue :endDate=toDateValue @fromDate="handleFromDate" @toDate="handleToDate"/>
         <SearchInput v-model="inputValue" placeholder="검색어를 입력해주세요" size="medium" style-type="square" color-type="gray"
           class-bind="ml-auto !min-w-[41.2rem]" />
         <div class="search__button-group">
@@ -63,6 +63,7 @@ import TemplateDataNone from '@/components/TemplateDataNone/TemplateDataNone.vue
 import { storeToRefs } from 'pinia';
 import { lsSupportManagerStore } from '@/stores/lsSupportManagerStore';
 import userId from '@/untils/loginUserId';
+import moment from 'moment';
 
 const { lsSupportManagerListForUser,isFirst } = storeToRefs(lsSupportManagerStore());
 const listData = ref([])
@@ -81,10 +82,12 @@ onMounted(async () => {
 
 async function reset() {
   inputValue.value = ''
-  await lsSupportManagerStore().getLsSupportManagerListForUser('', userId, '', '', '')
+  await lsSupportManagerStore().getLsSupportManagerListForUser('', userId, '', '', 1)
   listData.value = lsSupportManagerListForUser.value;
   currentPage.value = listData.value.data.currentPage;
   totalPages.value = listData.value.data.totalPages;
+  fromDateValue.value = moment().format('YYYY-MM-DD');
+  toDateValue.value = moment().format('YYYY-MM-DD');
 }
 async function navigate(newPage) {
   await updatePage(inputValue.value, userId, '', '', newPage)
@@ -100,12 +103,13 @@ async function updatePage(keyword, userId, startDate, endDate, page) {
   currentPage.value = listData.value.data.currentPage;
   totalPages.value = listData.value.data.totalPages;
 }
-async function fromDate(newValue) {
-  fromDateValue.value = newValue
-}
-async function toDate(newValue) {
-  toDateValue.value = newValue
-}
+const handleFromDate = (value) => {
+  fromDateValue.value = value;
+};
+
+const handleToDate = (value) => {
+  toDateValue.value = value;
+};
 </script>
 
 <style scoped>
