@@ -21,7 +21,8 @@
       <div class="list__item" v-for="(data) in listDataQuestion.data.list" :key="data.id">
         <div class="item__question-wrap">
           <span class="question__symbol">Q.</span>
-          <span class="question__title">{{ data.title }}</span>
+          <span class="question__title" v-if="!showDropdown[data.id]" @click="toggleDropdown(data.id)">{{ data.title }}</span>
+          <span class="question__title" v-else @click="closeToggleDropdown(data.id)">{{ data.title }}</span>
           <IconButton v-if="!showDropdown[data.id]" class="text-right" class-bind="question__icon" icon-name="chevron_b"
             size="small" @click="toggleDropdown(data.id)" type="outlined" component="button" />
           <IconButton v-else class="text-right rotate-180" class-bind="question__icon" icon-name="chevron_b" size="small"
@@ -89,6 +90,9 @@ async function setCurrentCategory(param) {
 const showDropdown = ref(Array(listDataQuestion.value.length).fill(false));
 
 const toggleDropdown = async (index) => {
+  for (let i = 0; i < showDropdown.value.length; i++) {
+    showDropdown.value[i] = false;
+  }
   showDropdown.value[index] = !showDropdown.value[index];
 };
 

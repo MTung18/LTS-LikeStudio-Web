@@ -33,7 +33,6 @@ import { useRoute, useRouter } from 'vue-router'
 import { storeToRefs } from 'pinia';
 import moment from 'moment'
 
-import Button from '@/components/Button/Button.vue';
 import FileDownload from '@/components/FileDownload/FileDownload.vue';
 import TemplateDetailBody from '@/components/TemplateDetailBody/TemplateDetailBody.vue';
 import TemplateDetailHead from '@/components/TemplateDetailHead/TemplateDetailHead.vue';
@@ -42,6 +41,7 @@ import TemplateEditInfo from '@/components/TemplateEditInfo/TemplateEditInfo.vue
 import UIButton from '@/components/UIButton/UIButton.vue';
 import DetailAnswer from '@/containers/customer-service/inquiries/DetailAnswer.vue';
 import customToast from '@/untils/custom_toast';
+import userId from '@/untils/loginUserId';
 
 import { lsSupportManagerStore } from '@/stores/lsSupportManagerStore';
 
@@ -54,7 +54,6 @@ const lsSupportManagerByIdData = ref([])
 const allLsSupportManagerData = ref([])
 const preLsSupportManagerByIdData = ref([])
 const nextLsSupportManagerByIdData = ref([])
-const userId = 1
 let preLsSupportManagerId, nextLsSupportManagerId
 
 onMounted(async () => {
