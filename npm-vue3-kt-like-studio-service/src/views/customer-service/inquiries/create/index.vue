@@ -9,7 +9,7 @@
           class-bind="w-full" />
       </TemplateEditTextFields>
       <TemplateEditTextFields :fields-id="contentIdId" label="내용" required class="!pb-[3.2rem]">
-        <ckeditor :editor="editor" v-model="content" :config="editorConfig"></ckeditor>
+        <CKEditor v-model="content"></CKEditor>
       </TemplateEditTextFields>
 
       <TemplateEditTextFields label="첨부파일" class-bind="pt-[3.2rem] !pb-[3.2rem] border-t-[1px] border-t-gray-gray-ddd">
@@ -48,14 +48,14 @@ import TemplateEditTextFields from '@/components/TemplateEditTextFields/Template
 import TextFields from '@/components/TextFields/TextFields.vue';
 import UIButton from '@/components/UIButton/UIButton.vue';
 import customToast from '@/untils/custom_toast';
+import CKEditor from '@/components/CKEditor/CKEditor.vue';
+
 import { storeToRefs } from 'pinia';
 import { lsSupportManagerStore } from '@/stores/lsSupportManagerStore';
 import { fileManagerStore } from '@/stores/fileManagerStore';
 import utils from '@/untils/utils';
 import userId from '@/untils/loginUserId';
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 
-const editor = ref(ClassicEditor);
 const router = useRouter();
 const { addRes, lsSupportManagerCategoryList } = storeToRefs(lsSupportManagerStore());
 const { responseUploadFile } = storeToRefs(fileManagerStore());

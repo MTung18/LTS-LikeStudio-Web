@@ -2,30 +2,13 @@
   <TemplateBoardWrap title="매장 VMD 관리">
     <div class="search-filter">
       <div class="search-filter__bottom">
-        <CalenderGroup :startDate = fromDate :endDate = toDate
-          @fromDate="handleFromDate" 
-          @toDate="handleToDate"
-          class="mr-[2.6rem]"
-        />
-        <SearchInput
-          v-model="dummyInput2"
-          placeholder="검색어를 입력해주세요"
-          size="medium"
-          style-type="square"
-          color-type="gray"
-          class="flex-1 mr-[1.4rem]"
-        />
-        <RoundButton
-          component="button"
-          color-type="filed"
-          size="medium"
-          class="mr-[1.4rem]"
-          @click = "searchVmd"
-          >검색</RoundButton
-        >
-        <RoundButton component="button" color-type="outlined" size="medium" @click = "resetSearch"
-          >초기화</RoundButton
-        >
+        <CalenderGroup :startDate=fromDate :endDate=toDate @fromDate="handleFromDate" @toDate="handleToDate"
+          class="mr-[2.6rem]" />
+        <SearchInput v-model="dummyInput2" placeholder="검색어를 입력해주세요" size="medium" style-type="square" color-type="gray"
+          class="flex-1 mr-[1.4rem]" />
+        <RoundButton component="button" color-type="filed" size="medium" class="mr-[1.4rem]" @click="searchVmd">검색
+        </RoundButton>
+        <RoundButton component="button" color-type="outlined" size="medium" @click="resetSearch">초기화</RoundButton>
       </div>
     </div>
 
@@ -37,17 +20,11 @@
             {{ category.value }}</Tabs>
         </li>
       </ul>
-      <RoundButton
-        component="a"
-        href="/site-management/vmd/create"
-        color-type="filed"
-        size="medium"
-        >등록</RoundButton
-      >
+      <RoundButton component="a" href="/site-management/vmd/create" color-type="filed" size="medium">등록</RoundButton>
     </div>
-    <div  class="manage_list-wrap">
+    <div class="manage_list-wrap">
       <div class="manage_table-wrap">
-        <template v-if="tableData == null || tableData.totalItems == 0 ">
+        <template v-if="tableData == null || tableData.totalItems == 0">
           <TemplateDataNone />
         </template>
         <table v-else>
@@ -80,7 +57,8 @@
         </table>
       </div>
     </div>
-    <Pagination v-if="tableData != null && tableData.totalItems != 0" :currentPage="currentPage" :pageNumber="totalPages" @numberPage="navigate" />
+    <Pagination v-if="tableData != null && tableData.totalItems != 0" :currentPage="currentPage" :pageNumber="totalPages"
+      @numberPage="navigate" />
   </TemplateBoardWrap>
 </template>
 
@@ -115,11 +93,9 @@ const dummyInput2 = ref('');
 let fromDate = ref();
 let toDate = ref();
 
-async function setCurrentCategory(id)
- {
+async function setCurrentCategory(id) {
   currentCategory.value = id
   await getListForAdmin(id, dummyInput2.value, fromDate.value, toDate.value, 1)
-  // console.log("table status", tableData);
 }
 
 async function getListCategory(functionType) {
@@ -130,7 +106,7 @@ async function getListCategory(functionType) {
     value: "Default",
     functionType: "",
     key: ""
-  }); 
+  });
 }
 
 async function searchVmd() {
@@ -138,7 +114,7 @@ async function searchVmd() {
 }
 
 async function getListForAdmin(category, keyword, startDate, endDate, page) {
-  await storeOfVmd.getAllVmdForAdmin(category, keyword,  startDate, endDate, page);
+  await storeOfVmd.getAllVmdForAdmin(category, keyword, startDate, endDate, page);
   if (listOfVmdAdmin.value) {
     tableData.value = listOfVmdAdmin.value;
     currentPage.value = tableData.value.currentPage;
@@ -168,12 +144,12 @@ onMounted(async () => {
 })
 
 const handleFromDate = (value) => {
-    fromDate.value = value;
-  };
+  fromDate.value = value;
+};
 
-  const handleToDate = (value) => {
-    toDate.value = value;
-  };
+const handleToDate = (value) => {
+  toDate.value = value;
+};
 
 </script>
 
@@ -182,10 +158,12 @@ const handleFromDate = (value) => {
   color: var(--color-gray-777);
   font-weight: 400;
 }
+
 .select-wrap {
   padding-bottom: 2.4rem;
   border-bottom: 1px solid var(--color-neutrals-black);
 }
+
 .category__list {
   display: flex;
   align-items: flex-end;
@@ -193,10 +171,12 @@ const handleFromDate = (value) => {
   font-size: 1.6rem;
   line-height: 2.4rem;
 }
+
 .manage_list-wrap {
   max-height: 748px;
   overflow: auto;
 }
+
 .manage_list-wrap table tbody td.title a {
   border-bottom: 0;
   line-height: 1;
@@ -213,7 +193,7 @@ const handleFromDate = (value) => {
   display: flex;
 }
 
-.search-filter__top + .search-filter__bottom {
+.search-filter__top+.search-filter__bottom {
   margin-top: 2.6rem;
 }
 </style>

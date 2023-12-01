@@ -10,7 +10,7 @@
         class="pb-[6rem] border-gray-gray-ddd border-b-[1px]" />
       <TemplateEditTextFields v-if="props.state === 'unanswered' || state === 'edit'" label="답변"
         class-bind="relative pt-[2.8rem] after:absolute after:bottom-[-1px] after:left-0 after:content-[''] after:w-full after:h-[1px] after:bg-neutrals-black">
-          <ckeditor :editor="editor" v-model="textareaRef" :config="editorConfig"></ckeditor>
+          <CKEditor v-model="textareaRef"></CKEditor>
         <TemplateEditFileFields @file-upload="handleFileUpload" @file-remove="handleFileRemove" :files="showFiles"
           file-caption-title="첨부파일은 최대 10개, 1개 파일당 50MB 이하의 아래 확장자만 업로드 가능합니다." :file-format="[
             '압축 파일 : zip, 7z, alz, egg',
@@ -62,7 +62,6 @@
 </template>
 
 <script setup>
-import { v4 as uuid } from 'uuid';
 import { defineProps, ref, onMounted } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 
@@ -76,15 +75,14 @@ import TemplateEditTextFields from '@/components/TemplateEditTextFields/Template
 import UIButton from '@/components/UIButton/UIButton.vue';
 import DetailAnswer from '@/containers/customer-service/inquiries/DetailAnswer.vue';
 import customToast from '@/untils/custom_toast';
+import CKEditor from '@/components/CKEditor/CKEditor.vue';
 
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { storeToRefs } from 'pinia';
 import { lsSupportManagerStore } from '@/stores/lsSupportManagerStore';
 import { fileManagerStore } from '@/stores/fileManagerStore';
 import utils from '@/untils/utils';
 import userId from '@/untils/loginUserId';
 
-const editor = ref(ClassicEditor);
 const props = defineProps({
   id: {
     type: String,

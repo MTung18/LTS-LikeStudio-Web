@@ -18,7 +18,7 @@
         <Switch :toggle="showValue" @someEvent="changeShow" />
       </TemplateEditTextFields>
       <TemplateEditTextFields label="내용" required>
-        <ckeditor :editor="editor" v-model="noticeBoarDetail.content" :config="editorConfig"></ckeditor>
+        <CKEditor v-model="noticeBoarDetail.content"></CKEditor>
       </TemplateEditTextFields>
       <TemplateEditTextFields label="첨부파일" class-bind="pt-[3.2rem] border-t-[1px] border-t-gray-gray-ddd">
         <TemplateEditFileFields @file-upload="handleFileUpload" @file-remove="handleFileRemove" :files="listFile"
@@ -56,8 +56,8 @@ import TemplateEditTextFields from '@/components/TemplateEditTextFields/Template
 import TextFields from '@/components/TextFields/TextFields.vue';
 import customToast from '@/untils/custom_toast';
 import utils from '@/untils/utils';
+import CKEditor from '@/components/CKEditor/CKEditor.vue';
 
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { noticeBoardStore } from '@/stores/noticeBoardStore';
 import { fileManagerStore } from '@/stores/fileManagerStore';
 import { storeToRefs } from 'pinia';
@@ -81,8 +81,6 @@ const gimValue = ref();
 const showValue = ref();
 const popupValue = ref();
 const listFileSave = ref([]);
-
-const editor = ref(ClassicEditor);
 
 const handleFileUpload = async (file) => {
   const sizeInMB = file.size / (1024 * 1024);

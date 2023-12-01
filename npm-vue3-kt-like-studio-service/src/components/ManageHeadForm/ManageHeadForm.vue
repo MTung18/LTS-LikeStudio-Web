@@ -73,9 +73,9 @@
         props.noReset ? '!gap-[1.4rem]' : '',
       ]">
         <div v-if="props.onlySearch && props.onlySearch & !props.noCalender" class="select-wrap">
-          <CalendarInput @date="fromDate" />
+          <CalendarInput :inputValue="fromDateValue" v-model="fromDateValue" @date="fromDate" />
           <span class="calendar__between">~</span>
-          <CalendarInput @date="toDate" />
+          <CalendarInput :inputValue="toDateValue" v-model="toDateValue" @date="toDate" />
         </div>
         <SearchInput v-model="dummyInputValue" placeholder="검색어를 입력해주세요" size="medium" style-type="square"
           color-type="gray" class-bind="flex-1" />
@@ -171,9 +171,14 @@ const emit = defineEmits(['search', 'reset']);
 function search() {
   emit('search', dummyInputValue.value, fromDateValue.value, toDateValue.value);
 }
+
 function reset() {
   dummyInputValue.value = ''
+  fromDateValue.value = ''
+  toDateValue.value = ''
   emit('reset');
+  fromDateValue.value = moment().format('YYYY-MM-DD');
+  toDateValue.value = moment().format('YYYY-MM-DD');
 }
 </script>
 <style scoped>

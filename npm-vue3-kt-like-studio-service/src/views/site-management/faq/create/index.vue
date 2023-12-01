@@ -16,7 +16,7 @@
           class-bind="w-full" />
       </TemplateEditTextFields>
       <TemplateEditTextFields label="내용" required v-model="inputRef">
-        <ckeditor :editor="editor" v-model="faqDetail.content" :config="editorConfig"></ckeditor>
+        <CKEditor v-model="faqDetail.content"></CKEditor>
       </TemplateEditTextFields>
       <TemplateEditTextFields label="첨부파일" class-bind="pt-[3.2rem] border-t-[1px] border-t-gray-gray-ddd">
         <TemplateEditFileFields @file-upload="handleFileUpload" @file-remove="handleFileRemove" :files="listFile"
@@ -53,15 +53,14 @@ import TemplateEditTextFields from '@/components/TemplateEditTextFields/Template
 import TextFields from '@/components/TextFields/TextFields.vue';
 import UIButton from '@/components/UIButton/UIButton.vue';
 import customToast from '@/untils/custom_toast';
+import CKEditor from '@/components/CKEditor/CKEditor.vue';
 
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { categoryStore } from '../../../../stores/categoryStore';
 import { faqStore } from '../../../../stores/faqStore';
 import { fileManagerStore } from '@/stores/fileManagerStore';
 import { storeToRefs } from 'pinia';
 import utils from '@/untils/utils';
 
-const editor = ref(ClassicEditor);
 const store = faqStore();
 const cateStore = categoryStore();
 const fileStore = fileManagerStore();

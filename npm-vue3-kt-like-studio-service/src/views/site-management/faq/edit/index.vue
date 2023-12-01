@@ -4,7 +4,7 @@
       <div class="flex gap-x-[8rem]">
         <TemplateEditTextFields label="카테고리" required
           class-bind="relative before:absolute before:right-[-4rem] before:w-[1px] before:h-[4.6rem] before:bg-gray-gray-ddd before:content-['']">
-          <DropdownSelect :selectList="categories" :dselectefault="optionList.defaultSelect" @select="handleSelect"
+          <DropdownSelect :selectList="categories" :selected="optionList.defaultSelect" @select="handleSelect"
             :firstOption="faqDetail.category"></DropdownSelect>
         </TemplateEditTextFields>
         <TemplateEditTextFields label="노출" required class-bind="items-center leading-none !border-b-0">
@@ -16,7 +16,7 @@
           class-bind="w-full" />
       </TemplateEditTextFields>
       <TemplateEditTextFields label="내용" required>
-          <ckeditor :editor="editor" v-model="faqDetail.content" :config="editorConfig"></ckeditor>
+        <CKEditor v-model="faqDetail.content"></CKEditor>
       </TemplateEditTextFields>
       <TemplateEditTextFields label="첨부파일" class-bind="pt-[3.2rem] border-t-[1px] border-t-gray-gray-ddd">
         <TemplateEditFileFields @file-upload="handleFileUpload" @file-remove="handleFileRemove" :files="listFile"
@@ -61,8 +61,8 @@ import TemplateEditTextFields from '@/components/TemplateEditTextFields/Template
 import TextFields from '@/components/TextFields/TextFields.vue';
 import UIButton from '@/components/UIButton/UIButton.vue';
 import customToast from '@/untils/custom_toast';
+import CKEditor from '@/components/CKEditor/CKEditor.vue';
 
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { categoryStore } from '../../../../stores/categoryStore';
 import { faqStore } from '../../../../stores/faqStore';
 import { fileManagerStore } from '@/stores/fileManagerStore';
@@ -76,7 +76,6 @@ const { faq, responseEditFaq } = storeToRefs(store);
 const { listCategory } = storeToRefs(cateStore);
 const { listOfFile, responseUploadFile } = storeToRefs(fileStore);
 
-const editor = ref(ClassicEditor);
 const router = useRouter();
 const route = useRoute();
 const inputId = uuid();
