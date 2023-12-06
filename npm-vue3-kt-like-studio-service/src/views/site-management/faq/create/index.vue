@@ -156,7 +156,7 @@ const handleCreateSubmit = async () => {
 
       listFile.value = listFile.value.map((file, index) => ({
         oriFileName: file.oriFileName,
-        createUser: 2,
+        createUserId: 1,
         uniqFileName: filePaths[index],
       }));
 
@@ -165,7 +165,7 @@ const handleCreateSubmit = async () => {
           category: categoryId.value,
           title: faqDetail.value.title,
           content: faqDetail.value.content,
-          createUser: 1,
+          createUserId: 1,
           show: showValue.value,
         },
         fileManagerList: listFile.value,
@@ -176,7 +176,7 @@ const handleCreateSubmit = async () => {
           category: categoryId.value,
           title: faqDetail.value.title,
           content: faqDetail.value.content,
-          createUser: 1,
+          createUserId: 1,
           show: showValue.value,
         },
         fileManagerList: [],

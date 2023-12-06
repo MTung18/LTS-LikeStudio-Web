@@ -155,7 +155,7 @@ const handleEdit = async () => {
 
       updatedFileManagerList.value = listFile.value.map((file, index) => ({
         oriFileName: file.oriFileName,
-        createUser: 2,
+        createUserId: 2,
         uniqFileName: filePaths[index],
       }));
     } else {
@@ -164,7 +164,7 @@ const handleEdit = async () => {
 
         updatedFileManagerList.value = listFile.value.map((file, index) => ({
           oriFileName: file.oriFileName,
-          createUser: 2,
+          createUserId: 2,
           uniqFileName: filePaths[index],
         }));
       } else {
@@ -177,8 +177,8 @@ const handleEdit = async () => {
         id: noticeId.value,
         title: noticeBoarDetail.value.title,
         content: noticeBoarDetail.value.content,
-        createUser: noticeBoarDetail.value.createUser,
-        editUser: 2,
+        createUserId: noticeBoarDetail.value.createUserId,
+        updateUserId: 2,
         gim: gimValue.value,
         show: showValue.value,
         popup: popupValue.value,

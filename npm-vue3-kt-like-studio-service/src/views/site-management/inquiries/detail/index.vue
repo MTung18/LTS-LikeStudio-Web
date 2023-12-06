@@ -135,7 +135,7 @@ onMounted(async () => {
   }
 
   lsSupportManagerByIdData.value.fileManagerListAnswer.forEach(e => {
-    showFiles.value.push({ oriFileName: e.oriFileName, uniqFileName: e.uniqFileName, createUser: userId })
+    showFiles.value.push({ oriFileName: e.oriFileName, uniqFileName: e.uniqFileName, createUserId: userId })
   })
 
   textareaRef.value = lsSupportManagerByIdData.value.contentAnswer
@@ -168,7 +168,7 @@ async function answer() {
     lsSupportManagerQuestionId: lsSupportManagerByIdData.value.id,
     lsSupportManagerAnswer: {
       content: textareaRef.value,
-      createUser: userId,
+      createUserId: userId,
       category: lsSupportManagerByIdData.value.category
     }, fileManagerList: showFiles.value
   }
@@ -190,7 +190,7 @@ async function update() {
     lsSupportManager: {
       id: lsSupportManagerByIdData.value.idAnswer,
       content: textareaRef.value,
-      editUser: userId
+      updateUserId: userId
     },
     fileManagerList: showFiles.value
   }
@@ -235,7 +235,7 @@ async function handleFileUpload(file) {
     customToast.error('Maximum of 10 files.');
     return;
   }
-  showFiles.value.push({ oriFileName: file.name, uniqFileName: '', createUser: userId })
+  showFiles.value.push({ oriFileName: file.name, uniqFileName: '', createUserId: userId })
   files.value.push(file)
 
 };
@@ -244,61 +244,6 @@ async function handleFileRemove(file) {
   showFiles.value.splice(file, 1)
   lsSupportManagerByIdData.value.fileManagerListAnswer.splice(file, 1)
 };
-// const dummyData = {
-//   title: '갤러리로 보내기 할 때 오류가 발생합니다',
-//   category: '서비스 오류',
-//   writer: '홍길동',
-//   writerPosition: '전략마케팅팀',
-//   date: '2023.01.30 11:32',
-//   content:
-//     '안녕하세요! 갤러리로 보내기 버튼을 누르면 오류가 발생합니다 첨부파일 참고 부탁드리고... 윈도우 노트북이고 크롬을 쓰고 있는데요 브라우저 문제인지 잘 모르겠네요 확인 부탁드려요',
-//   files: [
-//     {
-//       id: 0,
-//       filename: 'screenshot_5907111102.png',
-//     },
-//     {
-//       id: 1,
-//       filename: 'screenshot_02352786929249.png',
-//     },
-//   ],
-// };
-
-// const dummyAnswer = {
-//   content:
-//     '안녕하세요! 고객님. 먼저 불편을 끼쳐드려 정말 죄송합니다. 말씀하신 오류는 어젯밤 통신 장애로 인해 발생한 것으로 밤 10시경 조치 완료했습니다. 지금은 정상적으로 작동하오니 이점 참고해 다시 한 번 시도해 보세요. 라이크 스튜디오를 이용해 주셔서 정말 감사합니다. 오늘도 즐거운 하루 보내세요!',
-//   files: [
-//     {
-//       id: 0,
-//       filename: 'screenshot_5907111102.png',
-//     },
-//     {
-//       id: 1,
-//       filename: 'screenshot_02352786929249.png',
-//     },
-//   ],
-//   date: '2023.01.30 11:32',
-// };
-
-// const dummyfiles = [
-//   {
-//     id: 0,
-//     filename: 'screenshot_5907111102.png',
-//   },
-//   {
-//     id: 0,
-//     filename: 'screenshot_02352786929249.png',
-//   },
-// ];
-
-// const dummyInfo = {
-//   lastModifiedDate: '2023.02.12 15:34',
-//   modifier: '박미래',
-//   modifierPosition: '판매역량강화팀',
-//   createdDate: '2023.02.11 10:16',
-//   writer: '박미래',
-//   writerPosition: '판매역량강화팀',
-// };
 </script>
 
 <style scoped></style>

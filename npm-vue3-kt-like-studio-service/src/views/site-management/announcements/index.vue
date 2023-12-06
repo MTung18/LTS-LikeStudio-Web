@@ -45,7 +45,7 @@
               <td v-else="item.popup == 1">y</td>
               <td v-if="item.show == 0">N</td>
               <td v-else="item.show == 1">y</td>
-              <td>{{ item.createUser }}</td>
+              <td>{{ item.createUserId }}</td>
               <td class="date">{{ moment(item.createDate).format("YYYY.MM.DD HH:mm") }}</td>
             </tr>
           </tbody>

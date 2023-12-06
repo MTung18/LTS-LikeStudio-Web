@@ -26,7 +26,7 @@
             '음성 파일 : mp3, wma',
           ]" />
       </TemplateEditTextFields>
-      <TemplateEditInfo :hits="''" :last-modified-date="vmdByIdData.data.editDate ? vmdByIdData.data.editDate : ''"
+      <TemplateEditInfo :hits="''" :last-modified-date="vmdByIdData.data.updateDate ? vmdByIdData.data.updateDate : ''"
         :modifier="vmdByIdData.data.editUserName ? vmdByIdData.data.editUserName : ''"
         :modifier-position="vmdByIdData.data.editorPosition ? vmdByIdData.data.editorPosition : ''"
         :createdDate="vmdByIdData.data.createDate" :writer="vmdByIdData.data.createUserName"
@@ -94,7 +94,7 @@ onMounted(async () => {
 
   if (vmdByIdData.value.data.vmdFileList !== null) {
     vmdByIdData.value.data.vmdFileList.forEach(e => {
-      showFiles.value.push({ oriFileName: e.oriFileName, uniqFileName: e.uniqFileName, createUser: userId })
+      showFiles.value.push({ oriFileName: e.oriFileName, uniqFileName: e.uniqFileName, createUserId: userId })
     })
   }
 
@@ -117,7 +117,7 @@ async function update() {
       title: title.value,
       category: currentCategory.value,
       show: show.value ? 1 : 0,
-      editUser: userId
+      updateUserId: userId
     },
     vmdFileList: showFiles.value
   }
@@ -162,7 +162,7 @@ async function handleFileUpload(file) {
     customToast.error('Maximum of 10 files.');
     return;
   }
-  showFiles.value.push({ oriFileName: file.name, uniqFileName: '', createUser: userId })
+  showFiles.value.push({ oriFileName: file.name, uniqFileName: '', createUserId: userId })
   files.value.push(file)
 };
 

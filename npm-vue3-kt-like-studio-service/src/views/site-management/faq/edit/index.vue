@@ -28,7 +28,7 @@
           ]" />
       </TemplateEditTextFields>
 
-      <TemplateEditInfo :hits="faqDetail.views" :last-modified-date="faqDetail.editDate"
+      <TemplateEditInfo :hits="faqDetail.views" :last-modified-date="faqDetail.updateDate"
         :modifier="faqDetail.editUserName" :modifier-position="faqDetail.editorPosition"
         :created-date="faqDetail.createDate" :writer="faqDetail.createUserName"
         :writer-position="faqDetail.createrPosition" />
@@ -174,7 +174,7 @@ const handleEdit = async () => {
 
       updatedFileManagerList.value = listFile.value.map((file, index) => ({
         oriFileName: file.oriFileName,
-        createUser: 2,
+        createUserId: 2,
         uniqFileName: filePaths[index],
       }));
     } else {
@@ -183,7 +183,7 @@ const handleEdit = async () => {
 
         updatedFileManagerList.value = listFile.value.map((file, index) => ({
           oriFileName: file.oriFileName,
-          createUser: 2,
+          createUserId: 2,
           uniqFileName: filePaths[index],
         }));
       } else {
@@ -196,8 +196,8 @@ const handleEdit = async () => {
         category: categoryId.value || faqDetail.value.category,
         title: faqDetail.value.title,
         content: faqDetail.value.content,
-        createUser: faqDetail.value.createUser,
-        editUser: 2,
+        createUserId: faqDetail.value.createUserId,
+        updateUserId: 2,
         show: showValue.value,
       },
       fileManagerList: updatedFileManagerList.value,

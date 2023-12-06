@@ -106,7 +106,7 @@ const handleFileUpload = async (file) => {
     customToast.error('Maximum of 3 files.');
     return;
   }
-  showFiles.value.push({ oriFileName: file.name, uniqFileName: '', createUser: userId })
+  showFiles.value.push({ oriFileName: file.name, uniqFileName: '', createUserId: userId })
   files.value.push(file)
 };
 
@@ -126,7 +126,7 @@ async function handleCreateSubmit() {
       title: title.value,
       category: currentCategory.value,
       content: content.value,
-      createUser: userId
+      createUserId: userId
     },
     fileManagerList: showFiles.value
   }

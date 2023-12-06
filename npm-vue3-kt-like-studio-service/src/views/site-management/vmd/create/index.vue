@@ -200,7 +200,7 @@ const handleCreateSubmit = async () => {
 
       listFile.value = listFile.value.map((file, index) => ({
         oriFileName: file.oriFileName,
-        createUser: 2,
+        createUserId: 1,
         uniqFileName: filePaths[index],
       }));
 
@@ -208,7 +208,7 @@ const handleCreateSubmit = async () => {
         vmd: {
           category: categoryId.value,
           title: vmdDetail.value.title,
-          createUser: 1,
+          createUserId: 1,
           show: showValue.value,
           views: 0
         },
@@ -219,7 +219,7 @@ const handleCreateSubmit = async () => {
         vmd: {
           category: categoryId.value,
           title: vmdDetail.value.title,
-          createUser: 1,
+          createUserId: 1,
           show: showValue.value,
           views: 0
         },
