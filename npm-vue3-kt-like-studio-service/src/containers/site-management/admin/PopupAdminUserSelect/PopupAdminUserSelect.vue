@@ -81,7 +81,7 @@ const searchUser = async () => {
 async function addPermisstion(id) {
   dataPermiss.value = {
     userId: id,
-    userIdImpact: 1
+    userIdImpact: "1"
   }
   await store.addPermisstion(dataPermiss.value)
   if (createRes.value.statusCode == 1) {
