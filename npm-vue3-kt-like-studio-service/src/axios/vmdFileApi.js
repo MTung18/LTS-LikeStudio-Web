@@ -31,7 +31,19 @@ const VmdFileApi = {
       console.error('Error fetching data:', error);
       throw error;
     }
+  },
+
+  async downloadFile(filePaths) {
+    try {
+      const response = await axios.post(`${baseUrl}/download`, filePaths , {responseType: 'blob'});
+
+      return response.data
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      throw error;
+    }
   }
+
 };
 
 export default VmdFileApi;

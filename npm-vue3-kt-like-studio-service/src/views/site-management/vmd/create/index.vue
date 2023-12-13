@@ -116,7 +116,7 @@ const listFile = ref([]);
 const listFileSave = ref([]);
 const vmdData = ref({});
 
-const ARCHIVE_FILES = ['zip', '7z', 'alz', 'egg', 'xls', 'xlsx', 'ppt', 'pptx', 'doc', 'docx', 'pdf', 'jpg', 'jpeg', 'png', 'gif', 'mp4', 'wmv', 'asf', 'flv', 'mov', 'mpeg'];
+const ARCHIVE_FILES = ['zip', '7z', 'alz', 'egg', 'xls', 'xlsx', 'ppt', 'pptx', 'doc', 'docx', 'pdf', 'jpg', 'jpeg', 'png', 'gif', 'ai', 'psd', 'mp4', 'wmv', 'asf', 'flv', 'mov', 'mpeg', 'mp3', 'wma'];
 const maxSizeFile = 100;
 
 const optionList = {
@@ -135,17 +135,6 @@ const getListCategory = async () => {
   await cateStore.getListCategory(functionType)
   categories.value = listCategory.value;
 }
-
-const dummyfiles = [
-  {
-    id: 0,
-    filename: 'screenshot_5907111102.png',
-  },
-  {
-    id: 0,
-    filename: 'screenshot_02352786929249.png',
-  },
-];
 
 const handleFileUpload = async (file) => {
   const sizeInMB = file.size / (1024 * 1024);
@@ -243,9 +232,6 @@ const handleCreateSubmit = async () => {
     console.error('Error during create:', error);
     customToast.error('An error occurred during create.');
   }
-  // console.log('등록');
-  // customToast.success('글을 등록했습니다.');
-  // customToast.error('에러 메세지');
 };
 
 onMounted(async () => {

@@ -82,7 +82,7 @@ const title = ref('');
 const show = ref()
 const files = ref([])
 const showFiles = ref([])
-const ARCHIVE_FILES = ['zip', '7z', 'alz', 'egg', 'xls', 'xlsx', 'ppt', 'pptx', 'doc', 'docx', 'pdf', 'jpg', 'jpeg', 'png', 'gif', 'mp4', 'wmv', 'asf', 'flv', 'mov', 'mpeg'];
+const ARCHIVE_FILES = ['zip', '7z', 'alz', 'egg', 'xls', 'xlsx', 'ppt', 'pptx', 'doc', 'docx', 'pdf', 'jpg', 'jpeg', 'png', 'gif', 'ai', 'psd', 'mp4', 'wmv', 'asf', 'flv', 'mov', 'mpeg', 'mp3', 'wma'];
 const maxSizeFile = 50;
 
 onMounted(async () => {
@@ -190,26 +190,7 @@ const handleEditToList = () => {
   console.log('목록');
   router.push('/site-management/vmd');
 };
-const dummyfiles = [
-  {
-    id: 0,
-    filename: 'screenshot_5907111102.png',
-  },
-  {
-    id: 0,
-    filename: 'screenshot_02352786929249.png',
-  },
-];
 
-const dummyInfo = {
-  hits: 6300,
-  lastModifiedDate: '2023.02.12 15:34',
-  modifier: '박미래',
-  modifierPosition: '판매역량강화팀',
-  createdDate: '2023.02.11 10:16',
-  writer: '박미래',
-  writerPosition: '판매역량강화팀',
-};
 </script>
 
 <style scoped>

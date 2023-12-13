@@ -73,7 +73,11 @@ import IconButton from '@/components/IconButton/IconButton.vue';
 import Icons from '@/components/Icons/Icons.vue';
 import RoundButton from '@/components/RoundButton/RoundButton.vue';
 import customToast from '@/untils/custom_toast';
+import { fileManagerStore } from '../../stores/fileManagerStore';
+import { storeToRefs } from 'pinia';
 
+const store = fileManagerStore();
+const { responseDownloadFile } = storeToRefs(store);
 const props = defineProps({
   styleType: {
     type: String,
@@ -118,28 +122,26 @@ const onRemoveFile = (index) => {
 
 const onDownloadFile = async (file) => {
   const convertedPath = file.uniqFileName.replace(/\\/g, '/');
-  const finalPath = convertedPath.split('public')[1];
-  const finalString = finalPath.replace(/\/+/g, '/');
+  const finalString = convertedPath.replace(/\/+/g, '/');
   const fileUrl = finalString;
-
+  
   try {
-    const response = await fetch(fileUrl);
-    if (response.ok) {
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
+    await store.downloadFile(fileUrl);
 
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = file.oriFileName;
-      link.style.display = 'none';
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
+    const fileName = file.oriFileName; 
 
-      customToast.success('Successfully downloaded file');
-    } else {
-      customToast.error('Error while downloading file');
-    }
+    const blob = new Blob([responseDownloadFile.value]);
+    const url = window.URL.createObjectURL(blob);
+
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', fileName); 
+
+    document.body.appendChild(link);
+    link.click();
+
+    window.URL.revokeObjectURL(url);
+    customToast.success('Successfully downloaded file');
   } catch (error) {
     console.error('Error while downloading file', error);
     customToast.error('Error while downloading file');

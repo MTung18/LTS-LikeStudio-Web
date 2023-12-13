@@ -29,7 +29,8 @@
             <CheckBox :id="`no${item.id}`" :shape-type="'square'" :name="'content'" :model-value="item.isChecked"
               @click="handleCheck(item)" class="content__check-box"></CheckBox>
             <figure class="content__item-img">
-              <img v-if="item.thumbnail" :src="getImageUrl(item.thumbnail)" alt="예시 이미지" />
+              <img v-if="['jpg', 'jpeg', 'png', 'gif'].includes(item.fileType)" :src="getImageUrl(item.uniqFileName)"
+                alt="Example Image" />
               <Icons v-else-if="item.fileType === 'xls'" icon-name="psd" icon-color="transparent" :width="7.4"
                 :height="7.4" class="content__item-icon" />
               <Icons v-else-if="item.fileType === 'ai'" icon-name="ai" icon-color="transparent" :width="7.4" :height="7.4"
@@ -79,13 +80,16 @@ import TemplateBoardWrap from '@/components/TemplateBoardWrap/TemplateBoardWrap.
 import { categoryStore } from '../../stores/categoryStore';
 import { storeToRefs } from 'pinia';
 import { vmdStore } from '../../stores/vmdStore';
+import { vmdFileStore } from '../../stores/vmdFileStore';
 import utils from '@/untils/utils';
 import customToast from '@/untils/custom_toast';
 
 const store = vmdStore();
 const cateStore = categoryStore();
+const fileStore = vmdFileStore();
 const { listOfVmdUser, vmdById } = storeToRefs(store);
 const { listCategory } = storeToRefs(cateStore);
+const { responseDownloadFile } = storeToRefs(fileStore);
 
 const categoryList = ref([]);
 const currentCategory = ref(14);
@@ -102,8 +106,7 @@ async function navigate(newPage) {
   await getListVmd(currentCategory.value, dummyInputValue.value, newPage);
 }
 
-async function idOfVMD(id)
- {
+async function idOfVMD(id) {
   await getVmdById(id)
 
 }
@@ -134,28 +137,25 @@ const handleCheck = (file) => {
   }
 }
 
-const downloadFiles = () => {
+const downloadFiles = async () => {
   const selectedFiles = vmdDetail.value.vmdFileList.filter(file => file.isChecked);
   const filePaths = ref([]);
   selectedFiles.forEach(file => {
     const convertedPath = file.uniqFileName.replace(/\\/g, '/');
-    const finalPath = convertedPath.split('public')[1];
-    const finalString = finalPath.replace(/\/+/g, '/');
-    filePaths.value.push({ filePath: finalString, fileName: file.oriFileName })
+    const finalString = convertedPath.replace(/\/+/g, '/');
+    filePaths.value.push( finalString )
   });
 
   try {
-    filePaths.value.forEach(file => {
-      const link = document.createElement('a');
-      link.href = file.filePath;
-      link.download = file.fileName;
-      link.style.display = 'none';
-      link.target = '_blank';
-      document.body.appendChild(link)
-;
-      link.click();
-      link.remove();
-    });
+    await fileStore.downloadFile(filePaths.value)
+
+    const blob = new Blob([responseDownloadFile.value]);
+
+    const link = document.createElement('a');
+    link.href = window.URL.createObjectURL(blob);
+    link.download = 'files.zip';
+    link.click();
+
     customToast.success('Successfully downloaded file');
   } catch (error) {
     console.error('Error while downloading file', error);
@@ -168,7 +168,10 @@ const handleSearch = async () => {
 };
 
 const getImageUrl = (name) => {
-  return new URL(`./img/${name}.png`, import.meta.url).href;
+
+  const parts = name.split('\\');
+  const relativePath = `/${parts.slice(parts.indexOf('files')).join('/')}`;
+  return relativePath;
 };
 
 async function getListVmd(category, keyword, page) {
@@ -182,8 +185,7 @@ async function getListVmd(category, keyword, page) {
   }
 }
 
-async function getVmdById(id)
- {
+async function getVmdById(id) {
   await store.getById(id)
 
   vmdDetail.value = vmdById.value.data;

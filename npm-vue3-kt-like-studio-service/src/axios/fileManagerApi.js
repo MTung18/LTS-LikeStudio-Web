@@ -33,6 +33,22 @@ const FileManagerApi = {
       console.error('Error fetching data:', error);
       throw error;
     }
+  },
+
+  async downloadFile(path) {
+    try {
+      const response = await axios.get(`${baseUrl}/download`, {
+        params: {
+          path: path
+        },
+        responseType: 'blob',
+      });
+
+      return response.data
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      throw error;
+    }
   }
 };
 
