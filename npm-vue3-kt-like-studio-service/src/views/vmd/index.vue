@@ -29,7 +29,7 @@
             <CheckBox :id="`no${item.id}`" :shape-type="'square'" :name="'content'" :model-value="item.isChecked"
               @click="handleCheck(item)" class="content__check-box"></CheckBox>
             <figure class="content__item-img">
-              <img v-if="['jpg', 'jpeg', 'png', 'gif'].includes(item.fileType)" :src="`${getImageUrl(item.uniqFileName)}`"
+              <img v-if="['jpg', 'jpeg', 'png', 'gif'].includes(item.fileType)" :src="item.uniqFileName"
                 alt="Example Image" />
               <Icons v-else-if="item.fileType === 'xls'" icon-name="psd" icon-color="transparent" :width="7.4"
                 :height="7.4" class="content__item-icon" />
@@ -169,18 +169,40 @@ const handleSearch = async () => {
 
 const imageUrl = ref()
 
-const getImageUrl = async (name) => {
-  const parts = name.replace(/\\/g, '/');
+const validFileTypes = ['jpg', 'jpeg', 'png', 'gif'];
+const imageUrls = ref([])
+const getImg = async () => {
+  const selectedFiles = vmdDetail.value.vmdFileList.filter(file => {
+    return validFileTypes.includes(file.fileType);
+  });
 
-  try {
-    await fileStore.loadImg(parts);
-    const blob = new Blob([responseLoadImg.value]);
-    imageUrl.value = URL.createObjectURL(blob);
-  } catch (error) {
-    console.error('Error loading image:', error);
+  for(const fileImg of selectedFiles) {
+    const parts = fileImg.uniqFileName.replace(/\\/g, '/');
+
+    try {
+      await fileStore.loadImg(parts);
+      const blob = new Blob([responseLoadImg.value]);
+      imageUrl.value = URL.createObjectURL(blob);
+      imageUrls.value.push(imageUrl.value)
+    } catch (error) {
+      console.error('Error loading image:', error);
+    }
   }
-  return imageUrl.value;
-};
+
+  selectedFiles.forEach((file, index) => {
+    if (index < imageUrls.value.length) {
+      file.uniqFileName = imageUrls.value[index];
+    }
+  });
+
+  vmdDetail.value.vmdFileList = vmdDetail.value.vmdFileList.map(listFile => {
+    const listFileNew = selectedFiles.find(files => files.id === listFile.id);
+    if(listFileNew) {
+      listFile.uniqFileName = listFileNew.uniqFileName
+    }
+    return listFile;
+  })
+}
 
 
 async function getListVmd(category, keyword, page) {
@@ -206,6 +228,8 @@ async function getVmdById(id) {
       fileType: fileTypes[index],
       isChecked: allCheck.value
     }));
+
+    await getImg()
   }
 }
 
