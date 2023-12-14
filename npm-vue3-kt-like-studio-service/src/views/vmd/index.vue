@@ -25,11 +25,11 @@
           </div>
         </div>
         <div class="content__list" v-if="vmdDetail.vmdFileList">
-          <div v-if="vmdDetail" v-for="item in vmdDetail.vmdFileList" :key="item" class="content__item">
+          <div v-if="vmdDetail" v-for="item in vmdDetail.vmdFileList" :key="item.id" class="content__item">
             <CheckBox :id="`no${item.id}`" :shape-type="'square'" :name="'content'" :model-value="item.isChecked"
               @click="handleCheck(item)" class="content__check-box"></CheckBox>
             <figure class="content__item-img">
-              <img v-if="['jpg', 'jpeg', 'png', 'gif'].includes(item.fileType)" :src="getImageUrl(item.uniqFileName)"
+              <img v-if="['jpg', 'jpeg', 'png', 'gif'].includes(item.fileType)" :src="`${getImageUrl(item.uniqFileName)}`"
                 alt="Example Image" />
               <Icons v-else-if="item.fileType === 'xls'" icon-name="psd" icon-color="transparent" :width="7.4"
                 :height="7.4" class="content__item-icon" />
@@ -89,7 +89,7 @@ const cateStore = categoryStore();
 const fileStore = vmdFileStore();
 const { listOfVmdUser, vmdById } = storeToRefs(store);
 const { listCategory } = storeToRefs(cateStore);
-const { responseDownloadFile } = storeToRefs(fileStore);
+const { responseDownloadFile, responseLoadImg } = storeToRefs(fileStore);
 
 const categoryList = ref([]);
 const currentCategory = ref(14);
@@ -143,7 +143,7 @@ const downloadFiles = async () => {
   selectedFiles.forEach(file => {
     const convertedPath = file.uniqFileName.replace(/\\/g, '/');
     const finalString = convertedPath.replace(/\/+/g, '/');
-    filePaths.value.push( finalString )
+    filePaths.value.push(finalString)
   });
 
   try {
@@ -167,12 +167,21 @@ const handleSearch = async () => {
   await getListVmd(currentCategory.value, dummyInputValue.value, 1);
 };
 
-const getImageUrl = (name) => {
+const imageUrl = ref()
 
-  const parts = name.split('\\');
-  const relativePath = `/${parts.slice(parts.indexOf('files')).join('/')}`;
-  return relativePath;
+const getImageUrl = async (name) => {
+  const parts = name.replace(/\\/g, '/');
+
+  try {
+    await fileStore.loadImg(parts);
+    const blob = new Blob([responseLoadImg.value]);
+    imageUrl.value = URL.createObjectURL(blob);
+  } catch (error) {
+    console.error('Error loading image:', error);
+  }
+  return imageUrl.value;
 };
+
 
 async function getListVmd(category, keyword, page) {
   await store.getAllVmdForUser(category, keyword, page)
@@ -204,7 +213,6 @@ onMounted(async () => {
   await getListCategory()
   await getListVmd(currentCategory.value, "", 1);
   await getVmdById(listVmd.value.list[0].id)
-
 });
 </script>
 

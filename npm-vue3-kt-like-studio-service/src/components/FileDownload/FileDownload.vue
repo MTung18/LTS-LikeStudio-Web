@@ -18,6 +18,11 @@
 <script setup>
 import Icons from '@/components/Icons/Icons.vue';
 import customToast from '@/untils/custom_toast';
+import { fileManagerStore } from '../../stores/fileManagerStore';
+import { storeToRefs } from 'pinia';
+
+const store = fileManagerStore();
+const { responseDownloadFile } = storeToRefs(store);
 
 const props = defineProps({
   files: {
@@ -32,28 +37,24 @@ const props = defineProps({
 
 const downloadFile = async (filePath, filename) => {
   const convertedPath = filePath.replace(/\\/g, '/');
-  const finalPath = convertedPath.split('public')[1];
-  const finalString = finalPath.replace(/\/+/g, '/');
+  const finalString = convertedPath.replace(/\/+/g, '/');
   const fileUrl = finalString;
 
   try {
-    const response = await fetch(fileUrl);
-    if (response.ok) {
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
+    await store.downloadFile(fileUrl);
 
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = filename;
-      link.style.display = 'none';
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
+    const blob = new Blob([responseDownloadFile.value]);
+    const url = window.URL.createObjectURL(blob);
 
-      customToast.success('Successfully downloaded file');
-    } else {
-      customToast.error('Error while downloading file');
-    }
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', filename); 
+
+    document.body.appendChild(link);
+    link.click();
+
+    window.URL.revokeObjectURL(url);
+    customToast.success('Successfully downloaded file');
   } catch (error) {
     console.error('Error while downloading file', error);
     customToast.error('Error while downloading file');

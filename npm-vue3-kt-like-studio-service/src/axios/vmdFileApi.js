@@ -42,7 +42,25 @@ const VmdFileApi = {
       console.error('Error fetching data:', error);
       throw error;
     }
-  }
+  },
+
+  async loadImg(imagePath) {
+    try {
+      const response = await axios.get(`${baseUrl}/images`, {
+        params: {
+          path: imagePath,
+        },
+        responseType: 'arraybuffer',
+      });
+
+      return response.data
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      throw error;
+    }
+  },
+
+  
 
 };
 

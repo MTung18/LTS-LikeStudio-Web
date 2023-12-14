@@ -6,6 +6,7 @@ export const vmdFileStore = defineStore("vmdFile", () => {
  const listOfFile = ref([]);
  const responseUploadFile = ref();
  const responseDownloadFile = ref();
+ const responseLoadImg = ref();
 
  async function getListFile(vmdId) {
   listOfFile.value = await vmdFile.getListFile(vmdId);
@@ -19,12 +20,18 @@ export const vmdFileStore = defineStore("vmdFile", () => {
   responseDownloadFile.value = await vmdFile.downloadFile(filePaths);
  }
 
+ async function loadImg(imagePath) {
+  responseLoadImg.value = await vmdFile.loadImg(imagePath);
+ }
+
  return {
   listOfFile,
   responseUploadFile,
   responseDownloadFile,
+  responseLoadImg,
   getListFile,
   uploadFile,
-  downloadFile
+  downloadFile,
+  loadImg
  };
 })
