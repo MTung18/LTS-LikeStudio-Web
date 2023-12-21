@@ -19,6 +19,10 @@
             '영상 파일 : mp4, wmv, asf , flv, mov, mpeg',
           ]" />
       </TemplateEditTextFields>
+      abc
+      <h2>abc</h2>
+      <h5>abc</h5>
+      <QuillEditor :v-model:content="'<h5>a</h5>'" :toolbar="['']"/>
       <DetailAnswer v-if="props.state === 'answered'" :content="lsSupportManagerByIdData.contentAnswer"
         class="before:absolute before:bottom-[-1px] before:left-0 after:content-[''] before:w-full before:h-[1px] before:bg-neutrals-black">
         <FileDownload class-bind="!mt-0" v-for="item in lsSupportManagerByIdData.fileManagerListAnswer" :key="item.id"
@@ -82,6 +86,7 @@ import { lsSupportManagerStore } from '@/stores/lsSupportManagerStore';
 import { fileManagerStore } from '@/stores/fileManagerStore';
 import utils from '@/untils/utils';
 import userId from '@/untils/loginUserId';
+import { QuillEditor } from '@vueup/vue-quill';
 
 const props = defineProps({
   id: {
@@ -139,6 +144,7 @@ onMounted(async () => {
   })
 
   textareaRef.value = lsSupportManagerByIdData.value.contentAnswer
+  console.log('text area content: ', lsSupportManagerByIdData.value.contentAnswer);
 });
 
 function getPreNextLsSupportManagerId() {
