@@ -1,6 +1,6 @@
 <template>
   <div class="detail-body">
-    <div v-if="content" class="detail-body__content" v-html="props.content"></div>
+    <QuillFrame v-if="content" class="detail-body__content" :content="props.content" />
 
     <FileDownload class-bind="!mt-0" v-for="item in props.files" :key="item.id" :files="[
       { id: item.id, filename: item.oriFileName, filePath: item.uniqFileName },
@@ -33,6 +33,7 @@ import { ref } from 'vue';
 
 import FileDownload from '@/components/FileDownload/FileDownload.vue';
 import Icons from '@/components/Icons/Icons.vue';
+import QuillFrame from '../../components/CKEditor/QuillFrame.vue';
 
 const route = useRoute();
 const router = useRouter();

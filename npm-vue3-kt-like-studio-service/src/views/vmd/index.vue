@@ -24,12 +24,12 @@
             <RoundButton component="button" color-type="filed" size="medium" @click="downloadFiles">다운로드</RoundButton>
           </div>
         </div>
-        <div class="content__list" v-if="vmdDetail.vmdFileList">
+        <div class="content__list" v-if="loadListFile">
           <div v-if="vmdDetail" v-for="item in vmdDetail.vmdFileList" :key="item.id" class="content__item">
             <CheckBox :id="`no${item.id}`" :shape-type="'square'" :name="'content'" :model-value="item.isChecked"
               @click="handleCheck(item)" class="content__check-box"></CheckBox>
             <figure class="content__item-img">
-              <img v-if="['jpg', 'jpeg', 'png', 'gif'].includes(item.fileType)" :src="item.uniqFileName"
+              <img v-if="['jpg', 'jpeg', 'png', 'gif'].includes(item.fileType)" :src="item.path"
                 alt="Example Image" />
               <Icons v-else-if="item.fileType === 'xls'" icon-name="psd" icon-color="transparent" :width="7.4"
                 :height="7.4" class="content__item-icon" />
@@ -170,8 +170,9 @@ const handleSearch = async () => {
 const imageUrl = ref()
 
 const validFileTypes = ['jpg', 'jpeg', 'png', 'gif'];
-const imageUrls = ref([])
+const loadListFile = ref(false)
 const getImg = async () => {
+  const imageUrls = ref([])
   const selectedFiles = vmdDetail.value.vmdFileList.filter(file => {
     return validFileTypes.includes(file.fileType);
   });
@@ -186,22 +187,25 @@ const getImg = async () => {
       imageUrls.value.push(imageUrl.value)
     } catch (error) {
       console.error('Error loading image:', error);
+      return ;
     }
   }
 
   selectedFiles.forEach((file, index) => {
     if (index < imageUrls.value.length) {
-      file.uniqFileName = imageUrls.value[index];
+      const imagePath = imageUrls.value[index];
+      file.path = imagePath; 
     }
   });
 
   vmdDetail.value.vmdFileList = vmdDetail.value.vmdFileList.map(listFile => {
     const listFileNew = selectedFiles.find(files => files.id === listFile.id);
-    if(listFileNew) {
-      listFile.uniqFileName = listFileNew.uniqFileName
+    if (listFileNew) {
+      listFile.path = listFileNew.path;
     }
     return listFile;
-  })
+  });
+  loadListFile.value = true
 }
 
 
@@ -217,6 +221,7 @@ async function getListVmd(category, keyword, page) {
 }
 
 async function getVmdById(id) {
+  loadListFile.value = false
   await store.getById(id)
 
   vmdDetail.value = vmdById.value.data;

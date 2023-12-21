@@ -1,12 +1,14 @@
 <template>
   <div class="detail-answer">
     <div class="detail-answer__tag">라이크 스튜디오의 답변입니다.</div>
-    <div class="detail-answer__content" v-html="props.content"></div>
+    <QuillFrame class="detail-answer__content" :content="props.content" />
     <slot />
   </div>
 </template>
 
 <script setup>
+import QuillFrame from '@/components/CKEditor/quillframe.vue';
+
 const props = defineProps({
   content: {
     type: String,

@@ -2,8 +2,8 @@
   <TemplateBoardWrap title="FAQ">
     <ul class="category__list">
       <li v-for="category in categories" :key="category.id" class="category__item">
-        <Tabs type="withIcon" use-icon :is-selected="category.id == currentCategory ? true : false" 
-        @click="setCurrentCategory(category.id)">
+        <Tabs type="withIcon" use-icon :is-selected="category.id == currentCategory ? true : false"
+          @click="setCurrentCategory(category.id)">
           {{ category.value }}
         </Tabs>
       </li>
@@ -15,13 +15,14 @@
       </RoundButton>
     </CustomerSearchWrap>
     <div v-if="listDataQuestion.data == null">
-          <TemplateDataNone />
+      <TemplateDataNone />
     </div>
     <div class="list" v-else>
       <div class="list__item" v-for="(data) in listDataQuestion.data.list" :key="data.id">
         <div class="item__question-wrap">
           <span class="question__symbol">Q.</span>
-          <span class="question__title" v-if="!showDropdown[data.id]" @click="toggleDropdown(data.id)">{{ data.title }}</span>
+          <span class="question__title" v-if="!showDropdown[data.id]" @click="toggleDropdown(data.id)">{{ data.title
+          }}</span>
           <span class="question__title" v-else @click="closeToggleDropdown(data.id)">{{ data.title }}</span>
           <IconButton v-if="!showDropdown[data.id]" class="text-right" class-bind="question__icon" icon-name="chevron_b"
             size="small" @click="toggleDropdown(data.id)" type="outlined" component="button" />
@@ -34,7 +35,7 @@
               <div class="answer__symbol">A</div>
               <div class="answer__content">
                 <div class="answer__content-text">
-                  <div v-html="data.content"></div>
+                  <QuillFrame :content="data.content" />
                 </div>
                 <div class="answer__content-file">
                   <p class="mb-6 text-xl text-slate-950 font-bold">첨부파일</p>
@@ -67,6 +68,7 @@ import TemplateDataNone from '@/components/TemplateDataNone/TemplateDataNone.vue
 import { faqStore } from '../../../stores/faqStore';
 import { categoryStore } from '../../../stores/categoryStore';
 import { storeToRefs } from 'pinia';
+import QuillFrame from '../../../components/CKEditor/QuillFrame.vue';
 
 const store = faqStore();
 const cateStore = categoryStore();
@@ -126,7 +128,7 @@ async function navigate(newPage) {
 
 onMounted(async () => {
   await getListCategory()
-  await getListFaq("", currentCategory.value , 1);
+  await getListFaq("", currentCategory.value, 1);
 });
 </script>
 
