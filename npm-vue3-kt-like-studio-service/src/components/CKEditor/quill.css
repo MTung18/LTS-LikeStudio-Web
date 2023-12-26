@@ -1,0 +1,6 @@
+.show-quill {
+ .ql-toolbar,
+ .ql-container {
+  border-color: transparent !important;
+ }
+}
