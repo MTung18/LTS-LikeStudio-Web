@@ -1,0 +1,11 @@
+.jodit-status-bar {
+ display: none !important;
+}
+
+.jodit-wysiwyg_mode {
+ border: none !important;
+}
+
+.jodit-workplace {
+ background: none !important;
+}

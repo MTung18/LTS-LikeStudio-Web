@@ -1,39 +1,34 @@
 <template>
-    <div class="show-quill">
-        <!-- <QuillEditor v-model:content="props.content" contentType="html" :options="options" /> -->
-        <div id="content"></div>
-    </div>
+  <div>
+    <jodit-editor v-model="content" ref="myEditor" :config="editorConfig" />
+  </div>
 </template>
 <script setup>
 import { ref, watch, onMounted } from 'vue';
-import { QuillEditor } from '@vueup/vue-quill';
-import './quill.css'
+import 'jodit/build/jodit.min.css'
+import { JoditEditor } from 'jodit-vue'
+import './jodit.css'
 
 const props = defineProps(['content'])
 const content = ref('');
 
-onMounted(()=>{
-    watch(
-  () => props.content,
-  (newVal) => {
-    content.value = newVal;
-    document.getElementById('content').innerHTML = content.value;
-  },
-  {
-    immediate: true,
-  }
-);
+const editorConfig = {
+  toolbar: false,
+  readonly: true,
+};
+
+onMounted(() => {
+  watch(
+    () => props.content,
+    (newVal) => {
+      content.value = newVal;
+    },
+    {
+      immediate: true,
+    }
+  );
 
 });
-
-
-const options = {
-    modules: {
-        toolbar: false,
-    },
-    readOnly: true
-
-};
 </script>
 
 
